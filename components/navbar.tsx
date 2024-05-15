@@ -18,7 +18,7 @@ const IconLink = ({ src, href, name }: IconLinkProps) => {
 
 export const Navbar = () => {
   return (
-    <nav className="flex w-full p-0 lg:p-8">
+    <nav className="flex w-full">
       <ul className="flex flex-row justify-between items-center w-full">
         <li>
           <Link
