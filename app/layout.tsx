@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Navbar } from "@/components/navbar";
 import localFont from "next/font/local";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Kakarot Faucet",
@@ -30,7 +28,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${openSauce.variable} font-sans`}>{children}</body>
+      <body className={`${openSauce.variable} font-sans bg-[#E5E7EB] px-4 sm:px-20`}>
+        <Navbar />
+        {children}
+      </body>
     </html>
   );
 }
