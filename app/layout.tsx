@@ -1,3 +1,5 @@
+import { ThirdwebProvider, ConnectButton, lightTheme } from "thirdweb/react";
+
 import type { Metadata } from "next";
 import { Navbar } from "@/components/navbar";
 import localFont from "next/font/local";
@@ -28,10 +30,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${openSauce.variable} font-sans bg-[#E5E7EB] px-4 sm:px-20`}>
-        <Navbar />
-        {children}
-      </body>
+      <ThirdwebProvider>
+        <body className={`${openSauce.variable} font-sans bg-[#E5E7EB] px-4 sm:px-20`}>
+          <Navbar />
+          {children}
+        </body>
+      </ThirdwebProvider>
     </html>
   );
 }
