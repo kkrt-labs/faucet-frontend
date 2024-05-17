@@ -1,7 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { IconLink } from "./icon-link";
+import { WalletDetails } from "./wallet-details";
 
 export const Navbar = () => {
   return (
@@ -32,6 +35,10 @@ export const Navbar = () => {
               <Image src="/assets/docs-icon.svg" alt="Docs" width={16} height={16} />
             </Button>
           </Link>
+          <WalletDetails />
+        </li>
+        <li className="sm:hidden">
+          <WalletDetails />
         </li>
       </ul>
     </nav>
