@@ -1,14 +1,18 @@
 import { FC, PropsWithChildren } from "react";
-import background from "@/public/assets/background.svg";
+import { cn } from "@/lib/utils";
 
-export const BaseContainer: FC<PropsWithChildren> = ({ children }) => {
+interface BaseContainerProps {
+  className?: string;
+}
+
+export const BaseContainer: FC<PropsWithChildren<BaseContainerProps>> = ({ children, className }) => {
   return (
     <div
-      className="flex flex-col justify-center bg-white w-full py-11 md:h-96 rounded-md my-12 sm:my-16"
+      className={cn("flex flex-col justify-center bg-white w-full py-11 md:h-96 rounded-md my-12 sm:my-16", className)}
       style={{
         backgroundImage: `url("/assets/background.svg")`,
-        // backgroundRepeat: "no-repeat",
-        // backgroundSize: "100% 100%",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
       {children}
