@@ -1,9 +1,8 @@
-import { ThirdwebProvider, ConnectButton, lightTheme } from "thirdweb/react";
-
 import type { Metadata } from "next";
 import { Navbar } from "@/components/navbar";
 import localFont from "next/font/local";
 import "./globals.css";
+import { ThirdwebProvider } from "@/components/thirdweb-provider";
 
 export const metadata: Metadata = {
   title: "Kakarot Faucet",
