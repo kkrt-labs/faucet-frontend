@@ -1,32 +1,47 @@
-import { useConnect } from "thirdweb/react";
-import { createWallet, injectedProvider } from "thirdweb/wallets";
-import { client } from "@/lib/thirdweb-client";
+import { ConnectButton, lightTheme } from "thirdweb/react";
+import { client, wallets } from "@/lib/thirdweb-client";
+import { WalletDetails } from "./wallet-details";
 
 export const ConnectWallet = () => {
-  const { connect, isConnecting, error } = useConnect();
-
-  const connectWallet = async () => {
-    const metamask = createWallet("io.metamask");
-
-    if (injectedProvider("io.metamask")) {
-      await metamask.connect({ client });
-    } else {
-      await metamask.connect({
-        client,
-        walletConnect: { showQrModal: true },
-      });
-    }
-    return metamask;
-  };
-
   return (
     <div>
-      <button
-        className="inline-flex py-2 px-3 justify-center items-center gap-1 connectBtn text-white"
-        onClick={() => connect(connectWallet)}
-      >
-        Connect Wallet
-      </button>
+      <ConnectButton
+        client={client}
+        wallets={wallets}
+        connectButton={{
+          style: {
+            display: "inline-flex",
+            padding: "8px 12px",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "6px",
+            borderRadius: "6px",
+            background: "linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), #f54400",
+            boxShadow: "0px 1px 2px 0px rgba(255, 149, 73, 0.31), 0px 0px 0px 1px #f54400",
+            color: "#fff",
+            fontSize: "14px",
+          },
+        }}
+        theme={lightTheme({
+          colors: {
+            accentText: "#f54400",
+            accentButtonBg: "#f54400",
+            primaryButtonBg: "#f54400",
+          },
+        })}
+        connectModal={{
+          size: "wide",
+          title: "Select Wallet",
+          titleIcon:
+            "https://assets-global.website-files.com/6464a063474b57e2c4e03b61/64a20e2749d92613acf4fd1b_Logo%20dark.svg",
+          showThirdwebBranding: false,
+        }}
+        detailsButton={{
+          render() {
+            return <WalletDetails />;
+          },
+        }}
+      />
     </div>
   );
 };
