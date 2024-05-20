@@ -85,3 +85,45 @@ html {
   box-shadow: 0px 1px 2px 0px rgba(255, 149, 73, 0.5), 0px 0px 0px 1px #f54501, 0px 0px 0px 2px #1e1e1e,
     0px 0px 0px 3px rgba(255, 149, 73, 0.5);
 }
+
+.successButton {
+  border-radius: 6px;
+  border: 1px solid linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), #00d68f;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), #007f66;
+  box-shadow: 0px 1px 2px 0px #098b72, 0px 0px 0px 1px #00705a;
+}
+
+.successButton:hover {
+  border-radius: 6px;
+  border: 1px solid #00d68f;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 100%), #007f66;
+  box-shadow: 0px 1px 2px 0px #00d68f, 0px 0px 0px 1px #005c4f;
+}
+
+.successButton:active {
+  border-radius: 6px;
+  border: 1px solid linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), #00d68f;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), #007f66;
+  box-shadow: 0px 1px 2px 0px #00d68f, 0px 0px 0px 1px #00705a, 0px 0px 0px 2px #1e1e1e, 0px 0px 0px 3px #00d68f;
+}
+
+.failButton {
+  border-radius: 6px;
+  border: 1px solid linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), #ff4d4f;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), #df1c41;
+  box-shadow: 0px 1px 2px 0px rgba(113, 14, 33, 0.5), 0px 0px 0px 1px #b71836;
+}
+
+.failButton:hover {
+  border-radius: 6px;
+  border: 1px solid #ff4d4f;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 100%), #df1c41;
+  box-shadow: 0px 1px 2px 0px #ff4d4f, 0px 0px 0px 1px #b71836;
+}
+
+.failButton:active {
+  border-radius: 6px;
+  border: 1px solid linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), #ff4d4f;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), #df1c41;
+  box-shadow: 0px 1px 2px 0px #ff4d4f, 0px 0px 0px 1px #b71836, 0px 0px 0px 2px #1e1e1e, 0px 0px 0px 3px #ff4d4f;
+}
