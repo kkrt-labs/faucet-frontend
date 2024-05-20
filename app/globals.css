@@ -63,3 +63,25 @@ html {
     @apply bg-background text-foreground;
   }
 }
+
+.primaryButton {
+  border-radius: 6px;
+  border: 1px solid linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), #fff;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), #f54400;
+  box-shadow: 0px 1px 2px 0px rgba(255, 149, 73, 0.31), 0px 0px 0px 1px #f54400;
+}
+
+.primaryButton:hover {
+  border-radius: 6px;
+  border: 1px solid #fff;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 100%), #f54400;
+  box-shadow: 0px 1px 2px 0px rgba(255, 149, 73, 0.5), 0px 0px 0px 1px #ac3000;
+}
+
+.primaryButton:active {
+  border-radius: 6px;
+  border: 1px solid linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), #fff;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), #f54400;
+  box-shadow: 0px 1px 2px 0px rgba(255, 149, 73, 0.5), 0px 0px 0px 1px #f54501, 0px 0px 0px 2px #1e1e1e,
+    0px 0px 0px 3px rgba(255, 149, 73, 0.5);
+}
