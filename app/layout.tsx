@@ -7,6 +7,12 @@ import { ThirdwebProvider } from "@/components/thirdweb-provider";
 export const metadata: Metadata = {
   title: "Kakarot Faucet",
   description: "Get test tokens for building applications on the Superchain",
+  icons: [
+    {
+      url: "/favicon.svg",
+      href: "/favicon.svg",
+    },
+  ],
 };
 
 const openSauce = localFont({
