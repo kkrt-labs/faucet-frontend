@@ -21,7 +21,6 @@ export default function Home() {
       </p>
       {!wallet && <IntroSplash />}
       {wallet && <InviteCodeSplash setIsWhitelisted={() => setIsWhitelisted(true)} />}
-      <Footer />
     </main>
   );
 }

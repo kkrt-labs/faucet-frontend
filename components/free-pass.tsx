@@ -8,16 +8,18 @@ import mintingIcon from "@/public/assets/mining-icon.svg";
 export const FreePass = () => {
   return (
     <div
-      className="flex flex-col justify-center items-center bg-white w-full py-16 rounded-md"
+      className="flex flex-col justify-center items-center bg-white w-full py-16 px-3 rounded-md"
       style={{
         backgroundImage: `url("/assets/background.svg")`,
         backgroundSize: "cover",
         backgroundPosition: "right",
       }}
     >
-      <div className="flex flex-col justify-center items-center max-w-xl">
-        <h1 className="scroll-m-20 text-4xl font-medium tracking-tight lg:text-[52px]">Claim your Free Pass</h1>
-        <p className="leading-7 [&:not(:first-child)]:mt-6 text-center text-[#878794]">
+      <div className="flex flex-col justify-center items-center text-center max-w-xl">
+        <h1 className="scroll-m-20 text-3xl md:text-4xl font-medium tracking-tight lg:text-[52px]">
+          Claim your Free Pass
+        </h1>
+        <p className="leading-7 [&:not(:first-child)]:mt-6  text-[#878794]">
           Welcome to Kakraot beta testnet phase to commemorate this event. <br />
           Claim your free OG Pass by Kakarot Labs.
         </p>
@@ -33,7 +35,6 @@ export const FreePass = () => {
           Claimed
         </Button>
       </div>
-      <Footer />
     </div>
   );
 };
