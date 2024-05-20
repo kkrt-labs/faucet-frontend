@@ -8,7 +8,10 @@ interface BaseContainerProps {
 export const BaseContainer: FC<PropsWithChildren<BaseContainerProps>> = ({ children, className }) => {
   return (
     <div
-      className={cn("flex flex-col justify-center bg-white w-full py-11 md:h-96 rounded-md my-12 sm:my-16", className)}
+      className={cn(
+        "flex flex-col justify-center items-center bg-white w-full py-11 md:h-96 rounded-md my-12 sm:my-16",
+        className
+      )}
       style={{
         backgroundImage: `url("/assets/background.svg")`,
         backgroundSize: "cover",
