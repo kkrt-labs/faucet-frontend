@@ -30,8 +30,8 @@ export const Navbar = () => {
           <IconLink src="/assets/discord-icon.svg" href="https://discord.com" name="Discord" />
           <IconLink src="/assets/farcaster-icon.svg" href="https://farcaster.xyz/" name="Farcaster" />
           <Link href="/">
-            <Button className="space-x-2" variant="reverse" size="withIcon">
-              <span>Read Docs</span>
+            <Button className="space-x-2" variant="outline" size="withIcon">
+              <span className="text-[#ff4500]">Read Docs</span>
               <Image src="/assets/docs-icon.svg" alt="Docs" width={16} height={16} />
             </Button>
           </Link>
