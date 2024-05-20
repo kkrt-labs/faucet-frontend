@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 
 export const Footer = () => {
   return (
-    <footer className="absolute bottom-4 flex flex-col items-center space-y-6 sm:hidden">
+    <footer className="flex flex-col items-center space-y-6 pt-10 pb-4 sm:hidden">
       <div className="flex flex-row items-center space-x-6">
         <IconLink src="/assets/x-icon.svg" href="https://x.com" name="X" />
         <IconLink src="/assets/discord-icon.svg" href="https://discord.com" name="Discord" />
