@@ -11,7 +11,7 @@ export const ConnectWallet = () => {
         connectButton={{
           style: {
             display: "inline-flex",
-            padding: "8px 12px",
+            padding: "10px 12px",
             justifyContent: "center",
             alignItems: "center",
             gap: "6px",
@@ -35,11 +35,6 @@ export const ConnectWallet = () => {
           titleIcon:
             "https://assets-global.website-files.com/6464a063474b57e2c4e03b61/64a20e2749d92613acf4fd1b_Logo%20dark.svg",
           showThirdwebBranding: false,
-        }}
-        detailsButton={{
-          render() {
-            return <WalletDetails />;
-          },
         }}
       />
     </div>
