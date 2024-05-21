@@ -16,7 +16,7 @@ import mintingIcon from "@/public/assets/mining-icon.svg";
 import linkIcon from "@/public/assets/link-icon.svg";
 import xIcon from "@/public/assets/x-icon-inverted.svg";
 
-export const FreePass = () => {
+export const FreePass = ({ shouldGoToFaucet }: { shouldGoToFaucet: () => void }) => {
   return (
     <div
       className="flex flex-col justify-center items-center bg-white w-full py-16 px-3 rounded-md"
@@ -45,13 +45,13 @@ export const FreePass = () => {
         <Button variant="success" className="mt-4 w-full max-w-[400px]">
           Claimed
         </Button>
-        <ClaimedModal />
+        <ClaimedModal shouldGoToFaucet={shouldGoToFaucet} />
       </div>
     </div>
   );
 };
 
-const ClaimedModal = () => (
+const ClaimedModal = ({ shouldGoToFaucet }: { shouldGoToFaucet: () => void }) => (
   <Dialog>
     <div className="flex w-full space-x-3  max-w-[400px]">
       <Button variant="success" className="mt-4 w-full">
@@ -81,7 +81,7 @@ const ClaimedModal = () => (
           <Image src={xIcon} alt="minting" width={20} height={20} priority />
         </Button>
         <DialogClose asChild>
-          <Button variant="outline" className="mt-4 w-full text-[#ff4500]">
+          <Button variant="outline" className="mt-4 w-full text-[#ff4500]" onClick={shouldGoToFaucet}>
             Go to faucet
           </Button>
         </DialogClose>
