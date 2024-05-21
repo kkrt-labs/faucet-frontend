@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Confetti from "react-confetti";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -51,41 +53,53 @@ export const FreePass = ({ shouldGoToFaucet }: { shouldGoToFaucet: () => void })
   );
 };
 
-const ClaimedModal = ({ shouldGoToFaucet }: { shouldGoToFaucet: () => void }) => (
-  <Dialog>
-    <div className="flex w-full space-x-3  max-w-[400px]">
-      <Button variant="success" className="mt-4 w-full">
-        Claimed
-      </Button>
-      <DialogTrigger asChild>
-        <Button variant="outline" className="mt-4 w-full text-[#878794] gap-1">
-          <span>Tx Hash</span>
-          <Image src={linkIcon} alt="minting" width={20} height={20} priority />
+const ClaimedModal = ({ shouldGoToFaucet }: { shouldGoToFaucet: () => void }) => {
+  const [runConfetti, setRunConfetti] = useState(false);
+  const CONFETTI_COLORS = ["#FDA829", "#F6F5FC", "#FF2828"];
+
+  return (
+    <Dialog>
+      <div className="flex w-full space-x-3  max-w-[400px]">
+        <Button variant="success" className="mt-4 w-full">
+          Claimed
         </Button>
-      </DialogTrigger>
-    </div>
-    <DialogContent className="sm:max-w-lg">
-      <DialogHeader className="flex flex-col items-center">
-        <DialogTitle className="text-[#ff5400] text-2xl sm:text-3xl leading-9 font-medium">
-          Congratulations!
-        </DialogTitle>
-        <DialogDescription className="text-center">
-          Welcome to Kakraot beta testnet phase to commemorate this event. <br />
-          Claim your free OG Pass by Kakarot Labs.
-        </DialogDescription>
-      </DialogHeader>
-      <Image src={dummyFreePass} width={400} height={200} alt="Free Pass" className="w-full" />
-      <DialogFooter className="sm:justify-start">
-        <Button variant="outline" className="mt-4 w-full gap-1 !bg-black !text-white">
-          <span>Share on</span>
-          <Image src={xIcon} alt="minting" width={20} height={20} priority />
-        </Button>
-        <DialogClose asChild>
-          <Button variant="outline" className="mt-4 w-full text-[#ff4500]" onClick={shouldGoToFaucet}>
-            Go to faucet
+        <DialogTrigger asChild>
+          <Button variant="outline" className="mt-4 w-full text-[#878794] gap-1" onClick={() => setRunConfetti(true)}>
+            <span>Tx Hash</span>
+            <Image src={linkIcon} alt="minting" width={20} height={20} priority />
           </Button>
-        </DialogClose>
-      </DialogFooter>
-    </DialogContent>
-  </Dialog>
-);
+        </DialogTrigger>
+      </div>
+      <DialogContent className="sm:max-w-lg">
+        <Confetti
+          colors={CONFETTI_COLORS}
+          run={runConfetti}
+          numberOfPieces={500}
+          recycle={false}
+          className="!-inset-1/3"
+        />
+        <DialogHeader className="flex flex-col items-center">
+          <DialogTitle className="text-[#ff5400] text-2xl sm:text-3xl leading-9 font-medium">
+            Congratulations!
+          </DialogTitle>
+          <DialogDescription className="text-center">
+            Welcome to Kakraot beta testnet phase to commemorate this event. <br />
+            Claim your free OG Pass by Kakarot Labs.
+          </DialogDescription>
+        </DialogHeader>
+        <Image src={dummyFreePass} width={400} height={200} alt="Free Pass" className="w-full" />
+        <DialogFooter className="sm:justify-start">
+          <Button variant="outline" className="mt-4 w-full gap-1 !bg-black !text-white">
+            <span>Share on</span>
+            <Image src={xIcon} alt="minting" width={20} height={20} priority />
+          </Button>
+          <DialogClose asChild>
+            <Button variant="outline" className="mt-4 w-full text-[#ff4500]" onClick={shouldGoToFaucet}>
+              Go to faucet
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
