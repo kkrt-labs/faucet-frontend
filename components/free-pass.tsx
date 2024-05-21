@@ -1,9 +1,20 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Footer } from "./mobile-footer";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 import dummyFreePass from "@/public/assets/dummy-free-pass.svg";
 import mintingIcon from "@/public/assets/mining-icon.svg";
+import linkIcon from "@/public/assets/link-icon.svg";
+import xIcon from "@/public/assets/x-icon-inverted.svg";
 
 export const FreePass = () => {
   return (
@@ -34,7 +45,47 @@ export const FreePass = () => {
         <Button variant="success" className="mt-4 w-full max-w-[400px]">
           Claimed
         </Button>
+        <ClaimedModal />
       </div>
     </div>
   );
 };
+
+const ClaimedModal = () => (
+  <Dialog>
+    <div className="flex w-full space-x-3  max-w-[400px]">
+      <Button variant="success" className="mt-4 w-full">
+        Claimed
+      </Button>
+      <DialogTrigger asChild>
+        <Button variant="outline" className="mt-4 w-full text-[#878794] gap-1">
+          <span>Tx Hash</span>
+          <Image src={linkIcon} alt="minting" width={20} height={20} priority />
+        </Button>
+      </DialogTrigger>
+    </div>
+    <DialogContent className="sm:max-w-lg">
+      <DialogHeader className="flex flex-col items-center">
+        <DialogTitle className="text-[#ff5400] text-2xl sm:text-3xl leading-9 font-medium">
+          Congratulations!
+        </DialogTitle>
+        <DialogDescription className="text-center">
+          Welcome to Kakraot beta testnet phase to commemorate this event. <br />
+          Claim your free OG Pass by Kakarot Labs.
+        </DialogDescription>
+      </DialogHeader>
+      <Image src={dummyFreePass} width={400} height={200} alt="Free Pass" className="w-full" />
+      <DialogFooter className="sm:justify-start">
+        <Button variant="outline" className="mt-4 w-full gap-1 !bg-black !text-white">
+          <span>Share on</span>
+          <Image src={xIcon} alt="minting" width={20} height={20} priority />
+        </Button>
+        <DialogClose asChild>
+          <Button variant="outline" className="mt-4 w-full text-[#ff4500]">
+            Go to faucet
+          </Button>
+        </DialogClose>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
+);
