@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/mobile-footer";
+import { ThirdwebProvider } from "@/lib/thirdweb-provider";
+import { Provider } from "@/lib/query-provider";
+
 import localFont from "next/font/local";
 import "./globals.css";
-import { ThirdwebProvider } from "@/components/thirdweb-provider";
-import { Footer } from "@/components/mobile-footer";
 
 export const metadata: Metadata = {
   title: "Kakarot Faucet",
@@ -38,9 +40,11 @@ export default function RootLayout({
     <html lang="en">
       <ThirdwebProvider>
         <body className={`${openSauce.variable} font-sans bg-[#E5E7EB] px-4 sm:px-20`}>
-          <Navbar />
-          {children}
-          <Footer />
+          <Provider>
+            <Navbar />
+            {children}
+            <Footer />
+          </Provider>
         </body>
       </ThirdwebProvider>
     </html>
