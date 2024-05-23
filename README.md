@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Kakarot Faucet - Website
 
-## Getting Started
+> The fast, native Sepolia Testnet faucet to kickstart your journey in the Kakarot ecosystem.
 
-First, run the development server:
+checkout the current deployment ✨ [faucet-v0](https://faucet-smoky-pi.vercel.app/) ✨
+
+`faucet` uses GitHub’s public API to fetch mutual followers for every profile you visit, straight to the profile page!
+
+<div align="center">
+  <img src="public/assets/landing.jpg" width=700 />
+</div>
+
+## 📂 project structure?
+
+- `app/page.tsx` -> using next's app router, this is our home page
+- `app/globals.css` -> base for tailwind + shared styles
+- `components/` -> hosts all shared elements  + `/ui/` is base for `@shadcn` components
+- `public/assets` -> all shared assets, `.svg` preffered
+- `.env.example` -> create your own `.env` file following the structure here
+
+
+## 🤓 what's the tech?
+
+1. [`TailwindCSS`](https://tailwindcss.com)
+2. [`TypeScript`](https://www.typescriptlang.org/)
+3. [`NextJS`](https://nextjs.org/)
+3. [`ReactQuery`](https://tanstack.com/query/latest)
+
+## 🛠 want to install `faucet`, locally?
 
 ```bash
+git clone https://github.com/kkrt-labs/faucet-frontend
+cd faucet-frontend && npm i
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# aleternatively, yarn && yarn dev -> installs packages + starts server at port 3000!
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+made at kkrt labs 🥕✌️
