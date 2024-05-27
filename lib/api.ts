@@ -29,7 +29,7 @@ export const API = {
     claimFunds: (address: string): Promise<FaucetResponse> => requests.post(`claimFunds`, { to: address }),
   },
   jobs: {
-    redeemCode: (jobId: string): Promise<RedeemInviteJobResponse> => requests.get(`jobs/inviteCode/${jobId}`),
-    claimFunds: (jobId: string): Promise<FaucetJobResponse> => requests.get(`jobs/faucet/${jobId}`),
+    redeemCode: (jobId: string): Promise<RedeemInviteJobResponse> => requests.get(`job/inviteCode/${jobId}`),
+    claimFunds: (jobId: string): Promise<FaucetJobResponse> => requests.get(`job/faucet/${jobId}`),
   },
 };
