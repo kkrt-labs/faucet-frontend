@@ -1,17 +1,32 @@
+import { useEffect, useState } from "react";
 import { useActiveAccount } from "thirdweb/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BaseContainer } from "@/components/base-container";
 import { TextPair } from "@/components/text-pair";
-import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRedeemCode } from "@/mutations/useRedeemCode";
 
 export const InviteCodeSplash = ({ setIsWhitelisted }: { setIsWhitelisted: () => void }) => {
+  const { mutate: redeemCodeMutation, isError: redeemError, isPending, isSuccess, data } = useRedeemCode();
   const wallet = useActiveAccount();
-  const prettyWallet = wallet?.address.slice(0, 6) + "..." + wallet?.address.slice(-4);
+  const queryClient = useQueryClient();
 
   const [inviteCode, setInviteCode] = useState("");
-  const [isWrongCode, setIsWrongCode] = useState(false);
+  const prettyWallet = wallet?.address.slice(0, 6) + "..." + wallet?.address.slice(-4);
+
+  const handleRedeem = () => {
+    redeemCodeMutation({ inviteCode, walletAddress: wallet?.address || "" });
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      queryClient.setQueryData(["redeemCodeData"], data.jobID);
+      setIsWhitelisted();
+    }
+  }, [isSuccess]);
+
   return (
     <BaseContainer>
       <div className="flex flex-col justify-center items-center">
@@ -24,17 +39,12 @@ export const InviteCodeSplash = ({ setIsWhitelisted }: { setIsWhitelisted: () =>
           onChange={(e) => setInviteCode(e.target.value)}
         />
         <Button
-          variant={isWrongCode ? "fail" : "main"}
+          disabled={isPending || !inviteCode || !wallet}
+          variant={redeemError ? "fail" : "main"}
           className="w-full mt-4 md:mt-8"
-          onClick={() => {
-            if (inviteCode === "KKRT") {
-              setIsWhitelisted();
-            } else {
-              setIsWrongCode(true);
-            }
-          }}
+          onClick={handleRedeem}
         >
-          {isWrongCode ? "Invalid Code" : "Verify"}
+          {redeemError ? "Invalid Code" : "Verify"}
         </Button>
         <Button className="w-full space-x-6 items-center text-[#878794] mt-6" variant="outline">
           <div className="flex space-x-1">

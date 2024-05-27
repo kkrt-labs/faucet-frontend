@@ -13,4 +13,4 @@ const useRedeemCode = () => {
   });
 };
 
-export default useRedeemCode;
+export { useRedeemCode };
