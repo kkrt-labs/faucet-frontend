@@ -3,7 +3,7 @@ import { ENV } from "./constants";
 import type { AxiosRequestConfig } from "axios";
 import { FaucetJobResponse, FaucetResponse, RedeemInviteJobResponse, RedeemInviteResponse } from "./types";
 
-const instance = axios.create({ withCredentials: true });
+const instance = axios.create({});
 
 export const requests = {
   get: <T>(url: string, config?: AxiosRequestConfig): Promise<T> =>
@@ -26,7 +26,7 @@ export const API = {
       requests.post(`redeemInviteCode`, { inviteCode, address }),
   },
   facuet: {
-    claimFunds: (address: string): Promise<FaucetResponse> => requests.post(`faucet`, { to: address }),
+    claimFunds: (address: string): Promise<FaucetResponse> => requests.post(`claimFunds`, { to: address }),
   },
   jobs: {
     redeemCode: (jobId: string): Promise<RedeemInviteJobResponse> => requests.get(`jobs/inviteCode/${jobId}`),
