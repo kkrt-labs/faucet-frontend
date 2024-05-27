@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useActiveAccount } from "thirdweb/react";
+import { useActiveAccount, useConnectModal, lightTheme } from "thirdweb/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -7,9 +7,11 @@ import { BaseContainer } from "@/components/base-container";
 import { TextPair } from "@/components/text-pair";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRedeemCode } from "@/mutations/useRedeemCode";
+import { client, wallets } from "@/lib/thirdweb-client";
 
 export const InviteCodeSplash = ({ setIsWhitelisted }: { setIsWhitelisted: () => void }) => {
   const { mutate: redeemCodeMutation, isError: redeemError, isPending, isSuccess, data } = useRedeemCode();
+  const { connect } = useConnectModal();
   const wallet = useActiveAccount();
   const queryClient = useQueryClient();
 
@@ -18,6 +20,25 @@ export const InviteCodeSplash = ({ setIsWhitelisted }: { setIsWhitelisted: () =>
 
   const handleRedeem = () => {
     redeemCodeMutation({ inviteCode, walletAddress: wallet?.address || "" });
+  };
+
+  const changeWallet = async () => {
+    await connect({
+      client,
+      wallets,
+      size: "wide",
+      title: "Select Wallet",
+      titleIcon:
+        "https://assets-global.website-files.com/6464a063474b57e2c4e03b61/64a20e2749d92613acf4fd1b_Logo%20dark.svg",
+      showThirdwebBranding: false,
+      theme: lightTheme({
+        colors: {
+          accentText: "#f54400",
+          accentButtonBg: "#f54400",
+          primaryButtonBg: "#f54400",
+        },
+      }),
+    });
   };
 
   useEffect(() => {
@@ -46,7 +67,7 @@ export const InviteCodeSplash = ({ setIsWhitelisted }: { setIsWhitelisted: () =>
         >
           {redeemError ? "Invalid Code" : "Verify"}
         </Button>
-        <Button className="w-full space-x-6 items-center text-[#878794] mt-6" variant="outline">
+        <Button onClick={changeWallet} className="w-full space-x-6 items-center text-[#878794] mt-6" variant="outline">
           <div className="flex space-x-1">
             <Avatar>
               <AvatarImage src="https://github.com/shadcn.png" />
