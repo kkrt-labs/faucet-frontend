@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { Footer } from "@/components/mobile-footer";
+import { useState, useEffect } from "react";
 import { useActiveAccount } from "thirdweb/react";
+import { useIsWhitelisted } from "@/queries/useIsWhitelisted";
 import { IntroSplash } from "@/components/intro-splash";
 import { InviteCodeSplash } from "@/components/invite-splash";
 import { FreePass } from "@/components/free-pass";
@@ -10,8 +10,16 @@ import { Faucet } from "@/components/faucet";
 
 export default function Home() {
   const wallet = useActiveAccount();
+  const { data, isLoading } = useIsWhitelisted(wallet?.address ?? "");
+
   const [isWhitelisted, setIsWhitelisted] = useState(false);
   const [goToFaucet, setGoToFaucet] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading) {
+      setGoToFaucet(data?.isWhitelisted ?? false);
+    }
+  }, [data, isLoading]);
 
   if (goToFaucet) return <Faucet />;
   else if (isWhitelisted) return <FreePass shouldGoToFaucet={() => setGoToFaucet(true)} />;
