@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Confetti from "react-confetti";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useInviteCodeJob } from "@/queries/useInviteCodeJob";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,6 +21,10 @@ import linkIcon from "@/public/assets/link-icon.svg";
 import xIcon from "@/public/assets/x-icon-inverted.svg";
 
 export const FreePass = ({ shouldGoToFaucet }: { shouldGoToFaucet: () => void }) => {
+  const queryClient = useQueryClient();
+  const redeemCodeResult = queryClient.getQueryData(["redeemCodeData"]);
+  const { data: inviteCodeJob } = useInviteCodeJob(redeemCodeResult as string);
+
   return (
     <div
       className="flex flex-col justify-center items-center bg-white w-full py-16 px-3 rounded-md"
@@ -37,17 +43,20 @@ export const FreePass = ({ shouldGoToFaucet }: { shouldGoToFaucet: () => void })
           Claim your free OG Pass by Kakarot Labs.
         </p>
         <Image src={dummyFreePass} width={400} height={400} alt="Free Pass" className="mt-12" />
-        <Button variant="main" className="mt-4 md:mt-8 w-full max-w-[400px]">
+        {/* <Button variant="main" className="mt-4 md:mt-8 w-full max-w-[400px]">
           Claim your Pass
-        </Button>
-        <Button variant="outline" className="mt-4 w-full max-w-[400px] text-[#878794]">
-          <Image src={mintingIcon} alt="minting" width={24} height={24} priority className="w-[30px] h-6" />
-          <span>Minting in Progress</span>
-        </Button>
-        <Button variant="success" className="mt-4 w-full max-w-[400px]">
-          Claimed
-        </Button>
-        <ClaimedModal shouldGoToFaucet={shouldGoToFaucet} />
+        </Button> */}
+        {inviteCodeJob?.status === "pending" ? (
+          <Button variant="outline" className="mt-4 w-full max-w-[400px] text-[#878794]">
+            <Image src={mintingIcon} alt="minting" width={24} height={24} priority className="w-[30px] h-6" />
+            <span>Minting in Progress</span>
+          </Button>
+        ) : (
+          // <Button variant="success" className="mt-4 w-full max-w-[400px]">
+          //   Claimed
+          // </Button>
+          <ClaimedModal shouldGoToFaucet={shouldGoToFaucet} />
+        )}
       </div>
     </div>
   );
@@ -76,7 +85,7 @@ const ClaimedModal = ({ shouldGoToFaucet }: { shouldGoToFaucet: () => void }) =>
           run={runConfetti}
           numberOfPieces={500}
           recycle={false}
-          className="!-inset-1/3"
+          className="!-inset-3/4"
         />
         <DialogHeader className="flex flex-col items-center">
           <DialogTitle className="text-[#ff5400] text-2xl sm:text-3xl leading-9 font-medium">
