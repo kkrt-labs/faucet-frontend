@@ -1,10 +1,21 @@
 import Image from "next/image";
-import { TextPair } from "./text-pair";
-import { Button } from "./ui/button";
 import { useState } from "react";
+import { useActiveAccount } from "thirdweb/react";
+
+import { TextPair } from "@/components/text-pair";
+import { Button } from "@/components/ui/button";
+import { useClaimFunds } from "@/mutations/useClaimFunds";
 
 export const Faucet = () => {
-  const [available, setAvailable] = useState(0.5);
+  const { mutate: claimFunds, isPending, data: claimJobID } = useClaimFunds();
+  const wallet = useActiveAccount();
+
+  const handleClaim = async () => {
+    claimFunds({ walletAddress: wallet?.address as string });
+    setAvailable(0);
+  };
+
+  const [available, setAvailable] = useState(0.001);
   return (
     <main className="flex flex-col items-center">
       <div
@@ -17,14 +28,14 @@ export const Faucet = () => {
       >
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between">
           <DetailAndText title="Balance" text="0 Tokens" />
-          <DetailAndText title="Daily Allowance" text="0.5 ETH" />
+          <DetailAndText title="Daily Allowance" text="0.001 ETH" />
           <DetailAndText title="Cooldown" text="00:52:34" />
         </div>
         <div className="flex flex-col justify-center items-center my-16 sm:my-24">
           <div className="w-full sm:w-fit text-center">
             <h2 className="text-5xl md:text-7xl leading-tight text-[#878794]">{available} ETH</h2>
-            <Button onClick={() => setAvailable(0)} variant="main" className="mt-6 w-full" disabled={available === 0}>
-              Claim
+            <Button onClick={handleClaim} variant="main" className="mt-6 w-full" disabled={isPending}>
+              Claim {isPending ? "Processing..." : claimJobID?.jobID}
             </Button>
           </div>
         </div>
