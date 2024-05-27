@@ -1,7 +1,13 @@
 import axios from "axios";
 import { ENV } from "./constants";
 import type { AxiosRequestConfig } from "axios";
-import { FaucetJobResponse, FaucetResponse, RedeemInviteJobResponse, RedeemInviteResponse } from "./types";
+import {
+  FaucetJobResponse,
+  FaucetResponse,
+  IsWhitelistedResponse,
+  RedeemInviteJobResponse,
+  RedeemInviteResponse,
+} from "./types";
 
 const instance = axios.create({});
 
@@ -20,6 +26,8 @@ export const requests = {
 export const API = {
   general: {
     heartBeat: () => requests.get("health"),
+    isWhitelisted: (address: string): Promise<IsWhitelistedResponse> =>
+      requests.get(`isWhitelisted?address=${address}`),
   },
   invite: {
     redeemCode: (inviteCode: string, address: string): Promise<RedeemInviteResponse> =>

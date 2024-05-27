@@ -1,5 +1,5 @@
 export interface RedeemInviteResponse {
-  jobId: string;
+  jobID: string;
 }
 
 export interface RedeemInviteJobResponse {
@@ -11,7 +11,7 @@ export interface RedeemInviteJobResponse {
 }
 
 export interface FaucetResponse {
-  jobId: string;
+  jobID: string;
 }
 
 export interface FaucetJobResponse {
@@ -20,4 +20,8 @@ export interface FaucetJobResponse {
   status: "completed" | "pending" | "failed";
   transaction_hash: string;
   error: string | null;
+}
+
+export interface IsWhitelistedResponse {
+  isWhitelisted: boolean;
 }
