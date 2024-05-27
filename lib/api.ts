@@ -33,7 +33,7 @@ export const API = {
     redeemCode: (inviteCode: string, address: string): Promise<RedeemInviteResponse> =>
       requests.post(`redeemInviteCode`, { inviteCode, address }),
   },
-  facuet: {
+  faucet: {
     claimFunds: (address: string): Promise<FaucetResponse> => requests.post(`claimFunds`, { to: address }),
   },
   jobs: {
