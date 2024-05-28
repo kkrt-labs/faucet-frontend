@@ -10,12 +10,13 @@ import { useRedeemCode } from "@/mutations/useRedeemCode";
 import { client, wallets } from "@/lib/thirdweb-client";
 
 export const InviteCodeSplash = ({ setIsWhitelisted }: { setIsWhitelisted: () => void }) => {
-  const { mutate: redeemCodeMutation, isError: redeemError, isPending, isSuccess, data } = useRedeemCode();
+  const { mutate: redeemCodeMutation, isError, isPending, isSuccess, data } = useRedeemCode();
   const { connect } = useConnectModal();
   const wallet = useActiveAccount();
   const queryClient = useQueryClient();
 
   const [inviteCode, setInviteCode] = useState("");
+  const [redeemError, setRedeemError] = useState(isError);
   const prettyWallet = wallet?.address.slice(0, 6) + "..." + wallet?.address.slice(-4);
 
   const handleRedeem = () => {
@@ -47,6 +48,18 @@ export const InviteCodeSplash = ({ setIsWhitelisted }: { setIsWhitelisted: () =>
       setIsWhitelisted();
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (isError) {
+      setRedeemError(true);
+    }
+  }, [isError]);
+
+  useEffect(() => {
+    if (redeemError) {
+      setRedeemError(false);
+    }
+  }, [inviteCode]);
 
   return (
     <BaseContainer>
