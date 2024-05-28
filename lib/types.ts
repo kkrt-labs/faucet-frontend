@@ -5,7 +5,7 @@ export interface RedeemInviteResponse {
 export interface RedeemInviteJobResponse {
   created_at: string;
   job_id: string;
-  status: "completed" | "pending" | "failed";
+  status: "completed" | "pending" | "error";
   transaction_hash: string;
   error: string | null;
 }
@@ -17,7 +17,7 @@ export interface FaucetResponse {
 export interface FaucetJobResponse {
   created_at: string;
   job_id: string;
-  status: "completed" | "pending" | "failed";
+  status: "completed" | "pending" | "error";
   transaction_hash: string;
   error: string | null;
 }
