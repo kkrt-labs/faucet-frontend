@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Confetti from "react-confetti";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useInviteCodeJob } from "@/queries/useInviteCodeJob";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,13 @@ export const FreePass = ({ shouldGoToFaucet }: { shouldGoToFaucet: () => void })
   const redeemCodeResult = queryClient.getQueryData(["redeemCodeData"]);
   const { data: inviteCodeJob } = useInviteCodeJob(redeemCodeResult as string);
 
+  useEffect(() => {
+    if (inviteCodeJob && inviteCodeJob[0].status === "error") {
+      console.error("Error redeeming invite code");
+      shouldGoToFaucet();
+    }
+  }, [inviteCodeJob]);
+
   return (
     <div
       className="flex flex-col justify-center items-center bg-white w-full py-16 px-3 rounded-md"
@@ -46,16 +53,16 @@ export const FreePass = ({ shouldGoToFaucet }: { shouldGoToFaucet: () => void })
         {/* <Button variant="main" className="mt-4 md:mt-8 w-full max-w-[400px]">
           Claim your Pass
         </Button> */}
-        {inviteCodeJob?.status === "pending" ? (
-          <Button variant="outline" className="mt-4 w-full max-w-[400px] text-[#878794]">
-            <Image src={mintingIcon} alt="minting" width={24} height={24} priority className="w-[30px] h-6" />
-            <span>Minting in Progress</span>
-          </Button>
-        ) : (
+        {inviteCodeJob && inviteCodeJob[0].status === "completed" ? (
           // <Button variant="success" className="mt-4 w-full max-w-[400px]">
           //   Claimed
           // </Button>
           <ClaimedModal shouldGoToFaucet={shouldGoToFaucet} />
+        ) : (
+          <Button variant="outline" className="mt-4 w-full max-w-[400px] text-[#878794]">
+            <Image src={mintingIcon} alt="minting" width={24} height={24} priority className="w-[30px] h-6" />
+            <span>Minting in Progress</span>
+          </Button>
         )}
       </div>
     </div>
