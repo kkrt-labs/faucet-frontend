@@ -35,8 +35,8 @@ export const WalletDetails = () => {
           size="withIcon"
         >
           <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarImage src={`https://effigy.im/a/${wallet?.address}.png`} />
+            <AvatarFallback>{wallet.address}</AvatarFallback>
           </Avatar>
           <span>{prettyWallet}</span>
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />

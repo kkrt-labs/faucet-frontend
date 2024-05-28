@@ -83,8 +83,8 @@ export const InviteCodeSplash = ({ setIsWhitelisted }: { setIsWhitelisted: () =>
         <Button onClick={changeWallet} className="w-full space-x-6 items-center text-[#878794] mt-6" variant="outline">
           <div className="flex space-x-1">
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarImage src={`https://effigy.im/a/${wallet?.address}.png`} />
+              <AvatarFallback>{wallet?.address}</AvatarFallback>
             </Avatar>
             <span>{prettyWallet}</span>
           </div>
