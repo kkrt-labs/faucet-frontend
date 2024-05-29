@@ -1,86 +1,97 @@
 import { useEffect, useState } from "react";
-import { useActiveAccount, useConnectModal, lightTheme } from "thirdweb/react";
+import { useActiveAccount, useConnectModal } from "thirdweb/react";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+
+import { useDebounce } from "@/hooks/useDebounce";
+import { client, wallets } from "@/lib/thirdweb-client";
+import { WALLET_MODAL_OPTIONS } from "@/lib/constants";
+import { useInviteCodeValid } from "@/mutations/useInviteCodeValid";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BaseContainer } from "@/components/base-container";
 import { TextPair } from "@/components/text-pair";
-import { useQueryClient } from "@tanstack/react-query";
-import { useRedeemCode } from "@/mutations/useRedeemCode";
-import { client, wallets } from "@/lib/thirdweb-client";
 
 export const InviteCodeSplash = ({ setIsWhitelisted }: { setIsWhitelisted: () => void }) => {
-  const { mutate: redeemCodeMutation, isError, isPending, isSuccess, data } = useRedeemCode();
   const { connect } = useConnectModal();
-  const wallet = useActiveAccount();
-  const queryClient = useQueryClient();
+  const { mutate: checkInviteCode, isError, isSuccess, data: inviteCodeData } = useInviteCodeValid();
 
   const [inviteCode, setInviteCode] = useState("");
-  const [redeemError, setRedeemError] = useState(isError);
+  const [redeemError, setRedeemError] = useState(false);
+
+  const wallet = useActiveAccount();
+  const queryClient = useQueryClient();
+  const debouncedInviteCode = useDebounce(inviteCode, 500);
   const prettyWallet = wallet?.address.slice(0, 6) + "..." + wallet?.address.slice(-4);
 
   const handleRedeem = () => {
-    redeemCodeMutation({ inviteCode, walletAddress: wallet?.address || "" });
+    if (!inviteCode) return;
+    checkInviteCode({ inviteCode: debouncedInviteCode });
   };
 
   const changeWallet = async () => {
     await connect({
       client,
       wallets,
-      size: "wide",
-      title: "Select Wallet",
-      titleIcon:
-        "https://assets-global.website-files.com/6464a063474b57e2c4e03b61/64a20e2749d92613acf4fd1b_Logo%20dark.svg",
-      showThirdwebBranding: false,
-      theme: lightTheme({
-        colors: {
-          accentText: "#f54400",
-          accentButtonBg: "#f54400",
-          primaryButtonBg: "#f54400",
-        },
-      }),
+      ...WALLET_MODAL_OPTIONS,
     });
   };
 
+  const errorToast = () =>
+    toast.error("Seems like the invite code is invalid or has already been claimed. Please try again.");
+
   useEffect(() => {
-    if (isSuccess) {
-      queryClient.setQueryData(["redeemCodeData"], data.jobID);
+    if (!inviteCode) return;
+
+    if (isSuccess && inviteCodeData.isValidInviteCode && !inviteCodeData.isClaimed) {
+      queryClient.setQueryData(["redeemCodeData"], { inviteCode, ...inviteCodeData });
       setIsWhitelisted();
+      return;
     }
-  }, [isSuccess]);
+
+    setRedeemError(true);
+  }, [inviteCode, inviteCodeData, isSuccess, queryClient, setIsWhitelisted]);
 
   useEffect(() => {
     if (isError) {
       setRedeemError(true);
+      errorToast();
     }
   }, [isError]);
 
   useEffect(() => {
-    if (redeemError) {
-      setRedeemError(false);
-    }
+    setRedeemError(false);
   }, [inviteCode]);
 
   return (
     <BaseContainer>
       <div className="flex flex-col justify-center items-center">
-        <TextPair heading="Enter Invite Code" description="Enter the code in the input field" />
+        <TextPair
+          heading="Verify Your Access"
+          description="Welcome to the Kakarot Faucet! To get started, you'll need to verify your access by entering the invite code provided by our team."
+        />
         <Input
           type="text"
           placeholder="Enter your code here"
-          className="py-6 placeholder:text-xs placeholder:text-[#878794] mt-6 md:mt-12 placeholder:font-normal"
+          className="py-6 placeholder:text-xs placeholder:text-[#878794] mt-6 md:mt-12 placeholder:font-normal max-w-[350px]"
           value={inviteCode}
           onChange={(e) => setInviteCode(e.target.value)}
         />
         <Button
-          disabled={isPending || !inviteCode || !wallet}
+          disabled={!inviteCode || !wallet || redeemError}
           variant={redeemError ? "fail" : "main"}
-          className="w-full mt-4 md:mt-8"
+          className="w-full mt-4 md:mt-8 max-w-[350px]"
           onClick={handleRedeem}
         >
           {redeemError ? "Invalid Code" : "Verify"}
         </Button>
-        <Button onClick={changeWallet} className="w-full space-x-6 items-center text-[#878794] mt-6" variant="outline">
+        <Button
+          onClick={changeWallet}
+          className="w-full space-x-6 items-center text-[#878794] mt-6 max-w-[350px]"
+          variant="outline"
+        >
           <div className="flex space-x-1">
             <Avatar>
               <AvatarImage src={`https://effigy.im/a/${wallet?.address}.png`} />
