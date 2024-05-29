@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Toaster } from "sonner";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/mobile-footer";
 import { ThirdwebProvider } from "@/lib/thirdweb-provider";
@@ -40,6 +41,7 @@ export default function RootLayout({
     <html lang="en">
       <ThirdwebProvider>
         <body className={`${openSauce.variable} font-sans bg-[#E5E7EB] px-4 sm:px-20`}>
+          <Toaster />
           <Provider>
             <Navbar />
             {children}
