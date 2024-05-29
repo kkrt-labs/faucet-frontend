@@ -127,3 +127,14 @@ html {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), #df1c41;
   box-shadow: 0px 1px 2px 0px #ff4d4f, 0px 0px 0px 1px #b71836, 0px 0px 0px 2px #1e1e1e, 0px 0px 0px 3px #ff4d4f;
 }
+
+.cooldownButton {
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), #5496f8;
+}
+
+.faucetDetails {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(193, 199, 208, 0.02) 100%),
+    rgba(142, 152, 168, 0.14);
+  box-shadow: 0px 1px 2px 0px rgba(164, 172, 185, 0.24), 0px 0px 0px 1px rgba(18, 55, 105, 0.08);
+}
