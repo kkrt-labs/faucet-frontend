@@ -1,3 +1,5 @@
+import { UseConnectModalOptions, lightTheme } from "thirdweb/react";
+
 type NODE_ENV_TYPE = "production" | "development" | "test";
 interface Environment {
   NODE_ENV: NODE_ENV_TYPE;
@@ -13,4 +15,19 @@ const ENV: Environment = {
   THIRDWEB_CLIENT_SECRET: process.env.THIRDWEB_CLIENT_SECRET || "",
 };
 
-export { ENV };
+const WALLET_MODAL_OPTIONS: Partial<UseConnectModalOptions> = {
+  size: "wide",
+  title: "Select Wallet",
+  titleIcon:
+    "https://assets-global.website-files.com/6464a063474b57e2c4e03b61/64a20e2749d92613acf4fd1b_Logo%20dark.svg",
+  showThirdwebBranding: false,
+  theme: lightTheme({
+    colors: {
+      accentText: "#f54400",
+      accentButtonBg: "#f54400",
+      primaryButtonBg: "#f54400",
+    },
+  }),
+};
+
+export { ENV, WALLET_MODAL_OPTIONS };
