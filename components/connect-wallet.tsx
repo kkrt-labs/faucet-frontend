@@ -1,8 +1,10 @@
 import { ConnectButton, lightTheme } from "thirdweb/react";
 import { client, wallets } from "@/lib/thirdweb-client";
 import { WalletDetails } from "./wallet-details";
+import { WALLET_MODAL_OPTIONS } from "@/lib/constants";
 
 export const ConnectWallet = () => {
+  const { size, title, titleIcon, showThirdwebBranding } = WALLET_MODAL_OPTIONS;
   return (
     <div>
       <ConnectButton
@@ -22,19 +24,12 @@ export const ConnectWallet = () => {
             fontSize: "14px",
           },
         }}
-        theme={lightTheme({
-          colors: {
-            accentText: "#f54400",
-            accentButtonBg: "#f54400",
-            primaryButtonBg: "#f54400",
-          },
-        })}
+        theme={WALLET_MODAL_OPTIONS.theme}
         connectModal={{
-          size: "wide",
-          title: "Select Wallet",
-          titleIcon:
-            "https://assets-global.website-files.com/6464a063474b57e2c4e03b61/64a20e2749d92613acf4fd1b_Logo%20dark.svg",
-          showThirdwebBranding: false,
+          size,
+          title,
+          titleIcon,
+          showThirdwebBranding,
         }}
       />
     </div>
