@@ -2,6 +2,11 @@ export interface RedeemInviteResponse {
   jobID: string;
 }
 
+export interface IsValidInviteResponse {
+  isValidInviteCode: boolean;
+  isClaimed: boolean;
+}
+
 export interface RedeemInviteJobResponse {
   created_at: string;
   job_id: string;
@@ -24,4 +29,10 @@ export interface FaucetJobResponse {
 
 export interface IsWhitelistedResponse {
   isWhitelisted: boolean;
+}
+
+export interface FaucetStatsResponse {
+  timeLeftInS: number;
+  canClaim: boolean;
+  dripAmountInEth: string;
 }

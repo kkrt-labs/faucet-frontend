@@ -4,6 +4,8 @@ import type { AxiosRequestConfig } from "axios";
 import {
   FaucetJobResponse,
   FaucetResponse,
+  FaucetStatsResponse,
+  IsValidInviteResponse,
   IsWhitelistedResponse,
   RedeemInviteJobResponse,
   RedeemInviteResponse,
@@ -25,19 +27,22 @@ export const requests = {
 
 export const API = {
   general: {
-    heartBeat: () => requests.get("health"),
+    heartBeat: () => requests.get("/health"),
     isWhitelisted: (address: string): Promise<IsWhitelistedResponse> =>
-      requests.get(`isWhitelisted?address=${address}`),
+      requests.get(`/isWhitelisted?address=${address}`),
   },
   invite: {
+    isValid: (inviteCode: string): Promise<IsValidInviteResponse> =>
+      requests.get(`/isValidInviteCode?inviteCode=${inviteCode}`),
     redeemCode: (inviteCode: string, address: string): Promise<RedeemInviteResponse> =>
-      requests.post(`redeemInviteCode`, { inviteCode, address }),
+      requests.post(`/redeemInviteCode`, { inviteCode, address }),
   },
   faucet: {
-    claimFunds: (address: string): Promise<FaucetResponse> => requests.post(`claimFunds`, { to: address }),
+    claimFunds: (address: string): Promise<FaucetResponse> => requests.post(`/claimFunds`, { to: address }),
+    getStats: (address: string): Promise<FaucetStatsResponse> => requests.get(`/stats?address=${address}`),
   },
   jobs: {
-    redeemCode: (jobId: string): Promise<RedeemInviteJobResponse[]> => requests.get(`job/inviteCode/${jobId}`),
-    claimFunds: (jobId: string): Promise<FaucetJobResponse[]> => requests.get(`job/faucet/${jobId}`),
+    redeemCode: (jobId: string): Promise<RedeemInviteJobResponse[]> => requests.get(`/job/inviteCode/${jobId}`),
+    claimFunds: (jobId: string): Promise<FaucetJobResponse[]> => requests.get(`/job/faucet/${jobId}`),
   },
 };
