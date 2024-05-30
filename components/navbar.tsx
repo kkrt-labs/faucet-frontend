@@ -18,7 +18,7 @@ export const Navbar = () => {
             <Image
               src="/assets/kakarot-logo.svg"
               alt="Kakarot Logo"
-              className="dark:invert"
+              className="dark:invert shrink-0"
               width={137}
               height={40}
               priority
