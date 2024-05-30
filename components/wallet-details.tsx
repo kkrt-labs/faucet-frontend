@@ -2,11 +2,10 @@ import Image from "next/image";
 import { useState } from "react";
 import { CommandList } from "cmdk";
 import { useActiveAccount, useDisconnect, useActiveWallet, useWalletBalance } from "thirdweb/react";
-import { ethereum } from "thirdweb/chains";
 import { ChevronDown, LogOut } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { client } from "@/lib/thirdweb-client";
+import { KAKAROT_SEPOLIA, client } from "@/lib/thirdweb-client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
@@ -19,7 +18,11 @@ export const WalletDetails = () => {
   const wallet = useActiveAccount();
   const disconnectWallet = useActiveWallet();
   const { disconnect } = useDisconnect();
-  const { data: walletBalance } = useWalletBalance({ chain: ethereum, address: wallet?.address as string, client });
+  const { data: walletBalance } = useWalletBalance({
+    chain: KAKAROT_SEPOLIA,
+    address: wallet?.address as string,
+    client,
+  });
 
   const [open, setOpen] = useState(false);
   const prettyWallet = wallet?.address.slice(0, 5) + "..." + wallet?.address.slice(-3);
@@ -40,7 +43,7 @@ export const WalletDetails = () => {
         variant="wallet"
         size="withIcon"
       >
-        <Image src={ethereumLogo} alt="ethereum" className="bg-white rounded-full w-6" />
+        <Image src={ethereumLogo} alt="ethereum" className="bg-white rounded-full w-5" />
         <span>{walletBalance?.displayValue.substring(0, 6) ?? 0} ETH</span>
       </Button>
       <Popover open={open} onOpenChange={setOpen}>

@@ -1,4 +1,4 @@
-import { createThirdwebClient } from "thirdweb";
+import { createThirdwebClient, defineChain } from "thirdweb";
 import { createWallet, walletConnect } from "thirdweb/wallets";
 import { ENV } from "./constants";
 
@@ -19,3 +19,5 @@ export const client = createThirdwebClient(
 );
 
 export const wallets = [createWallet("io.metamask"), walletConnect(), createWallet("me.rainbow")];
+
+export const KAKAROT_SEPOLIA = defineChain(1802203764);

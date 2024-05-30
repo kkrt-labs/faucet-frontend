@@ -1,10 +1,9 @@
 import Image from "next/image";
 import { useActiveAccount, useBlockNumber } from "thirdweb/react";
-import { ethereum } from "thirdweb/chains";
 import { toast } from "sonner";
 import { InfoIcon } from "lucide-react";
 
-import { client } from "@/lib/thirdweb-client";
+import { KAKAROT_SEPOLIA, client } from "@/lib/thirdweb-client";
 import { cn } from "@/lib/utils";
 import { useFaucetJob } from "@/queries/useFaucetJob";
 import { useFaucetStats } from "@/queries/useFaucetStats";
@@ -23,7 +22,7 @@ export const Faucet = () => {
   const { data: faucetStats } = useFaucetStats(wallet?.address as string);
   const [isProcessing, setIsProcessing] = useState(isPending);
 
-  const blockNumber = useBlockNumber({ client, chain: ethereum });
+  const blockNumber = useBlockNumber({ client, chain: KAKAROT_SEPOLIA });
   const available = `${faucetStats?.dripAmountInEth ?? 0.001} ETH`;
 
   const isCooldown =
