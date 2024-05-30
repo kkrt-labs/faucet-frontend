@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { QueryKey, useQuery, useQueryClient } from "@tanstack/react-query";
 import { API } from "@/lib/api";
 
 interface FaucetJobParams {
@@ -17,7 +17,8 @@ const useFaucetJob = (jobId: string) => {
       countRef.current += 1;
       return API.jobs.claimFunds(jobId);
     },
-    refetchInterval: (query) => (isComplete(query, countRef.current) ? false : 1000),
+    enabled: !!jobId && countRef.current < 60,
+    refetchInterval: (query) => (isComplete(query, countRef.current) ? false : 2000),
   });
 };
 

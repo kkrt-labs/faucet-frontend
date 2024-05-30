@@ -13,26 +13,40 @@ import { TextPair } from "@/components/text-pair";
 import { Button } from "@/components/ui/button";
 
 import cooldownCarrot from "@/public/assets/cooldown-carrot.svg";
+import { useEffect, useState } from "react";
 
 export const Faucet = () => {
   const wallet = useActiveAccount();
 
   const { mutate: claimFunds, isPending, data: claimJobID } = useClaimFunds();
-  const { data: faucetJob } = useFaucetJob(claimJobID?.jobID ?? "");
+  const { data: faucetJob, isError } = useFaucetJob(claimJobID?.jobID ?? "");
   const { data: faucetStats } = useFaucetStats(wallet?.address as string);
-  const blockNumber = useBlockNumber({ client, chain: ethereum });
+  const [isProcessing, setIsProcessing] = useState(isPending);
 
-  const available = `${faucetStats?.dripAmountInEth ?? 0} ETH`;
-  const isProcessing = isPending || faucetJob?.[0]?.status === "completed" || faucetStats?.canClaim === false;
+  const blockNumber = useBlockNumber({ client, chain: ethereum });
+  const available = `${faucetStats?.dripAmountInEth ?? 0.001} ETH`;
+
+  const isCooldown =
+    faucetJob?.[0]?.status === "completed" && (faucetStats?.timeLeftInS !== 0 || faucetStats?.canClaim === false);
 
   const handleClaim = () => {
-    claimFunds(
-      { walletAddress: wallet?.address as string },
-      {
-        onSuccess: () => toast.success("ETH claimed successfully!"),
-      }
-    );
+    setIsProcessing(true);
+    claimFunds({ walletAddress: wallet?.address as string });
   };
+
+  useEffect(() => {
+    if (faucetJob && faucetJob[0].status === "completed") {
+      toast.success("Claimed successfully!");
+      setIsProcessing(false);
+    }
+  }, [faucetJob]);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error("Failed to claim funds. Please try again later.");
+      setIsProcessing(false);
+    }
+  }, [isError]);
 
   return (
     <main className="flex flex-col items-center">
@@ -50,19 +64,20 @@ export const Faucet = () => {
         </div>
         <div className="flex flex-col justify-center items-center my-16 sm:my-24">
           <div className="w-full sm:w-fit text-center flex flex-col justify-center items-center">
-            {isProcessing ? (
+            {!isProcessing && isCooldown ? (
               <Image src={cooldownCarrot} alt="Cooldown Carrot" />
             ) : (
               <h2 className="text-5xl md:text-7xl leading-tight text-[#878794]">{available}</h2>
             )}
             <Button
               onClick={handleClaim}
-              variant={isProcessing ? "cooldown" : "main"}
-              className={cn("mt-6 w-full", isProcessing && "pointer-events-none")}
+              disabled={isProcessing}
+              variant={!isProcessing && isCooldown ? "cooldown" : "main"}
+              className={cn("mt-6 w-full", !isProcessing && isCooldown && "pointer-events-none")}
             >
-              {isProcessing ? "Cooldown" : "Claim"}
+              {isProcessing ? "Claiming..." : isCooldown ? "Cooldown" : "Claim"}
             </Button>
-            {isProcessing && (
+            {!isProcessing && isCooldown && (
               <div className="flex flex-row items-center justify-center my-4">
                 <InfoIcon className="mt-4 ml-2 h-5 w-5 shrink-0 text-[#8E98A8]" />
                 <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[300px]">
