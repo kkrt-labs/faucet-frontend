@@ -30,4 +30,6 @@ const WALLET_MODAL_OPTIONS: Partial<UseConnectModalOptions> = {
   }),
 };
 
-export { ENV, WALLET_MODAL_OPTIONS };
+const CONFETTI_COLORS = ["#FDA829", "#F6F5FC", "#FF2828"];
+
+export { ENV, WALLET_MODAL_OPTIONS, CONFETTI_COLORS };

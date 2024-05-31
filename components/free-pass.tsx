@@ -10,6 +10,7 @@ import { useRedeemCode } from "@/mutations/useRedeemCode";
 import { useInviteCodeJob } from "@/queries/useInviteCodeJob";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { Button } from "@/components/ui/button";
+import { CONFETTI_COLORS } from "@/lib/constants";
 
 import dummyFreePass from "@/public/assets/dummy-free-pass.svg";
 import mintingIcon from "@/public/assets/mining.gif";
@@ -23,8 +24,6 @@ interface RedeemInviteCodeData {
   isClaimed: boolean;
   isValidInviteCode: boolean;
 }
-
-const CONFETTI_COLORS = ["#FDA829", "#F6F5FC", "#FF2828"];
 
 export const FreePass = ({ shouldGoToFaucet }: { shouldGoToFaucet: () => void }) => {
   const queryClient = useQueryClient();
