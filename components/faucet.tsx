@@ -1,18 +1,20 @@
 import Image from "next/image";
+import Confetti from "react-confetti";
+import { useEffect, useState } from "react";
 import { useActiveAccount, useBlockNumber } from "thirdweb/react";
 import { toast } from "sonner";
-import { InfoIcon } from "lucide-react";
 
 import { KAKAROT_SEPOLIA, client } from "@/lib/thirdweb-client";
-import { cn } from "@/lib/utils";
+import { CONFETTI_COLORS } from "@/lib/constants";
+import { useWindowSize } from "@/hooks/useWindowSize";
 import { useFaucetJob } from "@/queries/useFaucetJob";
 import { useFaucetStats } from "@/queries/useFaucetStats";
+import { useFaucetBalance } from "@/queries/useFaucetBalance";
 import { useClaimFunds } from "@/mutations/useClaimFunds";
+import { FaucetClaim } from "@/components/faucet-claim";
+import { FaucetSuccess } from "@/components/faucet-success";
 import { TextPair } from "@/components/text-pair";
 import { Button } from "@/components/ui/button";
-
-import cooldownCarrot from "@/public/assets/cooldown-carrot.svg";
-import { useEffect, useState } from "react";
 
 export const Faucet = () => {
   const wallet = useActiveAccount();
@@ -20,7 +22,11 @@ export const Faucet = () => {
   const { mutate: claimFunds, isPending, data: claimJobID } = useClaimFunds();
   const { data: faucetJob, isError } = useFaucetJob(claimJobID?.jobID ?? "");
   const { data: faucetStats } = useFaucetStats(wallet?.address as string);
+  const { data: faucetBalance, refetch: refetchFaucet } = useFaucetBalance();
+  const { width: windowWidth } = useWindowSize();
+
   const [isProcessing, setIsProcessing] = useState(isPending);
+  const [isClaimed, setIsClaimed] = useState(false);
 
   const blockNumber = useBlockNumber({ client, chain: KAKAROT_SEPOLIA });
   const available = `${faucetStats?.dripAmountInEth ?? 0.001} ETH`;
@@ -37,6 +43,8 @@ export const Faucet = () => {
     if (faucetJob && faucetJob[0].status === "completed") {
       toast.success("Claimed successfully!");
       setIsProcessing(false);
+      setIsClaimed(true);
+      refetchFaucet();
     }
   }, [faucetJob]);
 
@@ -57,35 +65,31 @@ export const Faucet = () => {
           backgroundPosition: "right",
         }}
       >
+        <Confetti
+          colors={CONFETTI_COLORS}
+          run={isClaimed}
+          numberOfPieces={500}
+          recycle={false}
+          width={windowWidth}
+          hidden={!isClaimed}
+        />
+
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between">
-          <DetailAndText title="Facuet Balance" text="973 ETH" />
+          <DetailAndText title="Facuet Balance" text={`${faucetBalance?.faucetBalanceInEth ?? 0}ETH`} />
           <DetailAndText title="Block Number" text={blockNumber?.toString() ?? "0x"} />
         </div>
-        <div className="flex flex-col justify-center items-center my-16 sm:my-24">
-          <div className="w-full sm:w-fit text-center flex flex-col justify-center items-center">
-            {!isProcessing && isCooldown ? (
-              <Image src={cooldownCarrot} alt="Cooldown Carrot" />
-            ) : (
-              <h2 className="text-5xl md:text-7xl leading-tight text-[#878794]">{available}</h2>
-            )}
-            <Button
-              onClick={handleClaim}
-              disabled={isProcessing}
-              variant={!isProcessing && isCooldown ? "cooldown" : "main"}
-              className={cn("mt-6 w-full", !isProcessing && isCooldown && "pointer-events-none")}
-            >
-              {isProcessing ? "Claiming..." : isCooldown ? "Cooldown" : "Claim"}
-            </Button>
-            {!isProcessing && isCooldown && (
-              <div className="flex flex-row items-center justify-center my-4">
-                <InfoIcon className="mt-4 ml-2 h-5 w-5 shrink-0 text-[#8E98A8]" />
-                <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[300px]">
-                  You&apos;re on a cooldown period! Try the Kakarot faucet again in {faucetStats?.timeLeftInS} seconds.
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
+
+        {isClaimed ? (
+          <FaucetSuccess navigateToClaim={() => setIsClaimed(false)} />
+        ) : (
+          <FaucetClaim
+            isCooldown={isCooldown}
+            isProcessing={isProcessing}
+            available={available}
+            handleClaim={handleClaim}
+            faucetStats={faucetStats}
+          />
+        )}
       </div>
       <TextPair
         heading="Need more testnet ETH?"
