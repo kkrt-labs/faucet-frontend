@@ -10,13 +10,26 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Kakarot Faucet",
-  description: "Get test tokens for building applications on the Superchain",
+  description: "The fast, native faucet to kickstart your journey in the Kakarot ecosystem.",
   icons: [
     {
       url: "/favicon.svg",
       href: "/favicon.svg",
     },
   ],
+  openGraph: {
+    type: "website",
+    title: "Kakarot Faucet",
+    description: "The fast, native faucet to kickstart your journey in the Kakarot ecosystem.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 628,
+        alt: "Kakarot Faucet",
+      },
+    ],
+  },
 };
 
 const openSauce = localFont({
