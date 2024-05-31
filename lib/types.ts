@@ -36,3 +36,7 @@ export interface FaucetStatsResponse {
   canClaim: boolean;
   dripAmountInEth: string;
 }
+
+export interface FaucetBalanceResponse {
+  faucetBalanceInEth: string;
+}
