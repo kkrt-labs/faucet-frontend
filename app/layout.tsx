@@ -24,6 +24,7 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/og-image.png",
+        href: "/og-image.png",
         width: 1200,
         height: 628,
         alt: "Kakarot Faucet",
