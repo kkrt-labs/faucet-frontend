@@ -17,6 +17,7 @@ export const metadata: Metadata = {
       href: "/favicon.svg",
     },
   ],
+  metadataBase: new URL("https://faucet-sepolia.kakarot.org"),
   openGraph: {
     type: "website",
     title: "Kakarot Faucet",
@@ -24,6 +25,7 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/og-image.png",
+        href: "/og-image.png",
         width: 1200,
         height: 628,
         alt: "Kakarot Faucet",

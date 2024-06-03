@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import Confetti from "react-confetti";
 import { useEffect, useState } from "react";
 import { useActiveAccount, useBlockNumber } from "thirdweb/react";
@@ -75,7 +76,7 @@ export const Faucet = () => {
         />
 
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between">
-          <DetailAndText title="Facuet Balance" text={`${faucetBalance?.faucetBalanceInEth ?? 0}ETH`} />
+          <DetailAndText title="Faucet Balance" text={`${faucetBalance?.faucetBalanceInEth ?? 0}ETH`} />
           <DetailAndText title="Block Number" text={blockNumber?.toString() ?? "0x"} />
         </div>
 
@@ -93,12 +94,14 @@ export const Faucet = () => {
       </div>
       <TextPair
         heading="Need more testnet ETH?"
-        description="Reach out to us @Kakarot Discord and raise a ticket if you need large amount of testnet ETH."
+        description="Reach out to us on Discord and raise a ticket if you need large amount of testnet ETH."
       />
-      <Button className="space-x-2 max-w-[120px] mt-6" variant="outline" size="withIcon">
-        <span>Reach Out</span>
-        <Image src="/assets/link-icon.svg" alt="Docs" width={16} height={16} />
-      </Button>
+      <Link href="https://discord.gg/kakarotzkevm" rel="noopener noreferrer" target="_blank">
+        <Button className="space-x-2 max-w-[120px] mt-6" variant="outline" size="withIcon">
+          <span>Reach Out</span>
+          <Image src="/assets/link-icon.svg" alt="Docs" width={16} height={16} />
+        </Button>
+      </Link>
     </main>
   );
 };
