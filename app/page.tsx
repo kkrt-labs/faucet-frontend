@@ -28,8 +28,7 @@ export default function Home() {
     <main className="flex flex-col justify-center items-center text-center py-12 sm:py-20">
       <h1 className="scroll-m-20 text-4xl font-medium tracking-tight lg:text-[52px]">Get free testnet Kakarot ETH</h1>
       <p className="leading-7 [&:not(:first-child)]:mt-6 text-foreground">
-        The fast, native faucet to kickstart your journey in the Kakarot ecosystem. This is staging deployment, not
-        production url.
+        The fast, native faucet to kickstart your journey in the Kakarot ecosystem.
       </p>
       {!wallet && <IntroSplash />}
       {wallet && <InviteCodeSplash setIsWhitelisted={() => setIsWhitelisted(true)} />}
