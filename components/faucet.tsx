@@ -37,7 +37,7 @@ export const Faucet = () => {
   const blockNumber = useBlockNumber({ client, chain: KAKAROT_SEPOLIA });
   const available = `${faucetStats?.dripAmountInEth ?? 0.001} ETH`;
 
-  const isCooldown = faucetStats?.timeLeftInS !== 0 || faucetStats?.canClaim === false;
+  const isCooldown = !!faucetStats && (faucetStats?.timeLeftInS !== 0 || faucetStats?.canClaim === false);
 
   const handleClaim = () => {
     setIsProcessing(true);
@@ -79,12 +79,10 @@ export const Faucet = () => {
           width={windowWidth}
           hidden={!isClaimed}
         />
-
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between">
           <DetailAndText title="Faucet Balance" text={`${faucetBalance?.faucetBalanceInEth.substring(0, 6) ?? 0}ETH`} />
           <DetailAndText title="Block Number" text={blockNumber?.toString() ?? "0x"} />
         </div>
-
         {isClaimed ? (
           <FaucetSuccess navigateToClaim={() => setIsClaimed(false)} />
         ) : (
