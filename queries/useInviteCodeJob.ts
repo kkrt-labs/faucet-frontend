@@ -12,6 +12,7 @@ const useInviteCodeJob = (jobId: string) => {
     queryKey: ["useInviteCodeJob", jobId],
     queryFn: () => API.jobs.redeemCode(jobId),
     refetchInterval: (query) => (isComplete(query) ? false : 2000),
+    enabled: !!jobId,
   });
 };
 
