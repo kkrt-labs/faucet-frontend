@@ -76,7 +76,7 @@ export const Faucet = () => {
         />
 
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between">
-          <DetailAndText title="Faucet Balance" text={`${faucetBalance?.faucetBalanceInEth ?? 0}ETH`} />
+          <DetailAndText title="Faucet Balance" text={`${faucetBalance?.faucetBalanceInEth.substring(0, 6) ?? 0}ETH`} />
           <DetailAndText title="Block Number" text={blockNumber?.toString() ?? "0x"} />
         </div>
 
