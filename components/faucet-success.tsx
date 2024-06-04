@@ -15,7 +15,6 @@ export const FaucetSuccess = ({ navigateToClaim }: FaucetSuccessProps) => (
       </Button>
 
       <div className="flex flex-row items-center justify-center my-4">
-        <InfoIcon className="mt-4 ml-2 h-5 w-5 shrink-0 text-[#8E98A8]" />
         <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[300px]">
           You just got some testnet ETH! Your wallet should reflect this transaction soon!
         </p>

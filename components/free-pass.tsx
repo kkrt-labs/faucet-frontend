@@ -10,9 +10,9 @@ import { useRedeemCode } from "@/mutations/useRedeemCode";
 import { useInviteCodeJob } from "@/queries/useInviteCodeJob";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { Button } from "@/components/ui/button";
-import { CONFETTI_COLORS } from "@/lib/constants";
+import { CONFETTI_COLORS, INTENT } from "@/lib/constants";
 
-import dummyFreePass from "@/public/assets/dummy-free-pass.svg";
+import ogPass from "@/public/assets/og-pass.png";
 import mintingIcon from "@/public/assets/mining.gif";
 import linkIcon from "@/public/assets/link-icon.svg";
 import xIcon from "@/public/assets/x-icon-inverted.svg";
@@ -71,20 +71,20 @@ export const FreePass = ({ shouldGoToFaucet }: { shouldGoToFaucet: () => void })
     >
       <Confetti colors={CONFETTI_COLORS} run={runConfetti} numberOfPieces={500} recycle={false} width={windowWidth} />
       <div className="flex flex-col justify-center items-center text-center max-w-xl">
-        <h1 className="scroll-m-20 text-3xl md:text-4xl font-medium tracking-tight lg:text-[52px]">
-          {mintingProgress === "completed" ? "Congratulations 🚀 " : "Claim your OG Pass"}
+        <h1 className="scroll-m-20 text-3xl md:text-4xl font-medium tracking-tight md:leading-[3rem] lg:text-[52px]">
+          {mintingProgress === "completed" ? "Congratulations 🚀 " : "Claim your Early Farmer 👨‍🌾 Pass"}
         </h1>
         <p className="leading-7 [&:not(:first-child)]:mt-6  text-[#878794]">
           {mintingProgress === "completed" ? (
-            "You have successfully claimed your OG Pass, do take a moment to share this on your twitter 🥕"
+            "You have successfully claimed your Early Farmer 👨‍🌾 Pass, do take a moment to share this on your twitter 🥕"
           ) : (
             <>
-              Welcome to Kakarot&apos;s Sepolia testnet phase to commemorate this event. <br />
-              Claim your OG Pass by KKRT Labs.
+              Welcome to Kakarot&apos;s Sepolia testnet phase. <br /> To commemorate this event, claim the Early Farmer
+              Pass by KKRT Labs.
             </>
           )}
         </p>
-        <Image src={dummyFreePass} width={400} height={400} alt="Free Pass" className="mt-12" />
+        <Image src={ogPass} width={400} height={400} alt="Free Pass" className="mt-12" />
 
         {mintingProgress === "not-started" && (
           <Button variant="main" className="mt-4 md:mt-8 w-full max-w-[400px]" onClick={handleClaim}>
@@ -104,7 +104,7 @@ export const FreePass = ({ shouldGoToFaucet }: { shouldGoToFaucet: () => void })
             {/* <Button variant="success" className="mt-4 w-full">
               Claimed
             </Button> */}
-            <Link rel="noopener noreferrer" target="_blank" href="https://x.com/intent/post" className="w-full">
+            <Link rel="noopener noreferrer" target="_blank" href={INTENT} className="w-full">
               <Button variant="outline" className="mt-4 w-full gap-1 !bg-black !text-white">
                 <span>Share on</span>
                 <Image src={xIcon} alt="minting" width={20} height={20} priority />
