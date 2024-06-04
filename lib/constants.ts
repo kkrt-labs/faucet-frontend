@@ -32,4 +32,16 @@ const WALLET_MODAL_OPTIONS: Partial<UseConnectModalOptions> = {
 
 const CONFETTI_COLORS = ["#FDA829", "#F6F5FC", "#FF2828"];
 
-export { ENV, WALLET_MODAL_OPTIONS, CONFETTI_COLORS };
+const TWEET_TEXT = `Hello everyone! 
+
+Just claimed my "Early Farmer 🧑‍🌾" NFT on @KakarotZkEvm testnet phase🥕
+  
+Reach out to the Kakarot team to see if you are eligible for an invite code.
+  
+Carrot season is coming 🥕🥕🥕🥕
+`;
+
+const FAUCET_URL = "https://faucet-sepolia.kakarot.org";
+const INTENT = `https://x.com/intent/post?text=${encodeURIComponent(TWEET_TEXT)}&url=${FAUCET_URL}`;
+
+export { ENV, WALLET_MODAL_OPTIONS, CONFETTI_COLORS, INTENT };
