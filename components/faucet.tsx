@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Confetti from "react-confetti";
 import { useEffect, useState } from "react";
-import { useActiveAccount, useBlockNumber } from "thirdweb/react";
+import { useActiveAccount, useBlockNumber, useWalletBalance } from "thirdweb/react";
 import { toast } from "sonner";
 
 import { KAKAROT_SEPOLIA, client } from "@/lib/thirdweb-client";
@@ -25,6 +25,11 @@ export const Faucet = () => {
   const { data: faucetStats } = useFaucetStats(wallet?.address as string);
   const { data: faucetBalance, refetch: refetchFaucet } = useFaucetBalance();
   const { width: windowWidth } = useWindowSize();
+  const { refetch: refetchWallet } = useWalletBalance({
+    chain: KAKAROT_SEPOLIA,
+    address: wallet?.address as string,
+    client,
+  });
 
   const [isProcessing, setIsProcessing] = useState(isPending);
   const [isClaimed, setIsClaimed] = useState(false);
@@ -32,8 +37,7 @@ export const Faucet = () => {
   const blockNumber = useBlockNumber({ client, chain: KAKAROT_SEPOLIA });
   const available = `${faucetStats?.dripAmountInEth ?? 0.001} ETH`;
 
-  const isCooldown =
-    faucetJob?.[0]?.status === "completed" && (faucetStats?.timeLeftInS !== 0 || faucetStats?.canClaim === false);
+  const isCooldown = faucetStats?.timeLeftInS !== 0 || faucetStats?.canClaim === false;
 
   const handleClaim = () => {
     setIsProcessing(true);
@@ -46,8 +50,9 @@ export const Faucet = () => {
       setIsProcessing(false);
       setIsClaimed(true);
       refetchFaucet();
+      refetchWallet();
     }
-  }, [faucetJob]);
+  }, [faucetJob, refetchFaucet, refetchWallet]);
 
   useEffect(() => {
     if (isError) {
