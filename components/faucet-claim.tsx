@@ -1,9 +1,12 @@
 import Image from "next/image";
+import { useActiveWallet } from "thirdweb/react";
 import { InfoIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { KAKAROT_SEPOLIA } from "@/lib/thirdweb-client";
 import { FaucetStatsResponse } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 
+import metamaskLogo from "@/public/assets/metamask.png";
 import cooldownCarrot from "@/public/assets/cooldown-carrot.svg";
 
 interface FaucetClaimProps {
@@ -15,6 +18,10 @@ interface FaucetClaimProps {
 }
 
 export const FaucetClaim = ({ isCooldown, isProcessing, available, handleClaim, faucetStats }: FaucetClaimProps) => {
+  const wallet = useActiveWallet();
+  const activeChain = wallet?.getChain();
+  const isMetaMask = wallet?.id === "io.metamask";
+
   const convertSecondsToTime = (seconds: number) => {
     const hours = String(Math.floor(seconds / 3600)).padStart(2, "0");
     const minutes = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
@@ -41,6 +48,16 @@ export const FaucetClaim = ({ isCooldown, isProcessing, available, handleClaim, 
         >
           {isProcessing ? "Claiming..." : isCooldown ? "Cooldown" : "Claim"}
         </Button>
+        {isMetaMask && activeChain?.id !== KAKAROT_SEPOLIA.id && (
+          <Button
+            variant="outline"
+            className="mt-6 w-full space-x-3"
+            onClick={() => wallet.switchChain(KAKAROT_SEPOLIA)}
+          >
+            <Image src={metamaskLogo} alt="metamask" width={16} height={16} />
+            <span className="text-[#ff4500]">Add to Metamask</span>
+          </Button>
+        )}
         {!isProcessing && isCooldown && (
           <div className="flex flex-row items-center justify-center my-4 gap-3">
             <InfoIcon className="mt-4 ml-2 h-5 w-5 shrink-0 text-[#8E98A8]" />
