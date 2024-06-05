@@ -7,6 +7,7 @@ import { Provider } from "@/lib/query-provider";
 
 import localFont from "next/font/local";
 import "./globals.css";
+import { LinkBanner } from "@/components/notify-banner";
 
 export const metadata: Metadata = {
   title: "Kakarot Faucet",
@@ -58,6 +59,7 @@ export default function RootLayout({
         <body className={`${openSauce.variable} font-sans bg-[#E5E7EB] px-4 sm:px-20`}>
           <Toaster />
           <Provider>
+            <LinkBanner />
             <Navbar />
             {children}
             <Footer />
