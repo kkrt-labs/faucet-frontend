@@ -44,7 +44,7 @@ export const FaucetClaim = ({ isCooldown, isProcessing, available, handleClaim, 
           onClick={handleClaim}
           disabled={isProcessing}
           variant={!isProcessing && isCooldown ? "cooldown" : "main"}
-          className={cn("mt-6 w-full", !isProcessing && isCooldown && "pointer-events-none")}
+          className={cn("mt-6 w-full", !isProcessing && isCooldown && "hidden")}
         >
           {isProcessing ? "Claiming..." : isCooldown ? "Cooldown" : "Claim"}
         </Button>
@@ -59,9 +59,8 @@ export const FaucetClaim = ({ isCooldown, isProcessing, available, handleClaim, 
           </Button>
         )}
         {!isProcessing && isCooldown && (
-          <div className="flex flex-row items-center justify-center my-4 gap-3">
-            <InfoIcon className="mt-4 ml-2 h-5 w-5 shrink-0 text-[#8E98A8]" />
-            <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[300px]">
+          <div className="flex flex-row items-center justify-center my-4">
+            <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">
               You&apos;re on a cooldown period! Try the Kakarot faucet again in{" "}
               {convertSecondsToTime(faucetStats?.timeLeftInS ?? 0)}.
             </p>
