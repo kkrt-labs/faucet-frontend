@@ -56,7 +56,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ThirdwebProvider>
-        <body className={`${openSauce.variable} font-sans bg-[#E5E7EB] px-4 sm:px-20`}>
+        <body className={`${openSauce.variable} font-sans faucetBackground h-[100svh] px-4 sm:px-20`}>
           <Toaster />
           <Provider>
             <LinkBanner />
