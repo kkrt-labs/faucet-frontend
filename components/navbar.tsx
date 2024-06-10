@@ -8,8 +8,8 @@ import { WalletDetails } from "./wallet-details";
 
 export const Navbar = () => {
   return (
-    <nav className="flex w-full pt-5">
-      <ul className="flex flex-row justify-between items-center w-full bg-white rounded-xl px-6">
+    <nav className="flex w-full justify-center pt-5">
+      <ul className="flex flex-row justify-between items-center w-full max-w-7xl bg-white rounded-xl px-6">
         <li>
           <Link className="pointer-events-none flex place-items-center gap-2 py-4 sm:py-6" href="/">
             <Image
