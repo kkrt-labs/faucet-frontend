@@ -25,7 +25,7 @@ export const Footer = () => {
   }
 
   return (
-    <footer className="w-screen -mx-4 sm:-mx-20 mt-10">
+    <footer className="w-screen -mx-4 sm:-mx-20 mt-16">
       <div className="flex flex-col items-center space-y-6 pb-4 sm:hidden">
         <div className="flex flex-row items-center space-x-6">
           <IconLink src="/assets/x-icon.svg" href="https://x.com/KakarotZkEvm" name="X" />

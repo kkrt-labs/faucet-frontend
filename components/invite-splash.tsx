@@ -66,42 +66,40 @@ export const InviteCodeSplash = ({ setIsWhitelisted }: { setIsWhitelisted: () =>
   }, [inviteCode]);
 
   return (
-    <BaseContainer>
-      <div className="flex flex-col justify-center items-center">
-        <TextPair
-          heading="Verify Your Access"
-          description="Welcome to the Kakarot Faucet! To get started, you'll need to verify your access by entering the invite code provided by our team."
-        />
-        <Input
-          type="text"
-          placeholder="Enter your code here"
-          className="py-6 placeholder:text-xs placeholder:text-[#878794] mt-6 md:mt-12 placeholder:font-normal max-w-[350px]"
-          value={inviteCode}
-          onChange={(e) => setInviteCode(e.target.value)}
-        />
-        <Button
-          disabled={!inviteCode || !wallet || redeemError}
-          variant={redeemError ? "fail" : "main"}
-          className="w-full mt-4 md:mt-8 max-w-[350px]"
-          onClick={handleRedeem}
-        >
-          {redeemError ? "Invalid Code" : "Verify"}
-        </Button>
-        <Button
-          onClick={changeWallet}
-          className="w-full space-x-6 items-center text-[#878794] mt-6 max-w-[350px]"
-          variant="outline"
-        >
-          <div className="flex space-x-1">
-            <Avatar>
-              <AvatarImage src={`https://effigy.im/a/${wallet?.address}.png`} />
-              <AvatarFallback>{wallet?.address}</AvatarFallback>
-            </Avatar>
-            <span>{prettyWallet}</span>
-          </div>
-          <span className="text-[#F54400] text-xs">Change Wallet</span>
-        </Button>
-      </div>
-    </BaseContainer>
+    <div className="flex flex-col justify-center items-center">
+      <TextPair
+        heading="Verify Your Access"
+        description="Welcome to the Kakarot Faucet! To get started, you'll need to verify your access by entering the invite code provided by our team."
+      />
+      <Input
+        type="text"
+        placeholder="Enter your code here"
+        className="py-6 placeholder:text-xs placeholder:text-[#878794] mt-6 md:mt-12 placeholder:font-normal max-w-[350px] bg-white"
+        value={inviteCode}
+        onChange={(e) => setInviteCode(e.target.value)}
+      />
+      <Button
+        disabled={!inviteCode || !wallet || redeemError}
+        variant={redeemError ? "fail" : "main"}
+        className="w-full mt-4 md:mt-8 max-w-[350px]"
+        onClick={handleRedeem}
+      >
+        {redeemError ? "Invalid Code" : "Verify"}
+      </Button>
+      <Button
+        onClick={changeWallet}
+        className="w-full space-x-6 items-center text-[#878794] mt-6 max-w-[350px]"
+        variant="outline"
+      >
+        <div className="flex space-x-1">
+          <Avatar>
+            <AvatarImage src={`https://effigy.im/a/${wallet?.address}.png`} />
+            <AvatarFallback>{wallet?.address}</AvatarFallback>
+          </Avatar>
+          <span>{prettyWallet}</span>
+        </div>
+        <span className="text-[#F54400] text-xs">Change Wallet</span>
+      </Button>
+    </div>
   );
 };
