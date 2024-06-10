@@ -61,14 +61,7 @@ export const FreePass = ({ shouldGoToFaucet }: { shouldGoToFaucet: () => void })
   }, [isError]);
 
   return (
-    <div
-      className="flex flex-col justify-center items-center bg-white w-full py-16 px-3 rounded-md mb-10"
-      style={{
-        backgroundImage: `url("/assets/background.svg")`,
-        backgroundSize: "cover",
-        backgroundPosition: "right",
-      }}
-    >
+    <div className="flex flex-col justify-center items-center w-full py-16 px-3 rounded-md mb-10">
       <Confetti colors={CONFETTI_COLORS} run={runConfetti} numberOfPieces={500} recycle={false} width={windowWidth} />
       <div className="flex flex-col justify-center items-center text-center max-w-xl">
         <h1 className="scroll-m-20 text-3xl md:text-4xl font-medium tracking-tight md:leading-[3rem] lg:text-[52px]">
