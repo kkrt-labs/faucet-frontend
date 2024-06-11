@@ -6,7 +6,7 @@ import { useActiveAccount, useBlockNumber, useWalletBalance } from "thirdweb/rea
 import { toast } from "sonner";
 
 import { KAKAROT_SEPOLIA, client } from "@/lib/thirdweb-client";
-import { CONFETTI_COLORS } from "@/lib/constants";
+import { CONFETTI_COLORS, KKRT_EXPLORER } from "@/lib/constants";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useFaucetJob } from "@/queries/useFaucetJob";
 import { useFaucetStats } from "@/queries/useFaucetStats";
@@ -44,9 +44,25 @@ export const Faucet = () => {
     claimFunds({ walletAddress: wallet?.address as string });
   };
 
+  const runSuccessToast = (txHash: string) =>
+    toast.message("Transaction Successful", {
+      action: (
+        <a
+          className="text-[#f54400] flex flex-row space-x-2 text-nowrap p-2"
+          href={`${KKRT_EXPLORER}/tx/${txHash}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span className="">View on Explorer</span>
+          <Image src="/assets/link-icon.svg" alt="Docs" width={16} height={16} />
+        </a>
+      ),
+      description: "You have successfully claimed 0.5 ETH on Kakarot Sepolia.",
+    });
+
   useEffect(() => {
     if (faucetJob && faucetJob[0].status === "completed") {
-      toast.success("Claimed successfully!");
+      runSuccessToast(faucetJob[0].transaction_hash);
       setIsProcessing(false);
       setIsClaimed(true);
       refetchFaucet();
@@ -62,7 +78,7 @@ export const Faucet = () => {
   }, [isError]);
 
   return (
-    <main className="flex flex-col items-center">
+    <main className="flex flex-col items-center mt-10">
       <div
         className="flex flex-col bg-white w-full py-6 px-3 sm:px-10 lg:px-20 rounded-md mb-12"
         style={{
