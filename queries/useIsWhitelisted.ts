@@ -9,6 +9,7 @@ const useIsWhitelisted = (address: string) => {
   return useQuery({
     queryKey: ["useIsWhitelisted", address],
     queryFn: () => API.general.isWhitelisted(address),
+    staleTime: 1 * 60 * 1000,
   });
 };
 
