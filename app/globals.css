@@ -150,3 +150,20 @@ html {
     ),
     #fff;
 }
+
+.haloGlow {
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    #5585f1 0%,
+    #9192f8 14.29%,
+    #e5e5e5 28.58%,
+    #eba1f9 42.87%,
+    #868cf6 57.16%,
+    #6283f6 71.45%,
+    #6fabd2 85.74%,
+    #f5f5f5 100%
+  );
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  padding: 4px;
+  border-radius: 8px;
+}

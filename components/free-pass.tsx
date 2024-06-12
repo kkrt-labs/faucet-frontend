@@ -77,7 +77,7 @@ export const FreePass = ({ shouldGoToFaucet }: { shouldGoToFaucet: () => void })
             </>
           )}
         </p>
-        <Image src={ogPass} width={400} height={400} alt="Free Pass" className="mt-12" />
+        <Image src={ogPass} width={400} height={400} alt="Free Pass" className="mt-12 haloGlow" />
 
         {mintingProgress === "not-started" && (
           <Button variant="main" className="mt-4 md:mt-8 w-full max-w-[400px]" onClick={handleClaim}>
