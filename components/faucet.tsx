@@ -22,7 +22,7 @@ export const Faucet = () => {
 
   const { mutate: claimFunds, isPending, data: claimJobID } = useClaimFunds();
   const { data: faucetJob, isError } = useFaucetJob(claimJobID?.jobID ?? "");
-  const { data: faucetStats } = useFaucetStats(wallet?.address as string);
+  const { data: faucetStats, isLoading: isFetchingFaucetStats } = useFaucetStats(wallet?.address as string);
   const { data: faucetBalance, refetch: refetchFaucet } = useFaucetBalance();
   const { width: windowWidth } = useWindowSize();
   const { refetch: refetchWallet } = useWalletBalance({
@@ -79,14 +79,7 @@ export const Faucet = () => {
 
   return (
     <main className="flex flex-col items-center mt-10">
-      <div
-        className="flex flex-col bg-white w-full py-6 px-3 sm:px-10 lg:px-20 rounded-md mb-12"
-        style={{
-          backgroundImage: `url("/assets/background.svg")`,
-          backgroundSize: "cover",
-          backgroundPosition: "right",
-        }}
-      >
+      <div className="flex flex-col bg-white w-full py-6 px-3 sm:px-10 lg:px-20 rounded-md mb-12">
         <Confetti
           colors={CONFETTI_COLORS}
           run={isClaimed}
@@ -103,6 +96,9 @@ export const Faucet = () => {
           <FaucetSuccess navigateToClaim={() => setIsClaimed(false)} />
         ) : (
           <FaucetClaim
+            isOutOfFunds={
+              parseFloat(faucetBalance?.faucetBalanceInEth ?? "0") < parseFloat(faucetStats?.dripAmountInEth ?? "0")
+            }
             isCooldown={isCooldown}
             isProcessing={isProcessing}
             available={available}

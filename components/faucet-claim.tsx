@@ -8,16 +8,25 @@ import { Button } from "@/components/ui/button";
 
 import metamaskLogo from "@/public/assets/metamask.png";
 import cooldownCarrot from "@/public/assets/cooldown-carrot.svg";
+import claimedCarrot from "@/public/assets/claimed-carrot.svg";
 
 interface FaucetClaimProps {
   isProcessing: boolean;
   isCooldown: boolean;
+  isOutOfFunds: boolean;
   available: string;
   handleClaim: () => void;
   faucetStats?: FaucetStatsResponse;
 }
 
-export const FaucetClaim = ({ isCooldown, isProcessing, available, handleClaim, faucetStats }: FaucetClaimProps) => {
+export const FaucetClaim = ({
+  isCooldown,
+  isOutOfFunds,
+  isProcessing,
+  available,
+  handleClaim,
+  faucetStats,
+}: FaucetClaimProps) => {
   const wallet = useActiveWallet();
   const activeChain = wallet?.getChain();
   const isMetaMask = wallet?.id === "io.metamask";
@@ -33,18 +42,20 @@ export const FaucetClaim = ({ isCooldown, isProcessing, available, handleClaim, 
   };
 
   return (
-    <div className="flex flex-col justify-center items-center my-16 sm:my-24">
+    <div className="flex flex-col justify-center items-center my-16">
       <div className="w-full sm:w-fit text-center flex flex-col justify-center items-center">
         {!isProcessing && isCooldown ? (
           <Image src={cooldownCarrot} alt="Cooldown Carrot" />
+        ) : !isProcessing && isOutOfFunds ? (
+          <Image src={claimedCarrot} alt="Cooldown Carrot" />
         ) : (
           <h2 className="text-5xl md:text-7xl leading-tight text-[#878794]">{available}</h2>
         )}
         <Button
           onClick={handleClaim}
           disabled={isProcessing}
-          variant={!isProcessing && isCooldown ? "cooldown" : "main"}
-          className={cn("mt-6 w-full", !isProcessing && isCooldown && "hidden")}
+          variant={!isProcessing && (isCooldown || isOutOfFunds) ? "cooldown" : "main"}
+          className={cn("mt-6 w-full", !isProcessing && (isCooldown || isOutOfFunds) && "hidden")}
         >
           {isProcessing ? "Claiming..." : isCooldown ? "Cooldown" : "Claim"}
         </Button>
@@ -58,13 +69,22 @@ export const FaucetClaim = ({ isCooldown, isProcessing, available, handleClaim, 
             <span className="text-[#ff4500]">Add to Metamask</span>
           </Button>
         )}
-        {!isProcessing && isCooldown && (
+        {!isProcessing && isCooldown ? (
           <div className="flex flex-row items-center justify-center my-4">
             <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">
               You&apos;re on a cooldown period! Try the Kakarot faucet again in{" "}
               {convertSecondsToTime(faucetStats?.timeLeftInS ?? 0)}.
             </p>
           </div>
+        ) : (
+          !isProcessing &&
+          isOutOfFunds && (
+            <div className="flex flex-row items-center justify-center my-4">
+              <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">
+                We've run out Juices come back again till we fix the juice machine.
+              </p>
+            </div>
+          )
         )}
       </div>
     </div>
