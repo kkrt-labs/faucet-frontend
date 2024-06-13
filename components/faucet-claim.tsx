@@ -81,7 +81,7 @@ export const FaucetClaim = ({
           isOutOfFunds && (
             <div className="flex flex-row items-center justify-center my-4">
               <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">
-                We've run out Juices come back again till we fix the juice machine.
+                We&apos;ve run out Juices come back again till we fix the juice machine.
               </p>
             </div>
           )
