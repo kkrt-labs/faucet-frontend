@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useActiveAccount, useAutoConnect } from "thirdweb/react";
 import { client, wallets } from "@/lib/thirdweb-client";
 import { useIsWhitelisted } from "@/queries/useIsWhitelisted";
+import { useFaucetStats } from "@/queries/useFaucetStats";
+import { useFaucetBalance } from "@/queries/useFaucetBalance";
 import { InviteCodeSplash } from "@/components/invite-splash";
 import { FreePass } from "@/components/free-pass";
 import { Faucet } from "@/components/faucet";
@@ -14,16 +16,18 @@ export default function Home() {
   const wallet = useActiveAccount();
   const { isLoading: isAutoConnecting } = useAutoConnect({ client, wallets });
   const { data, isLoading } = useIsWhitelisted(wallet?.address ?? "");
+  const { isLoading: isFetchingFaucetStats } = useFaucetStats(wallet?.address as string);
+  const { isLoading: isFetchingFaucetBalance } = useFaucetBalance();
 
   const [goToFaucet, setGoToFaucet] = useState(false);
   const [isWhitelisted, setIsWhitelisted] = useState(false);
 
-  if (isAutoConnecting || isLoading)
+  if (isAutoConnecting || isLoading || isFetchingFaucetStats || isFetchingFaucetBalance)
     return (
-      <main className="flex flex-col items-center text-center mt-20 h-[60svh] space-y-5">
-        <Skeleton className="w-1/3 h-16 bg-blue-100" />
-        <Skeleton className="w-1/2 h-20 bg-blue-100" />
-        <Skeleton className="w-1/2 h-full bg-blue-100" />
+      <main className="flex flex-col items-center text-center mt-20 h-[60svh]">
+        <Skeleton className="w-2/5 h-14 bg-blue-100 rounded-md" />
+        <Skeleton className="w-2/5 h-8 bg-blue-100 rounded-md mt-2" />
+        <Skeleton className="w-2/5 h-14 bg-blue-100 rounded-md mt-11" />
       </main>
     );
   else if (data?.isWhitelisted) return <Faucet />;
