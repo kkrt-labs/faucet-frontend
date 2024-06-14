@@ -12,8 +12,9 @@ export const ConnectWallet = () => {
         wallets={wallets}
         connectButton={{
           style: {
-            display: "inline-flex",
-            padding: "10px 12px",
+            display: "flex",
+            width: "350px",
+            padding: "12px 10px",
             justifyContent: "center",
             alignItems: "center",
             gap: "6px",

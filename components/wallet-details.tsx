@@ -39,7 +39,7 @@ export const WalletDetails = () => {
           background: "linear-gradient(0deg, #5E5E5E 0%, #5E5E5E 100%), rgba(255, 255, 255, 0.40)",
           boxShadow: "0px 1px 2px 0px rgba(164, 172, 185, 0.24), 0px 0px 0px 1px rgba(18, 55, 105, 0.08)",
         }}
-        className="space-x-2 font-medium justify-around hidden sm:flex"
+        className="space-x-2 font-medium justify-around hidden md:flex"
         variant="wallet"
         size="withIcon"
       >

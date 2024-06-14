@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/mobile-footer";
 import { ThirdwebProvider } from "@/lib/thirdweb-provider";
@@ -56,7 +57,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ThirdwebProvider>
-        <body className={`${openSauce.variable} font-sans bg-[#E5E7EB] px-4 sm:px-20`}>
+        <body className={`${openSauce.variable} flex flex-col font-sans faucetBackground min-h-svh px-4 sm:px-20`}>
           <Toaster />
           <Provider>
             <LinkBanner />
@@ -64,6 +65,7 @@ export default function RootLayout({
             {children}
             <Footer />
           </Provider>
+          <Analytics />
         </body>
       </ThirdwebProvider>
     </html>

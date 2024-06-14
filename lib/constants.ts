@@ -43,5 +43,6 @@ Carrot season is coming 🥕🥕🥕🥕
 
 const FAUCET_URL = "https://faucet-sepolia.kakarot.org";
 const INTENT = `https://x.com/intent/post?text=${encodeURIComponent(TWEET_TEXT)}&url=${FAUCET_URL}`;
+const KKRT_EXPLORER = "https://sepolia.kakarotscan.org";
 
-export { ENV, WALLET_MODAL_OPTIONS, CONFETTI_COLORS, INTENT };
+export { ENV, WALLET_MODAL_OPTIONS, CONFETTI_COLORS, INTENT, KKRT_EXPLORER };
