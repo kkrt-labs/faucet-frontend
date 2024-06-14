@@ -59,7 +59,7 @@ export const FaucetClaim = ({
         >
           {isProcessing ? "Claiming..." : isCooldown ? "Cooldown" : "Claim"}
         </Button>
-        {isMetaMask && activeChain?.id !== KAKAROT_SEPOLIA.id && (
+        {/* {isMetaMask && activeChain?.id !== KAKAROT_SEPOLIA.id && (
           <Button
             variant="outline"
             className="mt-6 w-full space-x-3"
@@ -68,7 +68,7 @@ export const FaucetClaim = ({
             <Image src={metamaskLogo} alt="metamask" width={16} height={16} />
             <span className="text-[#ff4500]">Add to Metamask</span>
           </Button>
-        )}
+        )} */}
         {!isProcessing && isCooldown ? (
           <div className="flex flex-row items-center justify-center my-4">
             <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">
