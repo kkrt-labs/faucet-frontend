@@ -30,7 +30,7 @@ export default function Home() {
         <Skeleton className="w-2/5 h-14 bg-blue-100 rounded-md mt-11" />
       </main>
     );
-  else if (data?.isWhitelisted) return <Faucet />;
+  else if (data?.isWhitelisted || goToFaucet) return <Faucet />;
   else if (isWhitelisted) return <FreePass shouldGoToFaucet={() => setGoToFaucet(true)} />;
 
   return (
