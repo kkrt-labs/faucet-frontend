@@ -93,7 +93,10 @@ export const Faucet = () => {
           <DetailAndText title="Block Number" text={blockNumber?.toString() ?? "0x"} />
         </div>
         {isClaimed ? (
-          <FaucetSuccess navigateToClaim={() => setIsClaimed(false)} />
+          <FaucetSuccess
+            txHash={(faucetJob && faucetJob[0].transaction_hash) ?? ""}
+            navigateToClaim={() => setIsClaimed(false)}
+          />
         ) : (
           <FaucetClaim
             isOutOfFunds={
