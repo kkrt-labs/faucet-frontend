@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useActiveWallet } from "thirdweb/react";
-import { InfoIcon } from "lucide-react";
+import { InfoIcon, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { KAKAROT_SEPOLIA } from "@/lib/thirdweb-client";
 import { FaucetStatsResponse } from "@/lib/types";
@@ -57,7 +57,16 @@ export const FaucetClaim = ({
           variant={!isProcessing && (isCooldown || isOutOfFunds) ? "cooldown" : "main"}
           className={cn("mt-6 w-full", !isProcessing && (isCooldown || isOutOfFunds) && "hidden")}
         >
-          {isProcessing ? "Claiming..." : isCooldown ? "Cooldown" : "Claim"}
+          {isProcessing ? (
+            <>
+              <Loader2 className="animate-spin w-4 h-4 mr-2" />
+              <span>Claiming..</span>
+            </>
+          ) : isCooldown ? (
+            "Cooldown"
+          ) : (
+            "Claim"
+          )}
         </Button>
         {/* {isMetaMask && activeChain?.id !== KAKAROT_SEPOLIA.id && (
           <Button
