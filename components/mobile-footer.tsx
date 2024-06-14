@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import carrotField from "@/public/assets/carrot-field.svg";
+import carrotField from "@/public/assets/carrot-cut.svg";
 import { IconLink } from "@/components/icon-link";
 import { Button } from "@/components/ui/button";
 import { useWindowSize } from "@/hooks/useWindowSize";
