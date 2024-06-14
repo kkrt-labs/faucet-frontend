@@ -16,6 +16,7 @@ import ogPass from "@/public/assets/og-pass.png";
 import mintingIcon from "@/public/assets/mining.gif";
 import linkIcon from "@/public/assets/link-icon.svg";
 import xIcon from "@/public/assets/x-icon-inverted.svg";
+import { cn } from "@/lib/utils";
 
 type MintState = "completed" | "pending" | "error" | "not-started";
 
@@ -77,7 +78,19 @@ export const FreePass = ({ shouldGoToFaucet }: { shouldGoToFaucet: () => void })
             </>
           )}
         </p>
-        <Image src={ogPass} width={400} height={400} alt="Free Pass" className="mt-12 haloGlow" />
+
+        <div className="grid items-start justify-center mt-12">
+          <div className="relative group">
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-[#5585f1] via-[#eba1f9] to-[#9192f8] rounded-md blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
+            <Image
+              className="relative rounded-md leading-none flex items-center divide-x divide-gray-600"
+              src={ogPass}
+              width={400}
+              height={400}
+              alt="Free Pass"
+            />
+          </div>
+        </div>
 
         {mintingProgress === "not-started" && (
           <Button variant="main" className="mt-4 md:mt-8 w-full max-w-[400px]" onClick={handleClaim}>
