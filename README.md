@@ -2,10 +2,9 @@
 
 > The fast, native Sepolia Testnet faucet to kickstart your journey in the Kakarot ecosystem.
 
-checkout the current deployment ✨ [faucet-v0](https://faucet-smoky-pi.vercel.app/) ✨
+checkout the current deployment ✨ [faucet](https://faucet-staging.kakarot.org/) ✨
 
-`faucet` uses GitHub’s public API to fetch mutual followers for every profile you visit, straight to the profile page!
-
+`faucet` gets you test tokens to build apps on the Kakarot Testnet!
 <div align="center">
   <img src="public/assets/landing.jpg" width=700 />
 </div>
