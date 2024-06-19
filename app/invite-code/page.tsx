@@ -1,25 +1,24 @@
 "use client";
 
+import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useActiveAccount, useAutoConnect, useConnectModal } from "thirdweb/react";
-import { client, wallets } from "@/lib/thirdweb-client";
-import { useIsWhitelisted } from "@/queries/useIsWhitelisted";
-import { Skeleton } from "@/components/ui/skeleton";
-import { TextPair } from "@/components/text-pair";
-import { Button } from "@/components/ui/button";
-import { useDebounce } from "@/hooks/useDebounce";
-import { WALLET_MODAL_OPTIONS } from "@/lib/constants";
-import { useInviteCodeValid } from "@/mutations/useInviteCodeValid";
-import { useQueryClient } from "@tanstack/react-query";
+import { useConnectModal } from "thirdweb/react";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+
+import { WALLET_MODAL_OPTIONS } from "@/lib/constants";
+import { client, wallets } from "@/lib/thirdweb-client";
+import { TextPair } from "@/components/text-pair";
+import { SkeletonLoading } from "@/components/skeleton-loading";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { redirect } from "next/navigation";
+import { useFaucet } from "@/hooks/useFaucet";
+import { useDebounce } from "@/hooks/useDebounce";
+import { useInviteCodeValid } from "@/mutations/useInviteCodeValid";
 
 export default function Home() {
-  const wallet = useActiveAccount();
-  const { isLoading: isAutoConnecting } = useAutoConnect({ client, wallets });
-  const { data, isLoading } = useIsWhitelisted(wallet?.address ?? "");
+  const { wallet, isFaucetLoading, isWhitelisted } = useFaucet();
 
   const { connect } = useConnectModal();
   const { mutate: checkInviteCode, isError, isSuccess, data: inviteCodeData } = useInviteCodeValid();
@@ -70,19 +69,9 @@ export default function Home() {
     setRedeemError(false);
   }, [inviteCode]);
 
-  if (isAutoConnecting || isLoading)
-    return (
-      <main className="flex flex-col items-center text-center mt-20 h-svh">
-        <Skeleton className="w-2/5 h-14 bg-blue-100 rounded-md" />
-        <Skeleton className="w-2/5 h-8 bg-blue-100 rounded-md mt-2" />
-        <Skeleton className="w-2/5 h-14 bg-blue-100 rounded-md mt-11" />
-      </main>
-    );
-
-  if (!wallet) {
-    redirect("/");
-  }
-  // TODO: Add redirect to /faucet if user is whitelisted
+  if (isFaucetLoading) return <SkeletonLoading />;
+  else if (!wallet) redirect("/");
+  else if (isWhitelisted) redirect("/faucet");
 
   return (
     <main className="flex flex-col items-center text-center mt-20 h-[60svh]">
