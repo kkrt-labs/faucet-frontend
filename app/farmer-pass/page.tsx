@@ -12,6 +12,7 @@ import { useRedeemCode } from "@/mutations/useRedeemCode";
 import { useInviteCodeJob } from "@/queries/useInviteCodeJob";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useFaucet } from "@/hooks/useFaucet";
+import { SkeletonLoading } from "@/components/skeleton-loading";
 import { Button } from "@/components/ui/button";
 import { CONFETTI_COLORS, INTENT } from "@/lib/constants";
 
@@ -19,7 +20,6 @@ import ogPass from "@/public/assets/og-pass.png";
 import mintingIcon from "@/public/assets/mining.gif";
 import linkIcon from "@/public/assets/link-icon.svg";
 import xIcon from "@/public/assets/x-icon-inverted.svg";
-import { SkeletonLoading } from "@/components/skeleton-loading";
 
 type MintState = "completed" | "pending" | "error" | "not-started";
 
@@ -121,10 +121,12 @@ export default function FarmerPass() {
                 <Image src={xIcon} alt="minting" width={20} height={20} priority />
               </Button>
             </Link>
-            <Button variant="outline" className="mt-4 w-full text-[#878794] gap-1" onClick={() => redirect("/faucet")}>
-              <span>Go To Faucet</span>
-              <Image src={linkIcon} alt="minting" width={20} height={20} priority />
-            </Button>
+            <Link href="/faucet" className="w-full">
+              <Button variant="outline" className="mt-4 w-full text-[#878794] gap-1">
+                <span>Go To Faucet</span>
+                <Image src={linkIcon} alt="minting" width={20} height={20} priority />
+              </Button>
+            </Link>
           </div>
         )}
       </div>
