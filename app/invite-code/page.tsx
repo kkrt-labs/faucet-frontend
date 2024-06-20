@@ -1,6 +1,6 @@
 "use client";
 
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useConnectModal } from "thirdweb/react";
 import { toast } from "sonner";
@@ -25,7 +25,7 @@ export default function Home() {
 
   const [inviteCode, setInviteCode] = useState("");
   const [redeemError, setRedeemError] = useState(false);
-
+  const router = useRouter();
   const queryClient = useQueryClient();
   const debouncedInviteCode = useDebounce(inviteCode, 500);
   const prettyWallet = wallet?.address.slice(0, 6) + "..." + wallet?.address.slice(-4);
@@ -51,7 +51,7 @@ export default function Home() {
 
     if (isSuccess && inviteCodeData.isValidInviteCode && !inviteCodeData.isClaimed) {
       queryClient.setQueryData(["redeemCodeData"], { inviteCode, ...inviteCodeData });
-      redirect("/farmer-pass");
+      router.replace("/farmer-pass");
       return;
     }
 
@@ -70,8 +70,8 @@ export default function Home() {
   }, [inviteCode]);
 
   if (isFaucetLoading) return <SkeletonLoading />;
-  else if (!wallet) redirect("/");
-  else if (isWhitelisted) redirect("/faucet");
+  else if (!wallet) router.replace("/");
+  else if (isWhitelisted) router.replace("/faucet");
 
   return (
     <main className="flex flex-col items-center text-center mt-20 h-[60svh]">

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Confetti from "react-confetti";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useBlockNumber, useWalletBalance } from "thirdweb/react";
 import { toast } from "sonner";
@@ -25,6 +25,7 @@ export default function Faucet() {
   const { width: windowWidth } = useWindowSize();
 
   const blockNumber = useBlockNumber({ client, chain: KAKAROT_SEPOLIA });
+  const router = useRouter();
   const { mutate: claimFunds, isPending, data: claimJobID } = useClaimFunds();
   const { data: faucetJob, isError } = useFaucetJob(claimJobID?.jobID ?? "");
   const { refetch: refetchWallet } = useWalletBalance({
@@ -84,11 +85,11 @@ export default function Faucet() {
   }, [isError]);
 
   if (isFaucetLoading) return <SkeletonLoader />;
-  else if (!wallet) redirect("/");
-  else if (!isWhitelisted) redirect("/invite-code");
+  if (!wallet) router.replace("/");
+  if (!isWhitelisted) router.replace("/invite-code");
 
   return (
-    <main className="flex flex-col items-center mt-10">
+    <main className="flex flex-col items-center mt-10 md:h-[60svh]">
       <div className="flex flex-col bg-white w-full py-6 px-3 sm:px-10 lg:px-20 rounded-md mb-12">
         <Confetti
           colors={CONFETTI_COLORS}
@@ -141,15 +142,15 @@ const DetailAndText = ({ title, text }: { title: string; text: string }) => (
 );
 
 const SkeletonLoader = () => (
-  <main className="flex flex-col items-center mt-10 h-svh">
+  <main className="flex flex-col items-center mt-10 h-[60svh] md:h-svh">
     <div className="flex flex-col bg-white w-full py-6 px-3 sm:px-10 lg:px-20 rounded-md mb-12">
       <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between">
-        <Skeleton className="w-1/4 h-14 bg-slate-200 rounded-md" />
-        <Skeleton className="w-1/4 h-14 bg-slate-200 rounded-md" />
+        <Skeleton className="w-full md:w-1/4 h-14 bg-slate-200 rounded-md" />
+        <Skeleton className="w-full md:w-1/4 h-14 bg-slate-200 rounded-md" />
       </div>
       <div className="flex flex-col justify-center items-center pt-16">
-        <Skeleton className="w-2/5 h-16 bg-slate-200 rounded-md" />
-        <Skeleton className="w-2/5 h-12 bg-slate-200 rounded-md mt-4" />
+        <Skeleton className="w-full md:w-2/5 h-16 bg-slate-200 rounded-md" />
+        <Skeleton className="w-full md:w-2/5 h-12 bg-slate-200 rounded-md mt-4" />
       </div>
     </div>
   </main>

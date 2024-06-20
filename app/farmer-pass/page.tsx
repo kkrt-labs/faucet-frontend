@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Confetti from "react-confetti";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
@@ -31,6 +31,7 @@ interface RedeemInviteCodeData {
 
 export default function FarmerPass() {
   const { isFaucetLoading, wallet } = useFaucet();
+  const router = useRouter();
   const queryClient = useQueryClient();
   const redeemCodeResult: RedeemInviteCodeData | undefined = queryClient.getQueryData(["redeemCodeData"]);
 
@@ -63,11 +64,11 @@ export default function FarmerPass() {
     }
   }, [isError]);
 
+  if (!redeemCodeResult) router.replace("/");
   if (isFaucetLoading) return <SkeletonLoading />;
-  else if (!redeemCodeResult) redirect("/");
 
   return (
-    <div className="flex flex-col justify-center items-center w-full py-16 px-3 rounded-md mb-10 h-svh">
+    <div className="flex flex-col justify-center items-center w-full py-16 px-3 rounded-md mb-10">
       <Confetti colors={CONFETTI_COLORS} run={runConfetti} numberOfPieces={500} recycle={false} width={windowWidth} />
       <div className="flex flex-col justify-center items-center text-center max-w-xl">
         <h1 className="scroll-m-20 text-3xl md:text-4xl font-medium tracking-tight md:leading-[3rem] lg:text-[52px]">
