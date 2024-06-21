@@ -68,7 +68,7 @@ export default function FarmerPass() {
   if (isFaucetLoading) return <SkeletonLoading />;
 
   return (
-    <div className="flex flex-col justify-center items-center w-full py-16 px-3 rounded-md mb-10">
+    <div className="flex flex-col justify-center items-center w-full py-16 px-3 rounded-md mb-10 h-full">
       <Confetti colors={CONFETTI_COLORS} run={runConfetti} numberOfPieces={500} recycle={false} width={windowWidth} />
       <div className="flex flex-col justify-center items-center text-center max-w-xl">
         <h1 className="scroll-m-20 text-3xl md:text-4xl font-medium tracking-tight md:leading-[3rem] lg:text-[52px]">

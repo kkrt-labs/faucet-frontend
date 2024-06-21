@@ -13,7 +13,7 @@ export default function Home() {
   else if (wallet) router.replace("/invite-code");
 
   return (
-    <main className="flex flex-col items-center text-center mt-20 h-[60svh]">
+    <main className="flex flex-col items-center text-center my-20 h-full">
       <h1 className="scroll-m-20 text-4xl font-medium tracking-tight lg:text-[52px]">Get free testnet Kakarot ETH</h1>
       <p className="leading-7 [&:not(:first-child)]:mt-6 text-foreground mb-14">
         The fast, native faucet to kickstart your journey in the Kakarot ecosystem.

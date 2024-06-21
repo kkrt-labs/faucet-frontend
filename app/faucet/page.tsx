@@ -89,7 +89,7 @@ export default function Faucet() {
   if (!isWhitelisted) router.replace("/invite-code");
 
   return (
-    <main className="flex flex-col items-center mt-10 md:h-[60svh]">
+    <main className="flex flex-col items-center mt-10 h-full">
       <div className="flex flex-col bg-white w-full py-6 px-3 sm:px-10 lg:px-20 rounded-md mb-12">
         <Confetti
           colors={CONFETTI_COLORS}
@@ -125,7 +125,7 @@ export default function Faucet() {
         heading="Need more testnet ETH?"
         description="Reach out to us on Discord and raise a ticket if you need large amount of testnet ETH."
       />
-      <Link href="https://discord.gg/kakarotzkevm" rel="noopener noreferrer" target="_blank">
+      <Link href="https://discord.gg/kakarotzkevm" rel="noopener noreferrer" target="_blank" className="pb-10">
         <Button className="space-x-2 max-w-[120px] mt-6" variant="outline" size="withIcon">
           <span>Reach Out</span>
           <Image src="/assets/link-icon.svg" alt="Docs" width={16} height={16} />
@@ -142,7 +142,7 @@ const DetailAndText = ({ title, text }: { title: string; text: string }) => (
 );
 
 const SkeletonLoader = () => (
-  <main className="flex flex-col items-center mt-10 h-[60svh] md:h-svh">
+  <main className="flex flex-col items-center mt-10 h-[50svh]">
     <div className="flex flex-col bg-white w-full py-6 px-3 sm:px-10 lg:px-20 rounded-md mb-12">
       <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between">
         <Skeleton className="w-full md:w-1/4 h-14 bg-slate-200 rounded-md" />
