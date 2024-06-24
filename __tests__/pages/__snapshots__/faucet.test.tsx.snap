@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Faucet Page Snapshot Test matches snapshot 1`] = `
+<DocumentFragment>
+  <main
+    class="flex flex-col items-center mt-10 h-full"
+  >
+    <div
+      class="flex flex-col bg-white w-full py-6 px-3 sm:px-10 lg:px-20 rounded-md mb-12"
+    >
+      <div />
+      <div
+        class="flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between"
+      >
+        <h4
+          class="text-[#878794] faucetDetails px-3 py-2 rounded-sm"
+        >
+          Faucet Balance: 
+          <span
+            class="text-[#f54400]"
+          >
+            1ETH
+          </span>
+        </h4>
+        <h4
+          class="text-[#878794] faucetDetails px-3 py-2 rounded-sm"
+        >
+          Block Number: 
+          <span
+            class="text-[#f54400]"
+          >
+            0x
+          </span>
+        </h4>
+      </div>
+      <div>
+        <button
+          class=""
+        >
+          Claim
+        </button>
+      </div>
+    </div>
+    <div>
+      <h3>
+        Need more testnet ETH?
+      </h3>
+      <p>
+        Reach out to us on Discord and raise a ticket if you need large amount of testnet ETH.
+      </p>
+    </div>
+    <a
+      class="pb-10"
+      href="https://discord.gg/kakarotzkevm"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      <button>
+        <span>
+          Reach Out
+        </span>
+        <img
+          alt="Docs"
+          data-nimg="1"
+          decoding="async"
+          height="16"
+          loading="lazy"
+          src="/assets/link-icon.svg"
+          style="color: transparent;"
+          width="16"
+        />
+      </button>
+    </a>
+  </main>
+</DocumentFragment>
+`;

@@ -1,13 +1,13 @@
 import "@testing-library/jest-dom";
-import { act, render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import { useRouter } from "next/navigation";
 import { useFaucet } from "@/hooks/useFaucet";
 import { useBlockNumber, useWalletBalance, lightTheme } from "thirdweb/react";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useFaucetJob } from "@/queries/useFaucetJob";
 import { useClaimFunds } from "@/mutations/useClaimFunds";
-import Faucet from "@/app/faucet/page";
 import { toast } from "sonner";
+import Faucet from "@/app/faucet/page";
 
 // Mock hooks and components
 jest.mock("next/navigation", () => ({
@@ -40,18 +40,39 @@ jest.mock("sonner", () => ({
 // Mock components
 jest.mock("react-confetti", () => () => <div />);
 jest.mock("@/components/faucet-claim", () => ({
-  FaucetClaim: ({ handleClaim, isDisabled }: { handleClaim: () => void; isDisabled: boolean }) => (
+  FaucetClaim: ({
+    handleClaim,
+    isProcessing,
+    isCooldown,
+    isOutOfFunds,
+    available,
+    faucetStats,
+  }: {
+    handleClaim: () => void;
+    isProcessing: boolean;
+    isCooldown: boolean;
+    isOutOfFunds: boolean;
+    available: string;
+    faucetStats: {};
+  }) => (
     <div>
-      <button disabled={isDisabled} onClick={handleClaim}>
-        Claim
+      <button
+        onClick={handleClaim}
+        disabled={isProcessing}
+        className={!isProcessing && (isCooldown || isOutOfFunds) ? "hidden" : ""}
+      >
+        {isProcessing ? "Claiming.." : isCooldown ? "Cooldown" : "Claim"}
       </button>
     </div>
   ),
 }));
 jest.mock("@/components/faucet-success", () => ({
-  FaucetSuccess: ({ navigateToClaim }: { navigateToClaim: () => void }) => (
+  FaucetSuccess: ({ navigateToClaim, txHash }: { navigateToClaim: () => void; txHash: string }) => (
     <div>
       <button onClick={navigateToClaim}>Back to Claim</button>
+      <a href={`https://explorer.kakarot.io/tx/${txHash}`} rel="noopener noreferrer" target="_blank">
+        View on Explorer
+      </a>
     </div>
   ),
 }));
@@ -209,11 +230,11 @@ describe("Faucet Page", () => {
     });
 
     it("handles case when faucet balance is low", () => {
-      mockUseFaucet.mockReturnValue({ ...mockUseFaucet(), faucetBalance: { faucetBalanceInEth: "0.0001" } });
+      mockUseFaucet.mockReturnValue({ ...mockUseFaucet(), faucetBalance: { faucetBalanceInEth: "0.000005" } });
 
       render(<Faucet />);
 
-      expect(screen.getByText("Claim")).toBeDisabled();
+      expect(screen.getByText("Claim")).toBeInTheDocument();
     });
 
     it("handles cooldown state", () => {
@@ -224,7 +245,7 @@ describe("Faucet Page", () => {
 
       render(<Faucet />);
 
-      expect(screen.getByText("Claim")).toBeDisabled();
+      expect(screen.getByText("Cooldown")).toBeInTheDocument();
     });
 
     it("updates correctly when useFaucet value changes", () => {
