@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home Page Snapshot Test matches snapshot 1`] = `
+<DocumentFragment>
+  <main
+    class="flex flex-col items-center text-center my-20 h-full"
+  >
+    <h1
+      class="scroll-m-20 text-4xl font-medium tracking-tight lg:text-[52px]"
+    >
+      Get free testnet Kakarot ETH
+    </h1>
+    <p
+      class="leading-7 [&:not(:first-child)]:mt-6 text-foreground mb-14"
+    >
+      The fast, native faucet to kickstart your journey in the Kakarot ecosystem.
+    </p>
+    <div>
+      Connect Wallet
+    </div>
+  </main>
+</DocumentFragment>
+`;
