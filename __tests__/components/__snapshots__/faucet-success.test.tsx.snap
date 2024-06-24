@@ -8,11 +8,6 @@ exports[`FaucetSuccess matches snapshot 1`] = `
     <div
       class="w-full sm:w-fit text-center flex flex-col justify-center items-center"
     >
-      <h2
-        class="text-3xl md:text-5xl text-[#878794] mb-2"
-      >
-        Cha Ching!
-      </h2>
       <img
         alt="Success Carrot"
         data-nimg="1"

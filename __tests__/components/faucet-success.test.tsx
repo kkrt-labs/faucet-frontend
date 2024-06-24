@@ -15,7 +15,7 @@ describe("FaucetSuccess", () => {
 
   it("renders without crashing", () => {
     render(<FaucetSuccess navigateToClaim={mockNavigateToClaim} txHash="0x12345" />);
-    expect(screen.getByText("Cha Ching!")).toBeInTheDocument();
+    expect(screen.getByText("Back to Claim")).toBeInTheDocument();
   });
 
   it("calls navigateToClaim function when 'Back to Claim' button is clicked", () => {
