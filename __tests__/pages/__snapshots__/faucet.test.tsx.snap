@@ -41,21 +41,31 @@ exports[`Faucet Page Snapshot Test matches snapshot 1`] = `
         </button>
       </div>
     </div>
-    <div>
-      <h3>
-        Need more testnet ETH?
-      </h3>
-      <p>
+    <section
+      class="flex flex-col justify-center items-center px-4"
+    >
+      <header>
+        <h3
+          class="scroll-m-20 text-2xl tracking-tight"
+        >
+          Need more testnet ETH?
+        </h3>
+      </header>
+      <p
+        class="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] text-center text-pretty max-w-[400px]"
+      >
         Reach out to us on Discord and raise a ticket if you need large amount of testnet ETH.
       </p>
-    </div>
+    </section>
     <a
       class="pb-10"
       href="https://discord.gg/kakarotzkevm"
       rel="noopener noreferrer"
       target="_blank"
     >
-      <button>
+      <button
+        class="inline-flex items-center justify-center whitespace-nowrap text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground font-normal p-3 rounded-md w-max space-x-2 max-w-[120px] mt-6"
+      >
         <span>
           Reach Out
         </span>

@@ -76,17 +76,7 @@ jest.mock("@/components/faucet-success", () => ({
     </div>
   ),
 }));
-jest.mock("@/components/text-pair", () => ({
-  TextPair: ({ heading, description }: { heading: string; description: string }) => (
-    <div>
-      <h3>{heading}</h3>
-      <p>{description}</p>
-    </div>
-  ),
-}));
-jest.mock("@/components/ui/button", () => ({
-  Button: ({ children }: { children: React.ReactNode }) => <button>{children}</button>,
-}));
+
 jest.mock("@/components/ui/skeleton", () => ({
   Skeleton: () => <div>Skeleton Loading...</div>,
 }));

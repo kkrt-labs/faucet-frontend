@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FaucetSuccess matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="flex flex-col justify-center items-center my-16 sm:my-24"
+  >
+    <div
+      class="w-full sm:w-fit text-center flex flex-col justify-center items-center"
+    >
+      <h2
+        class="text-3xl md:text-5xl text-[#878794] mb-2"
+      >
+        Cha Ching!
+      </h2>
+      <img
+        alt="Success Carrot"
+        data-nimg="1"
+        decoding="async"
+        height="40"
+        loading="lazy"
+        src="/_next/image?url=%2Fimg.jpg&w=96&q=75"
+        srcset="/_next/image?url=%2Fimg.jpg&w=48&q=75 1x, /_next/image?url=%2Fimg.jpg&w=96&q=75 2x"
+        style="color: transparent;"
+        width="40"
+      />
+      <button
+        class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 primaryButton text-white font-normal h-10 px-4 py-3 mt-6 w-full"
+      >
+        Back to Claim
+      </button>
+      <a
+        class="w-full"
+        href="https://explorer.kakarot.io/tx/0x12345"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        <button
+          class="inline-flex items-center justify-center whitespace-nowrap text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground font-normal p-3 rounded-md space-x-2 w-full mt-2"
+        >
+          <span>
+            View on Explorer
+          </span>
+          <img
+            alt="Docs"
+            data-nimg="1"
+            decoding="async"
+            height="16"
+            loading="lazy"
+            src="/assets/link-icon.svg"
+            style="color: transparent;"
+            width="16"
+          />
+        </button>
+      </a>
+      <div
+        class="flex flex-row items-center justify-center my-4"
+      >
+        <p
+          class="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[300px]"
+        >
+          You just got some testnet ETH! Your wallet should reflect this transaction soon!
+        </p>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
