@@ -13,7 +13,6 @@ interface FaucetSuccessProps {
 export const FaucetSuccess = ({ navigateToClaim, txHash }: FaucetSuccessProps) => (
   <div className="flex flex-col justify-center items-center my-16 sm:my-24">
     <div className="w-full sm:w-fit text-center flex flex-col justify-center items-center">
-      <h2 className="text-3xl md:text-5xl text-[#878794] mb-2">Cha Ching!</h2>
       <Image src={successCarrot} alt="Success Carrot" />
       <Button onClick={navigateToClaim} variant="main" className="mt-6 w-full">
         Back to Claim
