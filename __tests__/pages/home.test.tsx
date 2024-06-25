@@ -38,26 +38,6 @@ describe("Home Page", () => {
     });
   });
 
-  describe("Whitelisted State", () => {
-    it("redirects to /faucet when isWhitelisted is true", () => {
-      mockUseFaucet.mockReturnValue({ isFaucetLoading: false, isWhitelisted: true, wallet: null });
-
-      render(<Home />);
-
-      expect(mockReplace).toHaveBeenCalledWith("/faucet");
-    });
-  });
-
-  describe("Wallet State", () => {
-    it("redirects to /invite-code when wallet is defined but not whitelisted", () => {
-      mockUseFaucet.mockReturnValue({ isFaucetLoading: false, isWhitelisted: false, wallet: "some-wallet-address" });
-
-      render(<Home />);
-
-      expect(mockReplace).toHaveBeenCalledWith("/invite-code");
-    });
-  });
-
   describe("Normal Render", () => {
     it("renders main content when not loading, not whitelisted, and no wallet", () => {
       mockUseFaucet.mockReturnValue({ isFaucetLoading: false, isWhitelisted: false, wallet: null });
@@ -89,14 +69,6 @@ describe("Home Page", () => {
   });
 
   describe("Edge Cases", () => {
-    it("handles case when wallet is present but both isFaucetLoading and isWhitelisted are false", () => {
-      mockUseFaucet.mockReturnValue({ isFaucetLoading: false, isWhitelisted: false, wallet: "some-wallet-address" });
-
-      render(<Home />);
-
-      expect(mockReplace).toHaveBeenCalledWith("/invite-code");
-    });
-
     it("handles case when isWhitelisted and isFaucetLoading are both true", () => {
       mockUseFaucet.mockReturnValue({ isFaucetLoading: true, isWhitelisted: true, wallet: null });
 

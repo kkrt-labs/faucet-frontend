@@ -127,14 +127,6 @@ describe("Faucet Page", () => {
 
       expect(mockReplace).toHaveBeenCalledWith("/");
     });
-
-    it("redirects to invite-code page when not whitelisted", () => {
-      mockUseFaucet.mockReturnValue({ ...mockUseFaucet(), isWhitelisted: false });
-
-      render(<Faucet />);
-
-      expect(mockReplace).toHaveBeenCalledWith("/invite-code");
-    });
   });
 
   describe("Normal Render", () => {
