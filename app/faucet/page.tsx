@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Faucet() {
-  const { wallet, faucetStats, faucetBalance, refetchFaucet, isFaucetLoading, isWhitelisted } = useFaucet();
+  const { wallet, faucetStats, faucetBalance, refetchFaucet, isFaucetLoading } = useFaucet();
   const { width: windowWidth } = useWindowSize();
 
   const blockNumber = useBlockNumber({ client, chain: KAKAROT_SEPOLIA });
@@ -84,9 +84,8 @@ export default function Faucet() {
     }
   }, [isError]);
 
-  if (isFaucetLoading) return <SkeletonLoader />;
   if (!wallet) router.replace("/");
-  if (!isWhitelisted) router.replace("/invite-code");
+  if (isFaucetLoading) return <SkeletonLoader />;
 
   return (
     <main className="flex flex-col items-center mt-10 h-full">

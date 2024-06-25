@@ -8,13 +8,11 @@ import { useIsWhitelisted } from "@/queries/useIsWhitelisted";
 const useFaucet = () => {
   const wallet = useActiveAccount();
   const { isLoading: isAutoConnecting } = useAutoConnect({ client, wallets });
-  const { data, isLoading } = useIsWhitelisted(wallet?.address ?? "");
   const { data: faucetBalance, refetch: refetchFaucet, isLoading: isFetchingFaucetBalance } = useFaucetBalance();
   const { data: faucetStats, isLoading: isFetchingFaucetStats } = useFaucetStats(wallet?.address as string);
 
   return {
-    isFaucetLoading: isAutoConnecting || isLoading || isFetchingFaucetStats || isFetchingFaucetBalance,
-    isWhitelisted: data?.isWhitelisted,
+    isFaucetLoading: isAutoConnecting || isFetchingFaucetStats || isFetchingFaucetBalance,
     wallet,
     faucetBalance,
     faucetStats,

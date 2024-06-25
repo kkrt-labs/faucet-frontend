@@ -5,12 +5,11 @@ import { ConnectWallet } from "@/components/connect-wallet";
 import { SkeletonLoading } from "@/components/skeleton-loading";
 
 export default function Home() {
-  const { isFaucetLoading, isWhitelisted, wallet } = useFaucet();
+  const { isFaucetLoading, wallet } = useFaucet();
   const router = useRouter();
 
   if (isFaucetLoading) return <SkeletonLoading />;
-  else if (isWhitelisted) router.replace("/faucet");
-  else if (wallet) router.replace("/invite-code");
+  else if (wallet) router.replace("/faucet");
 
   return (
     <main className="flex flex-col items-center text-center my-20 h-full">
