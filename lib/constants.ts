@@ -23,9 +23,9 @@ const WALLET_MODAL_OPTIONS: Partial<UseConnectModalOptions> = {
   showThirdwebBranding: false,
   theme: lightTheme({
     colors: {
-      accentText: "#f54400",
-      accentButtonBg: "#f54400",
-      primaryButtonBg: "#f54400",
+      accentText: "#FF7600",
+      accentButtonBg: "#FF7600",
+      primaryButtonBg: "#FF7600",
     },
   }),
 };

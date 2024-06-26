@@ -15,7 +15,7 @@ export const Navbar = () => {
   const isMobile = width < 700 && wallet;
   return (
     <nav className="flex w-full justify-center pt-5">
-      <ul className="flex flex-row justify-between items-center w-full max-w-7xl bg-white rounded-xl px-6">
+      <ul className="flex flex-row justify-between items-center w-full max-w-7xl px-6">
         <li>
           <Link className="pointer-events-none flex place-items-center gap-2 py-6" href="/">
             <Image
@@ -39,7 +39,7 @@ export const Navbar = () => {
           {/* <IconLink src="/assets/farcaster-icon.svg" href="https://farcaster.xyz/" name="Farcaster" /> */}
           <Link href="https://docs.kakarot.org/" rel="noopener noreferrer" target="_blank">
             <Button className="space-x-2" variant="outline" size="withIcon">
-              <span className="text-[#ff4500]">Read Docs</span>
+              <span className="text-kkrtOrange">Read Docs</span>
               <Image src="/assets/docs-icon.svg" alt="Docs" width={16} height={16} />
             </Button>
           </Link>

@@ -17,6 +17,7 @@ const config = {
         sans: ["var(--font-open-sauce)"],
       },
       colors: {
+        kkrtOrange: "#FF7600",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

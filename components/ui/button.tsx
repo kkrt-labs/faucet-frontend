@@ -19,8 +19,8 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        reverse: "bg-white text-[#F54400] shadow-sm hover:bg-secondary/80 font-light",
-        wallet: "rounded-[6px] bg-gradient-to-r from-[#F54400] to-[#F54400] text-white shadow-sm hover:bg-secondary/80",
+        reverse: "bg-white text-[#FF7600] shadow-sm hover:bg-secondary/80 font-light",
+        wallet: "rounded-[6px] bg-gradient-to-r from-[#FF7600] to-[#FF7600] text-white shadow-sm hover:bg-secondary/80",
       },
       size: {
         default: "h-10 px-4 py-3",

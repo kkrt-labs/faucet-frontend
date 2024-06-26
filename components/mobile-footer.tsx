@@ -18,7 +18,7 @@ export const Footer = () => {
 
         <Link href="https://docs.kakarot.org/" rel="noopener noreferrer" target="_blank">
           <Button className="space-x-2" variant="outline" size="withIcon">
-            <span className="text-[#ff4500]">Read Docs</span>
+            <span className="text-kkrtOrange">Read Docs</span>
             <Image src="/assets/docs-icon.svg" alt="Docs" width={16} height={16} />
           </Button>
         </Link>

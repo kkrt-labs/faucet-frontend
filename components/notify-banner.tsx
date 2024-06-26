@@ -21,7 +21,7 @@ const LinkBanner = () => {
     >
       <p className="text-white mt-6 lg:mt-0">
         Hurray 🎉 we just shipped some new improvements to our faucet. Need help? Reach out to us on{" "}
-        <a rel="noopener noreferrer" target="_blank" href="https://discord.gg/kakarotzkevm" className="text-[#f54500]">
+        <a rel="noopener noreferrer" target="_blank" href="https://discord.gg/kakarotzkevm" className="text-kkrtOrange">
           Discord
         </a>
       </p>
