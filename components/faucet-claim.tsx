@@ -1,14 +1,21 @@
-import Image from "next/image";
+import { FC, PropsWithChildren } from "react";
+import Image, { StaticImageData } from "next/image";
 import { useActiveWallet } from "thirdweb/react";
-import { InfoIcon, Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 import { KAKAROT_SEPOLIA } from "@/lib/thirdweb-client";
-import { FaucetStatsResponse } from "@/lib/types";
+import { FaucetJobResponse, FaucetStatsResponse } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 
 import metamaskLogo from "@/public/assets/metamask.png";
 import cooldownCarrot from "@/public/assets/cooldown-carrot.svg";
+import pendingCarrot from "@/public/assets/pending-carrot.svg";
 import claimedCarrot from "@/public/assets/claimed-carrot.svg";
+
+interface InfoCarrotProps {
+  carrotSrc: StaticImageData;
+  title?: string;
+  description: string;
+}
 
 interface FaucetClaimProps {
   isProcessing: boolean;
@@ -17,6 +24,7 @@ interface FaucetClaimProps {
   available: string;
   handleClaim: () => void;
   faucetStats?: FaucetStatsResponse;
+  faucetJob?: FaucetJobResponse[];
 }
 
 export const FaucetClaim = ({
@@ -26,10 +34,15 @@ export const FaucetClaim = ({
   available,
   handleClaim,
   faucetStats,
+  faucetJob,
 }: FaucetClaimProps) => {
   const wallet = useActiveWallet();
   const activeChain = wallet?.getChain();
   const isMetaMask = wallet?.id === "io.metamask";
+
+  // if taking longer tha 45 seconds to process the claim
+  const isNetworkOverloaded =
+    faucetJob && faucetJob[0].status === "pending" && new Date(faucetJob[0].created_at).getTime() + 45000 < Date.now();
 
   const convertSecondsToTime = (seconds: number) => {
     const hours = String(Math.floor(seconds / 3600)).padStart(2, "0");
@@ -41,61 +54,77 @@ export const FaucetClaim = ({
     return `${remainingSeconds} seconds`;
   };
 
+  if (isNetworkOverloaded)
+    return (
+      <CarrotContainer>
+        <InfoCarrot
+          carrotSrc={pendingCarrot}
+          description="The faucet is currently overloaded. Please try again later."
+        />
+      </CarrotContainer>
+    );
+
+  if (isCooldown && !isProcessing)
+    return (
+      <CarrotContainer>
+        <InfoCarrot
+          carrotSrc={cooldownCarrot}
+          description={`You're on a cooldown period! Try the Kakarot faucet again in ${convertSecondsToTime(
+            faucetStats?.timeLeftInS ?? 0
+          )}.`}
+        />
+      </CarrotContainer>
+    );
+
+  if (isOutOfFunds && !isProcessing)
+    return (
+      <CarrotContainer>
+        <InfoCarrot
+          carrotSrc={claimedCarrot}
+          description="We've run out Juices come back again till we fix the juice machine."
+        />
+      </CarrotContainer>
+    );
+
   return (
-    <div className="flex flex-col justify-center items-center my-16">
-      <div className="w-full sm:w-fit text-center flex flex-col justify-center items-center">
-        {!isProcessing && isCooldown ? (
-          <Image src={cooldownCarrot} alt="Cooldown Carrot" />
-        ) : !isProcessing && isOutOfFunds ? (
-          <Image src={claimedCarrot} alt="Cooldown Carrot" />
+    <CarrotContainer>
+      <h2 className="text-5xl md:text-7xl leading-tight text-[#878794] font-medium">{available}</h2>
+      <Button onClick={handleClaim} disabled={isProcessing} variant={"main"} className="mt-6 w-full">
+        {isProcessing ? (
+          <>
+            <Loader2 className="animate-spin w-4 h-4 mr-2 text-lg" />
+            <span>Claiming..</span>
+          </>
         ) : (
-          <h2 className="text-5xl md:text-7xl leading-tight text-[#878794]">{available}</h2>
+          "Claim"
         )}
-        <Button
-          onClick={handleClaim}
-          disabled={isProcessing}
-          variant={!isProcessing && (isCooldown || isOutOfFunds) ? "cooldown" : "main"}
-          className={cn("mt-6 w-full", !isProcessing && (isCooldown || isOutOfFunds) && "hidden")}
-        >
-          {isProcessing ? (
-            <>
-              <Loader2 className="animate-spin w-4 h-4 mr-2" />
-              <span>Claiming..</span>
-            </>
-          ) : isCooldown ? (
-            "Cooldown"
-          ) : (
-            "Claim"
-          )}
-        </Button>
-        {/* {isMetaMask && activeChain?.id !== KAKAROT_SEPOLIA.id && (
-          <Button
-            variant="outline"
-            className="mt-6 w-full space-x-3"
-            onClick={() => wallet.switchChain(KAKAROT_SEPOLIA)}
-          >
-            <Image src={metamaskLogo} alt="metamask" width={16} height={16} />
-            <span className="text-[#ff4500]">Add to Metamask</span>
+      </Button>
+
+      {wallet && activeChain?.id !== KAKAROT_SEPOLIA.id && (
+        <div className="flex justify-center items-center w-full mt-6 text-sm md:text-md gap-4">
+          <Button variant="outline" className="space-x-3" onClick={() => wallet.switchChain(KAKAROT_SEPOLIA)}>
+            {isMetaMask && <Image src={metamaskLogo} alt="metamask" width={16} height={16} />}
+            <span className="text-kkrtOrange">Add Network</span>
           </Button>
-        )} */}
-        {!isProcessing && isCooldown ? (
-          <div className="flex flex-row items-center justify-center my-4">
-            <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">
-              You&apos;re on a cooldown period! Try the Kakarot faucet again in{" "}
-              {convertSecondsToTime(faucetStats?.timeLeftInS ?? 0)}.
-            </p>
-          </div>
-        ) : (
-          !isProcessing &&
-          isOutOfFunds && (
-            <div className="flex flex-row items-center justify-center my-4">
-              <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">
-                We&apos;ve run out Juices come back again till we fix the juice machine.
-              </p>
-            </div>
-          )
-        )}
-      </div>
-    </div>
+          <span className="text-kkrtOrange underline">Network Details</span>
+        </div>
+      )}
+    </CarrotContainer>
   );
 };
+
+const InfoCarrot = ({ carrotSrc, title = "", description }: InfoCarrotProps) => (
+  <>
+    <Image src={carrotSrc} alt="Pending Carrot" />
+    {title.length > 0 && <h2 className="text-3xl md:text-5xl leading-tight  font-medium">{title}</h2>}
+    <div className="flex flex-row items-center justify-center my-4">
+      <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">{description}</p>
+    </div>
+  </>
+);
+
+const CarrotContainer: FC<PropsWithChildren> = ({ children }) => (
+  <div className="flex flex-col justify-center items-center my-16">
+    <div className="w-full sm:w-fit text-center flex flex-col justify-center items-center">{children}</div>
+  </div>
+);
