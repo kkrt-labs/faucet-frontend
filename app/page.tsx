@@ -1,15 +1,14 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { useFaucet } from "@/hooks/useFaucet";
 import { ConnectWallet } from "@/components/connect-wallet";
 import { SkeletonLoading } from "@/components/skeleton-loading";
 
 export default function Home() {
   const { isFaucetLoading, wallet } = useFaucet();
-  const router = useRouter();
 
   if (isFaucetLoading) return <SkeletonLoading />;
-  else if (wallet) router.replace("/faucet");
+  if (wallet) redirect("/faucet");
 
   return (
     <main className="flex flex-col items-center text-center my-20 h-full">
