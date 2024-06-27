@@ -1,14 +1,13 @@
+import "./globals.css";
 import type { Metadata } from "next";
+import { Inter_Tight } from "next/font/google";
 import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/mobile-footer";
+import { LinkBanner } from "@/components/notify-banner";
 import { ThirdwebProvider } from "@/lib/thirdweb-provider";
 import { Provider } from "@/lib/query-provider";
-
-import localFont from "next/font/local";
-import "./globals.css";
-import { LinkBanner } from "@/components/notify-banner";
 
 export const metadata: Metadata = {
   title: "Kakarot Faucet",
@@ -36,17 +35,9 @@ export const metadata: Metadata = {
   },
 };
 
-const openSauce = localFont({
-  src: [
-    { path: "../public/font/OpenSauceSans-Light.ttf", weight: "300" },
-    { path: "../public/font/OpenSauceSans-Regular.ttf", weight: "400" },
-    { path: "../public/font/OpenSauceSans-Medium.ttf", weight: "500" },
-    { path: "../public/font/OpenSauceSans-Bold.ttf", weight: "700" },
-    { path: "../public/font/OpenSauceSans-SemiBold.ttf", weight: "600" },
-    { path: "../public/font/OpenSauceSans-ExtraBold.ttf", weight: "800" },
-    { path: "../public/font/OpenSauceSans-Black.ttf", weight: "900" },
-  ],
-  variable: "--font-open-sauce",
+const inter = Inter_Tight({
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export default function RootLayout({
@@ -57,7 +48,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ThirdwebProvider>
-        <body className={`${openSauce.variable} flex flex-col font-sans faucetBackground min-h-svh px-4 sm:px-20`}>
+        <body className={`${inter.className} flex flex-col faucetBackground min-h-svh px-4 sm:px-20`}>
           <Toaster />
           <Provider>
             <LinkBanner />

@@ -13,9 +13,6 @@ const config = {
       },
     },
     extend: {
-      fontFamily: {
-        sans: ["var(--font-open-sauce)"],
-      },
       colors: {
         kkrtOrange: "#FF7600",
         border: "hsl(var(--border))",
