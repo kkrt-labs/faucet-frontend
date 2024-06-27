@@ -12,11 +12,7 @@ import {
   RedeemInviteResponse,
 } from "./types";
 
-const instance = axios.create({
-  headers: {
-    Authorization: `Bearer ${ENV.NEXT_PUBLIC_BEARER_TOKEN}`,
-  },
-});
+const instance = axios.create({});
 
 export const requests = {
   get: <T>(url: string, config?: AxiosRequestConfig): Promise<T> =>

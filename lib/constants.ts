@@ -6,7 +6,6 @@ interface Environment {
   API_ROOT: string;
   NEXT_PUBLIC_THIRDWEB_CLIENT_ID: string;
   THIRDWEB_CLIENT_SECRET: string;
-  NEXT_PUBLIC_BEARER_TOKEN: string;
 }
 
 const ENV: Environment = {
@@ -14,7 +13,6 @@ const ENV: Environment = {
   API_ROOT: process.env.NEXT_PUBLIC_API_ROOT || "",
   NEXT_PUBLIC_THIRDWEB_CLIENT_ID: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID || "",
   THIRDWEB_CLIENT_SECRET: process.env.THIRDWEB_CLIENT_SECRET || "",
-  NEXT_PUBLIC_BEARER_TOKEN: process.env.NEXT_PUBLIC_BEARER_TOKEN || "",
 };
 
 const WALLET_MODAL_OPTIONS: Partial<UseConnectModalOptions> = {
