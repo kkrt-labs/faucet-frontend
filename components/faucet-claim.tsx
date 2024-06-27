@@ -1,9 +1,9 @@
-import { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren, useEffect } from "react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
-import { useActiveWallet } from "thirdweb/react";
+import { useActiveWallet, useActiveWalletChain } from "thirdweb/react";
 import { Loader2 } from "lucide-react";
-import { KAKAROT_SEPOLIA } from "@/lib/thirdweb-client";
+import { KAKAROT_SEPOLIA, client } from "@/lib/thirdweb-client";
 import { KKRT_RPC_DETAILS } from "@/lib/constants";
 import { FaucetJobResponse, FaucetStatsResponse } from "@/lib/types";
 import { Button } from "@/components/ui/button";
@@ -39,6 +39,7 @@ export const FaucetClaim = ({
   faucetJob,
 }: FaucetClaimProps) => {
   const wallet = useActiveWallet();
+  const chainId = useActiveWalletChain();
   const activeChain = wallet?.getChain();
   const isMetaMask = wallet?.id === "io.metamask";
 
@@ -55,6 +56,11 @@ export const FaucetClaim = ({
     if (minutes !== "00") return `${minutes}:${remainingSeconds} minutes`;
     return `${remainingSeconds} seconds`;
   };
+
+  // keep checking for network switch in background using hook
+  useEffect(() => {
+    if (wallet) wallet.autoConnect({ client });
+  }, [chainId]);
 
   if (isNetworkOverloaded)
     return (
