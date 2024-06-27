@@ -1,8 +1,10 @@
 import { FC, PropsWithChildren } from "react";
 import Image, { StaticImageData } from "next/image";
+import Link from "next/link";
 import { useActiveWallet } from "thirdweb/react";
 import { Loader2 } from "lucide-react";
 import { KAKAROT_SEPOLIA } from "@/lib/thirdweb-client";
+import { KKRT_RPC_DETAILS } from "@/lib/constants";
 import { FaucetJobResponse, FaucetStatsResponse } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 
@@ -106,7 +108,9 @@ export const FaucetClaim = ({
             {isMetaMask && <Image src={metamaskLogo} alt="metamask" width={16} height={16} />}
             <span className="text-kkrtOrange">Add Network</span>
           </Button>
-          <span className="text-kkrtOrange underline">Network Details</span>
+          <Link href={KKRT_RPC_DETAILS} rel="noopener noreferrer" target="_blank">
+            <span className="text-kkrtOrange underline">Network Details</span>
+          </Link>
         </div>
       )}
     </CarrotContainer>

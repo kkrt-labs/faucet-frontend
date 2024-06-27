@@ -18,8 +18,8 @@ const ENV: Environment = {
 const WALLET_MODAL_OPTIONS: Partial<UseConnectModalOptions> = {
   size: "wide",
   title: "Select Wallet",
-  titleIcon:
-    "https://assets-global.website-files.com/6464a063474b57e2c4e03b61/64a20e2749d92613acf4fd1b_Logo%20dark.svg",
+  // TODO: update to "kakarot-logo-mobile"
+  titleIcon: "https://sepolia-faucet.kakarot.org/assets/kakarot-logo.svg",
   showThirdwebBranding: false,
   theme: lightTheme({
     colors: {
@@ -44,5 +44,6 @@ Carrot season is coming 🥕🥕🥕🥕
 const FAUCET_URL = "https://faucet-sepolia.kakarot.org";
 const INTENT = `https://x.com/intent/post?text=${encodeURIComponent(TWEET_TEXT)}&url=${FAUCET_URL}`;
 const KKRT_EXPLORER = "https://sepolia.kakarotscan.org";
+const KKRT_RPC_DETAILS = "https://thirdweb.com/kakarot-sepolia";
 
-export { ENV, WALLET_MODAL_OPTIONS, CONFETTI_COLORS, INTENT, KKRT_EXPLORER };
+export { ENV, WALLET_MODAL_OPTIONS, CONFETTI_COLORS, INTENT, KKRT_EXPLORER, KKRT_RPC_DETAILS };
