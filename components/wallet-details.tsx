@@ -68,8 +68,8 @@ export const WalletDetails = () => {
             <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[155px] -mt-2 p-0 !bg-[#5e5e5e]">
-          <Command className="!bg-[#5e5e5e] rounded-t-none">
+        <PopoverContent className="w-[152px] -mt-2 p-0 !bg-[#003E2A]">
+          <Command className="!bg-[#003E2A] rounded-t-none">
             <CommandGroup>
               <CommandList>
                 <CommandItem
@@ -78,7 +78,7 @@ export const WalletDetails = () => {
                     disconnect(disconnectWallet);
                     setOpen(false);
                   }}
-                  className="flex items-center justify-between !text-white !bg-[#5e5e5e] cursor-pointer"
+                  className="flex items-center justify-between !text-white !bg-[#003E2A] cursor-pointer"
                 >
                   Disconnect
                   <LogOut className={cn("mr-2 h-4 w-4")} />

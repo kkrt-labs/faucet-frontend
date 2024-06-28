@@ -18,8 +18,7 @@ const ENV: Environment = {
 const WALLET_MODAL_OPTIONS: Partial<UseConnectModalOptions> = {
   size: "wide",
   title: "Select Wallet",
-  // TODO: update to "kakarot-logo-mobile"
-  titleIcon: "https://sepolia-faucet.kakarot.org/assets/kakarot-logo.svg",
+  titleIcon: "https://sepolia-faucet.kakarot.org/assets/kakarot-logo-mobile.svg",
   showThirdwebBranding: false,
   theme: lightTheme({
     colors: {
