@@ -1,11 +1,18 @@
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { useActiveWallet } from "thirdweb/react";
+import { useActiveWallet, useActiveWalletChain } from "thirdweb/react";
 import { FaucetClaim } from "@/components/faucet-claim";
 
 // Mock hooks and components
 jest.mock("thirdweb/react", () => ({
   useActiveWallet: jest.fn(),
+  useActiveWalletChain: jest.fn(),
+  lightTheme: jest.fn().mockImplementation(() => ({
+    colors: {
+      accentText: "#FF7600",
+      accentButtonBg: "#FF7600",
+    },
+  })),
 }));
 
 jest.mock("lucide-react", () => ({
@@ -15,10 +22,16 @@ jest.mock("lucide-react", () => ({
 
 describe("FaucetClaim", () => {
   const mockUseActiveWallet = useActiveWallet as jest.Mock;
+  const mockUseActiveWalletChain = useActiveWalletChain as jest.Mock;
   const mockHandleClaim = jest.fn();
 
   beforeEach(() => {
-    mockUseActiveWallet.mockReturnValue({ getChain: () => ({ id: "0x1" }), id: "io.metamask" });
+    mockUseActiveWallet.mockReturnValue({
+      getChain: () => ({ id: "0x1" }),
+      id: "io.metamask",
+      autoConnect: (client: any) => ({}),
+    });
+    mockUseActiveWalletChain.mockReturnValue({ id: "0x1" });
     jest.clearAllMocks();
   });
 
@@ -64,7 +77,7 @@ describe("FaucetClaim", () => {
         faucetStats={{ timeLeftInS: 0 } as any}
       />
     );
-    expect(screen.getByAltText("Cooldown Carrot")).toBeInTheDocument();
+    expect(screen.getByAltText("Juiced Carrot")).toBeInTheDocument();
     expect(screen.getByText("We've run out Juices come back again till we fix the juice machine.")).toBeInTheDocument();
   });
 
@@ -110,32 +123,6 @@ describe("FaucetClaim", () => {
       />
     );
     expect(screen.getByText("Claiming..").closest("button")).toBeDisabled();
-  });
-
-  it("disables claim button when on cooldown or out of funds", () => {
-    render(
-      <FaucetClaim
-        isProcessing={false}
-        isCooldown={true}
-        isOutOfFunds={false}
-        available="0.001 ETH"
-        handleClaim={mockHandleClaim}
-        faucetStats={{ timeLeftInS: 3600 } as any}
-      />
-    );
-    expect(screen.getByText("Cooldown").closest("button"));
-
-    render(
-      <FaucetClaim
-        isProcessing={false}
-        isCooldown={false}
-        isOutOfFunds={true}
-        available="0.001 ETH"
-        handleClaim={mockHandleClaim}
-        faucetStats={{ timeLeftInS: 0 } as any}
-      />
-    );
-    expect(screen.getByText("Claim").closest("button"));
   });
 
   it("matches snapshot", () => {

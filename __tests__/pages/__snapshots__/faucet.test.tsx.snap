@@ -6,7 +6,7 @@ exports[`Faucet Page Snapshot Test matches snapshot 1`] = `
     class="flex flex-col items-center mt-10 h-full"
   >
     <div
-      class="flex flex-col bg-white w-full py-6 px-3 sm:px-10 lg:px-20 rounded-md mb-12"
+      class="flex flex-col bg-white w-full py-6 px-3 sm:px-10 lg:px-20 rounded-md mb-12 border border-[#2e2e342e]"
     >
       <div />
       <div
@@ -17,7 +17,7 @@ exports[`Faucet Page Snapshot Test matches snapshot 1`] = `
         >
           Faucet Balance: 
           <span
-            class="text-[#f54400]"
+            class="text-kkrtOrange font-medium"
           >
             1ETH
           </span>
@@ -27,7 +27,7 @@ exports[`Faucet Page Snapshot Test matches snapshot 1`] = `
         >
           Block Number: 
           <span
-            class="text-[#f54400]"
+            class="text-[#0A846C] font-medium"
           >
             0x
           </span>

@@ -1,12 +1,12 @@
 import "@testing-library/jest-dom";
 import { act, render, screen } from "@testing-library/react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { useFaucet } from "@/hooks/useFaucet";
 import Home from "@/app/page";
 
 // Mock hooks and components
 jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
+  redirect: jest.fn(),
 }));
 jest.mock("@/hooks/useFaucet", () => ({
   useFaucet: jest.fn(),
@@ -19,12 +19,9 @@ jest.mock("@/components/connect-wallet", () => ({
 }));
 
 describe("Home Page", () => {
-  const mockReplace = jest.fn();
-  const mockUseRouter = useRouter as jest.Mock;
   const mockUseFaucet = useFaucet as jest.Mock;
 
   beforeEach(() => {
-    mockUseRouter.mockReturnValue({ replace: mockReplace });
     jest.clearAllMocks();
   });
 
@@ -62,7 +59,7 @@ describe("Home Page", () => {
 
       render(<Home />);
 
-      expect(mockReplace).not.toHaveBeenCalled();
+      expect(redirect).not.toHaveBeenCalled();
       expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
       expect(screen.getByText("Connect Wallet")).toBeInTheDocument();
     });
@@ -75,7 +72,7 @@ describe("Home Page", () => {
       render(<Home />);
 
       expect(screen.getByText("Skeleton Loading...")).toBeInTheDocument();
-      expect(mockReplace).not.toHaveBeenCalledWith("/faucet");
+      expect(redirect).not.toHaveBeenCalledWith("/faucet");
     });
 
     it("updates correctly when useFaucet value changes", () => {

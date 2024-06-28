@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { act, render, screen, waitFor } from "@testing-library/react";
-import { useRouter } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
 import { useFaucet } from "@/hooks/useFaucet";
 import { useBlockNumber, useWalletBalance, lightTheme } from "thirdweb/react";
 import { useWindowSize } from "@/hooks/useWindowSize";
@@ -11,7 +11,7 @@ import Faucet from "@/app/faucet/page";
 
 // Mock hooks and components
 jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
+  redirect: jest.fn(),
 }));
 jest.mock("@/hooks/useFaucet", () => ({
   useFaucet: jest.fn(),
@@ -82,8 +82,6 @@ jest.mock("@/components/ui/skeleton", () => ({
 }));
 
 describe("Faucet Page", () => {
-  const mockReplace = jest.fn();
-  const mockUseRouter = useRouter as jest.Mock;
   const mockUseFaucet = useFaucet as jest.Mock;
   const mockUseBlockNumber = useBlockNumber as jest.Mock;
   const mockUseWalletBalance = useWalletBalance as jest.Mock;
@@ -92,7 +90,6 @@ describe("Faucet Page", () => {
   const mockUseClaimFunds = useClaimFunds as jest.Mock;
 
   beforeEach(() => {
-    mockUseRouter.mockReturnValue({ replace: mockReplace });
     mockUseFaucet.mockReturnValue({
       wallet: null,
       faucetStats: null,
@@ -125,7 +122,7 @@ describe("Faucet Page", () => {
 
       render(<Faucet />);
 
-      expect(mockReplace).toHaveBeenCalledWith("/");
+      expect(redirect).toHaveBeenCalledWith("/");
     });
   });
 
