@@ -15,6 +15,7 @@ import claimedCarrot from "@/public/assets/claimed-carrot.svg";
 
 interface InfoCarrotProps {
   carrotSrc: StaticImageData;
+  imageAlt: string;
   title?: string;
   description: string;
 }
@@ -44,8 +45,11 @@ export const FaucetClaim = ({
   const isMetaMask = wallet?.id === "io.metamask";
 
   // if taking longer tha 45 seconds to process the claim
-  const isNetworkOverloaded =
-    faucetJob && faucetJob[0].status === "pending" && new Date(faucetJob[0].created_at).getTime() + 45000 < Date.now();
+  // const isNetworkOverloaded =
+  // faucetJob && faucetJob[0].status === "pending" && new Date(faucetJob[0].created_at).getTime() + 45000 < Date.now();
+
+  // to simulate downtime
+  const isNetworkOverloaded = true;
 
   const convertSecondsToTime = (seconds: number) => {
     const hours = String(Math.floor(seconds / 3600)).padStart(2, "0");
@@ -66,6 +70,7 @@ export const FaucetClaim = ({
     return (
       <CarrotContainer>
         <InfoCarrot
+          imageAlt="Pending Carrot"
           carrotSrc={pendingCarrot}
           description="The faucet is currently overloaded. Please try again later."
         />
@@ -76,6 +81,7 @@ export const FaucetClaim = ({
     return (
       <CarrotContainer>
         <InfoCarrot
+          imageAlt="Cooldown Carrot"
           carrotSrc={cooldownCarrot}
           description={`You're on a cooldown period! Try the Kakarot faucet again in ${convertSecondsToTime(
             faucetStats?.timeLeftInS ?? 0
@@ -88,6 +94,7 @@ export const FaucetClaim = ({
     return (
       <CarrotContainer>
         <InfoCarrot
+          imageAlt="Juiced Carrot"
           carrotSrc={claimedCarrot}
           description="We've run out Juices come back again till we fix the juice machine."
         />
@@ -123,9 +130,9 @@ export const FaucetClaim = ({
   );
 };
 
-const InfoCarrot = ({ carrotSrc, title = "", description }: InfoCarrotProps) => (
+const InfoCarrot = ({ carrotSrc, title = "", description, imageAlt }: InfoCarrotProps) => (
   <>
-    <Image src={carrotSrc} alt="Pending Carrot" />
+    <Image src={carrotSrc} alt={imageAlt} />
     {title.length > 0 && <h2 className="text-3xl md:text-5xl leading-tight  font-medium">{title}</h2>}
     <div className="flex flex-row items-center justify-center my-4">
       <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">{description}</p>
