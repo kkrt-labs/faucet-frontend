@@ -36,7 +36,7 @@ export const WalletDetails = () => {
         aria-expanded={open}
         style={{
           borderRadius: "6px",
-          background: "linear-gradient(0deg, #5E5E5E 0%, #5E5E5E 100%), rgba(255, 255, 255, 0.40)",
+          background: "rgba(0, 0, 0, 0.12)",
           boxShadow: "0px 1px 2px 0px rgba(164, 172, 185, 0.24), 0px 0px 0px 1px rgba(18, 55, 105, 0.08)",
         }}
         className="space-x-2 font-medium justify-around hidden md:flex"
@@ -44,7 +44,7 @@ export const WalletDetails = () => {
         size="withIcon"
       >
         <Image src={ethereumLogo} alt="ethereum" className="bg-white rounded-full w-5" />
-        <span>{walletBalance?.displayValue.substring(0, 6) ?? 0} ETH</span>
+        <span className="text-[#353535]">{walletBalance?.displayValue.substring(0, 6) ?? 0} ETH</span>
       </Button>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
@@ -53,7 +53,7 @@ export const WalletDetails = () => {
             aria-expanded={open}
             style={{
               borderRadius: "6px",
-              background: "linear-gradient(0deg, #5E5E5E 0%, #5E5E5E 100%), rgba(255, 255, 255, 0.40)",
+              background: "linear-gradient(0deg, #003E2A 0%, #003E2A 100%), rgba(255, 255, 255, 0.40)",
               boxShadow: "0px 1px 2px 0px rgba(164, 172, 185, 0.24), 0px 0px 0px 1px rgba(18, 55, 105, 0.08)",
             }}
             className="space-x-2 font-medium justify-around"
@@ -68,8 +68,8 @@ export const WalletDetails = () => {
             <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[155px] -mt-2 p-0 !bg-[#5e5e5e]">
-          <Command className="!bg-[#5e5e5e] rounded-t-none">
+        <PopoverContent className="w-[152px] -mt-2 p-0 !bg-[#003E2A]">
+          <Command className="!bg-[#003E2A] rounded-t-none">
             <CommandGroup>
               <CommandList>
                 <CommandItem
@@ -78,7 +78,7 @@ export const WalletDetails = () => {
                     disconnect(disconnectWallet);
                     setOpen(false);
                   }}
-                  className="flex items-center justify-between !text-white !bg-[#5e5e5e] cursor-pointer"
+                  className="flex items-center justify-between !text-white !bg-[#003E2A] cursor-pointer"
                 >
                   Disconnect
                   <LogOut className={cn("mr-2 h-4 w-4")} />

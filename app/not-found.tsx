@@ -5,7 +5,7 @@ import image404 from "@/public/assets/404.svg";
 
 export default function FourOFour() {
   return (
-    <main className="flex flex-col items-center justify-center">
+    <main className="flex flex-col items-center justify-center mb-10">
       <Image src={image404} alt="404" className="mb-16 mt-10" />
       <TextPair
         heading="Need more testnet ETH?"
