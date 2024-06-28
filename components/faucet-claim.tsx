@@ -15,6 +15,7 @@ import claimedCarrot from "@/public/assets/claimed-carrot.svg";
 
 interface InfoCarrotProps {
   carrotSrc: StaticImageData;
+  imageAlt: string;
   title?: string;
   description: string;
 }
@@ -42,6 +43,7 @@ export const FaucetClaim = ({
   const chainId = useActiveWalletChain();
   const activeChain = wallet?.getChain();
   const isMetaMask = wallet?.id === "io.metamask";
+  const isDowntime = true; // to simulate downtime
 
   // if taking longer tha 45 seconds to process the claim
   const isNetworkOverloaded =
@@ -62,12 +64,25 @@ export const FaucetClaim = ({
     if (wallet) wallet.autoConnect({ client });
   }, [chainId]);
 
+  if (isDowntime)
+    return (
+      <CarrotContainer>
+        <InfoCarrot
+          imageAlt="Pending Carrot"
+          carrotSrc={pendingCarrot}
+          description="Kakarot is currently undergoing scheduled maintenace. We will be back soon!"
+        />
+      </CarrotContainer>
+    );
+
   if (isNetworkOverloaded)
     return (
       <CarrotContainer>
         <InfoCarrot
+          imageAlt="Pending Carrot"
           carrotSrc={pendingCarrot}
-          description="The faucet is currently overloaded. Please try again later."
+          title="Your funds are on the way!"
+          description="The faucet is under load, we have recieved your request, and the funds are on the way."
         />
       </CarrotContainer>
     );
@@ -76,6 +91,7 @@ export const FaucetClaim = ({
     return (
       <CarrotContainer>
         <InfoCarrot
+          imageAlt="Cooldown Carrot"
           carrotSrc={cooldownCarrot}
           description={`You're on a cooldown period! Try the Kakarot faucet again in ${convertSecondsToTime(
             faucetStats?.timeLeftInS ?? 0
@@ -88,6 +104,7 @@ export const FaucetClaim = ({
     return (
       <CarrotContainer>
         <InfoCarrot
+          imageAlt="Juiced Carrot"
           carrotSrc={claimedCarrot}
           description="We've run out Juices come back again till we fix the juice machine."
         />
@@ -123,9 +140,9 @@ export const FaucetClaim = ({
   );
 };
 
-const InfoCarrot = ({ carrotSrc, title = "", description }: InfoCarrotProps) => (
+const InfoCarrot = ({ carrotSrc, title = "", description, imageAlt }: InfoCarrotProps) => (
   <>
-    <Image src={carrotSrc} alt="Pending Carrot" />
+    <Image src={carrotSrc} alt={imageAlt} />
     {title.length > 0 && <h2 className="text-3xl md:text-5xl leading-tight  font-medium">{title}</h2>}
     <div className="flex flex-row items-center justify-center my-4">
       <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">{description}</p>

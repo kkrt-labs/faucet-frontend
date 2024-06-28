@@ -9,7 +9,7 @@ exports[`FaucetClaim matches snapshot 1`] = `
       class="w-full sm:w-fit text-center flex flex-col justify-center items-center"
     >
       <h2
-        class="text-5xl md:text-7xl leading-tight text-[#878794]"
+        class="text-5xl md:text-7xl leading-tight text-[#878794] font-medium"
       >
         0.001 ETH
       </h2>
@@ -18,6 +18,41 @@ exports[`FaucetClaim matches snapshot 1`] = `
       >
         Claim
       </button>
+      <div
+        class="flex justify-center items-center w-full mt-6 text-sm md:text-md gap-4"
+      >
+        <button
+          class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground font-normal h-10 px-4 py-3 space-x-3"
+        >
+          <img
+            alt="metamask"
+            data-nimg="1"
+            decoding="async"
+            height="16"
+            loading="lazy"
+            src="/_next/image?url=%2Fimg.jpg&w=32&q=75"
+            srcset="/_next/image?url=%2Fimg.jpg&w=16&q=75 1x, /_next/image?url=%2Fimg.jpg&w=32&q=75 2x"
+            style="color: transparent;"
+            width="16"
+          />
+          <span
+            class="text-kkrtOrange"
+          >
+            Add Network
+          </span>
+        </button>
+        <a
+          href="https://thirdweb.com/kakarot-sepolia"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <span
+            class="text-kkrtOrange underline"
+          >
+            Network Details
+          </span>
+        </a>
+      </div>
     </div>
   </div>
 </DocumentFragment>
