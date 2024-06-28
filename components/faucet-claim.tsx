@@ -43,7 +43,7 @@ export const FaucetClaim = ({
   const chainId = useActiveWalletChain();
   const activeChain = wallet?.getChain();
   const isMetaMask = wallet?.id === "io.metamask";
-  const isDowntime = true; // to simulate downtime
+  const isDowntime = false; // to simulate downtime
 
   // if taking longer tha 45 seconds to process the claim
   const isNetworkOverloaded =
