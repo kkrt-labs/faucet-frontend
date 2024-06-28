@@ -43,13 +43,11 @@ export const FaucetClaim = ({
   const chainId = useActiveWalletChain();
   const activeChain = wallet?.getChain();
   const isMetaMask = wallet?.id === "io.metamask";
+  const isDowntime = true; // to simulate downtime
 
   // if taking longer tha 45 seconds to process the claim
-  // const isNetworkOverloaded =
-  // faucetJob && faucetJob[0].status === "pending" && new Date(faucetJob[0].created_at).getTime() + 45000 < Date.now();
-
-  // to simulate downtime
-  const isNetworkOverloaded = true;
+  const isNetworkOverloaded =
+    faucetJob && faucetJob[0].status === "pending" && new Date(faucetJob[0].created_at).getTime() + 45000 < Date.now();
 
   const convertSecondsToTime = (seconds: number) => {
     const hours = String(Math.floor(seconds / 3600)).padStart(2, "0");
@@ -66,13 +64,25 @@ export const FaucetClaim = ({
     if (wallet) wallet.autoConnect({ client });
   }, [chainId]);
 
+  if (isDowntime)
+    return (
+      <CarrotContainer>
+        <InfoCarrot
+          imageAlt="Pending Carrot"
+          carrotSrc={pendingCarrot}
+          description="Kakarot is currently undergoing scheduled maintenace. We will be back soon!"
+        />
+      </CarrotContainer>
+    );
+
   if (isNetworkOverloaded)
     return (
       <CarrotContainer>
         <InfoCarrot
           imageAlt="Pending Carrot"
           carrotSrc={pendingCarrot}
-          description="The faucet is currently overloaded. Please try again later."
+          title="Your funds are on the way!"
+          description="The faucet is under load, we have recieved your request, and the funds are on the way."
         />
       </CarrotContainer>
     );
