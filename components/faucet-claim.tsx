@@ -1,10 +1,11 @@
-import { FC, PropsWithChildren, useEffect } from "react";
+import { FC, PropsWithChildren, createRef, useEffect } from "react";
 import Image, { StaticImageData } from "next/image";
+import ReCAPTCHA from "react-google-recaptcha";
 import Link from "next/link";
 import { useActiveWallet, useActiveWalletChain } from "thirdweb/react";
 import { Loader2 } from "lucide-react";
 import { KAKAROT_SEPOLIA, client } from "@/lib/thirdweb-client";
-import { KKRT_RPC_DETAILS } from "@/lib/constants";
+import { ENV, KKRT_RPC_DETAILS } from "@/lib/constants";
 import { FaucetJobResponse, FaucetStatsResponse } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 
@@ -42,6 +43,7 @@ export const FaucetClaim = ({
   const wallet = useActiveWallet();
   const chainId = useActiveWalletChain();
   const activeChain = wallet?.getChain();
+  const recaptchaRef = createRef() as React.RefObject<ReCAPTCHA>;
   const isMetaMask = wallet?.id === "io.metamask";
   const isDowntime = false; // to simulate downtime
 
@@ -57,6 +59,14 @@ export const FaucetClaim = ({
     if (minutes !== "00") return `${minutes}:${remainingSeconds} minutes`;
     return `${remainingSeconds} seconds`;
   };
+
+  const onReCAPTCHAChange = (captchaCode: string | null) => {
+    if (!captchaCode) return;
+    handleClaim();
+    recaptchaRef.current?.reset();
+  };
+
+  const handleClick = () => recaptchaRef.current?.execute();
 
   // keep checking for network switch in background using hook
   useEffect(() => {
@@ -113,7 +123,13 @@ export const FaucetClaim = ({
   return (
     <CarrotContainer>
       <h2 className="text-5xl md:text-7xl leading-tight text-[#878794] font-medium">{available}</h2>
-      <Button onClick={handleClaim} disabled={isProcessing} variant={"main"} className="mt-6 w-full">
+      <ReCAPTCHA
+        ref={recaptchaRef}
+        size="invisible"
+        sitekey={ENV.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+        onChange={onReCAPTCHAChange}
+      />
+      <Button onClick={handleClick} disabled={isProcessing} variant={"main"} className="mt-6 w-full">
         {isProcessing ? (
           <>
             <Loader2 className="animate-spin w-4 h-4 mr-2 text-lg" />
