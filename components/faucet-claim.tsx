@@ -46,8 +46,7 @@ export const FaucetClaim = ({
   const isDowntime = false; // to simulate downtime
 
   // if taking longer tha 45 seconds to process the claim
-  const isNetworkOverloaded =
-    faucetJob && faucetJob[0].status === "pending" && new Date(faucetJob[0].created_at).getTime() + 45000 < Date.now();
+  const isNetworkOverloaded = (faucetJob && faucetJob[0].status === "processing") || isProcessing;
 
   const convertSecondsToTime = (seconds: number) => {
     const hours = String(Math.floor(seconds / 3600)).padStart(2, "0");

@@ -88,9 +88,9 @@ export default function Faucet() {
       // 300 seconds === 5 minutes
       if (diff > 300) {
         localStorage.removeItem(LOCAL_STORAGE_KEY);
-      } else {
-        setJobId(savedJobId);
       }
+    } else {
+      setJobId(savedJobId);
     }
   }, []);
 
