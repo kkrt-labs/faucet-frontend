@@ -6,6 +6,8 @@ interface Environment {
   API_ROOT: string;
   NEXT_PUBLIC_THIRDWEB_CLIENT_ID: string;
   THIRDWEB_CLIENT_SECRET: string;
+  NEXT_PUBLIC_RECAPTCHA_SITE_KEY: string;
+  RECAPTCHA_SECRET_KEY: string;
 }
 
 const ENV: Environment = {
@@ -13,6 +15,8 @@ const ENV: Environment = {
   API_ROOT: process.env.NEXT_PUBLIC_API_ROOT || "",
   NEXT_PUBLIC_THIRDWEB_CLIENT_ID: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID || "",
   THIRDWEB_CLIENT_SECRET: process.env.THIRDWEB_CLIENT_SECRET || "",
+  NEXT_PUBLIC_RECAPTCHA_SITE_KEY: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "",
+  RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY || "",
 };
 
 const WALLET_MODAL_OPTIONS: Partial<UseConnectModalOptions> = {
@@ -30,7 +34,7 @@ const WALLET_MODAL_OPTIONS: Partial<UseConnectModalOptions> = {
 };
 
 const CONFETTI_COLORS = ["#FDA829", "#F6F5FC", "#FF2828"];
-
+const GOOGLE_CAPTCHA_API_BASE = "https://www.google.com/recaptcha/api/siteverify";
 const TWEET_TEXT = `Hello everyone! 
 
 Just claimed my "Early Farmer 🧑‍🌾" NFT on @KakarotZkEvm testnet phase🥕
