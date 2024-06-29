@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils";
 const LOCAL_STORAGE_KEY = "faucetJobId";
 
 export default function Faucet() {
-  const { wallet, faucetStats, faucetBalance, refetchFaucet, isFaucetLoading } = useFaucet();
+  const { wallet, faucetStats, faucetBalance, refetchFaucet, isFaucetLoading, activeWallets } = useFaucet();
   const { width: windowWidth } = useWindowSize();
 
   const blockNumber = useBlockNumber({ client, chain: KAKAROT_SEPOLIA });
@@ -113,7 +113,7 @@ export default function Faucet() {
   }, [isError]);
 
   if (isFaucetLoading) return <SkeletonLoader />;
-  if (!wallet) redirect("/");
+  if (!wallet || !activeWallets) redirect("/");
 
   return (
     <main className="flex flex-col items-center mt-10 h-full">
