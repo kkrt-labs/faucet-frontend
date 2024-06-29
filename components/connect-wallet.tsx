@@ -1,10 +1,15 @@
-import { ConnectButton, ConnectEmbed } from "thirdweb/react";
+import { ConnectButton, ConnectEmbed, useConnectModal } from "thirdweb/react";
 import { KAKAROT_SEPOLIA, client, recommendedWallets, wallets } from "@/lib/thirdweb-client";
-import { WalletDetails } from "./wallet-details";
 import { WALLET_MODAL_OPTIONS } from "@/lib/constants";
+import { useFaucet } from "@/hooks/useFaucet";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const ConnectWallet = () => {
+  const { wallet } = useFaucet();
   const { size, title, titleIcon, showThirdwebBranding } = WALLET_MODAL_OPTIONS;
+  const prettyWallet = wallet?.address.slice(0, 6) + "..." + wallet?.address.slice(-4);
+
   return (
     <div>
       <ConnectButton
@@ -40,6 +45,20 @@ export const ConnectWallet = () => {
           url: "https://sepolia-faucet.kakarot.org/",
           description: "The fast, native faucet to kickstart your journey in the Kakarot ecosystem.",
           logoUrl: "https://sepolia-faucet.kakarot.org/assets/kakarot-logo.svg",
+        }}
+        detailsButton={{
+          render: () => (
+            <Button className="w-full space-x-6 items-center text-[#878794] mt-6" variant="outline">
+              <div className="flex space-x-1">
+                <Avatar>
+                  <AvatarImage src={`https://effigy.im/a/${wallet?.address}.png`} />
+                  <AvatarFallback>{wallet?.address}</AvatarFallback>
+                </Avatar>
+                <span>{prettyWallet}</span>
+              </div>
+              <span className="text-[#FF7600] text-xs">Change Wallet</span>
+            </Button>
+          ),
         }}
       />
     </div>
