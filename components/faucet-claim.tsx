@@ -1,10 +1,11 @@
-import { FC, PropsWithChildren, useEffect } from "react";
+import { FC, PropsWithChildren, createRef, useEffect } from "react";
 import Image, { StaticImageData } from "next/image";
+import ReCAPTCHA from "react-google-recaptcha";
 import Link from "next/link";
 import { useActiveWallet, useActiveWalletChain } from "thirdweb/react";
 import { Loader2 } from "lucide-react";
 import { KAKAROT_SEPOLIA, client } from "@/lib/thirdweb-client";
-import { KKRT_RPC_DETAILS } from "@/lib/constants";
+import { ENV, KKRT_RPC_DETAILS } from "@/lib/constants";
 import { FaucetJobResponse, FaucetStatsResponse } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 
@@ -42,12 +43,15 @@ export const FaucetClaim = ({
   const wallet = useActiveWallet();
   const chainId = useActiveWalletChain();
   const activeChain = wallet?.getChain();
+  const recaptchaRef = createRef() as React.RefObject<ReCAPTCHA>;
   const isMetaMask = wallet?.id === "io.metamask";
   const isDowntime = false; // to simulate downtime
 
   // if taking longer tha 45 seconds to process the claim
   const isNetworkOverloaded =
-    faucetJob && faucetJob[0].status === "pending" && new Date(faucetJob[0].created_at).getTime() + 45000 < Date.now();
+    faucetJob &&
+    faucetJob[0].status === "processing" &&
+    new Date(faucetJob[0].created_at).getTime() + 45000 < Date.now();
 
   const convertSecondsToTime = (seconds: number) => {
     const hours = String(Math.floor(seconds / 3600)).padStart(2, "0");
@@ -58,6 +62,14 @@ export const FaucetClaim = ({
     if (minutes !== "00") return `${minutes}:${remainingSeconds} minutes`;
     return `${remainingSeconds} seconds`;
   };
+
+  const onReCAPTCHAChange = (captchaCode: string | null) => {
+    if (!captchaCode) return;
+    handleClaim();
+    recaptchaRef.current?.reset();
+  };
+
+  const handleClick = () => recaptchaRef.current?.execute();
 
   // keep checking for network switch in background using hook
   useEffect(() => {
@@ -114,7 +126,13 @@ export const FaucetClaim = ({
   return (
     <CarrotContainer>
       <h2 className="text-5xl md:text-7xl leading-tight text-[#878794] font-medium">{available}</h2>
-      <Button onClick={handleClaim} disabled={isProcessing} variant={"main"} className="mt-6 w-full">
+      <ReCAPTCHA
+        ref={recaptchaRef}
+        size="invisible"
+        sitekey={ENV.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+        onChange={onReCAPTCHAChange}
+      />
+      <Button onClick={handleClick} disabled={isProcessing} variant={"main"} className="mt-6 w-full">
         {isProcessing ? (
           <>
             <Loader2 className="animate-spin w-4 h-4 mr-2 text-lg" />
@@ -140,7 +158,7 @@ export const FaucetClaim = ({
   );
 };
 
-const InfoCarrot = ({ carrotSrc, title = "", description, imageAlt }: InfoCarrotProps) => (
+export const InfoCarrot = ({ carrotSrc, title = "", description, imageAlt }: InfoCarrotProps) => (
   <>
     <Image src={carrotSrc} alt={imageAlt} />
     {title.length > 0 && <h2 className="text-3xl md:text-5xl leading-tight  font-medium">{title}</h2>}
@@ -150,7 +168,7 @@ const InfoCarrot = ({ carrotSrc, title = "", description, imageAlt }: InfoCarrot
   </>
 );
 
-const CarrotContainer: FC<PropsWithChildren> = ({ children }) => (
+export const CarrotContainer: FC<PropsWithChildren> = ({ children }) => (
   <div className="flex flex-col justify-center items-center my-16">
     <div className="w-full sm:w-fit text-center flex flex-col justify-center items-center">{children}</div>
   </div>

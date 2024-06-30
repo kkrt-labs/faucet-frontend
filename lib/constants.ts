@@ -6,6 +6,8 @@ interface Environment {
   API_ROOT: string;
   NEXT_PUBLIC_THIRDWEB_CLIENT_ID: string;
   THIRDWEB_CLIENT_SECRET: string;
+  NEXT_PUBLIC_RECAPTCHA_SITE_KEY: string;
+  RECAPTCHA_SECRET_KEY: string;
 }
 
 const ENV: Environment = {
@@ -13,6 +15,8 @@ const ENV: Environment = {
   API_ROOT: process.env.NEXT_PUBLIC_API_ROOT || "",
   NEXT_PUBLIC_THIRDWEB_CLIENT_ID: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID || "",
   THIRDWEB_CLIENT_SECRET: process.env.THIRDWEB_CLIENT_SECRET || "",
+  NEXT_PUBLIC_RECAPTCHA_SITE_KEY: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "",
+  RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY || "",
 };
 
 const WALLET_MODAL_OPTIONS: Partial<UseConnectModalOptions> = {
@@ -30,14 +34,15 @@ const WALLET_MODAL_OPTIONS: Partial<UseConnectModalOptions> = {
 };
 
 const CONFETTI_COLORS = ["#FDA829", "#F6F5FC", "#FF2828"];
+const GOOGLE_CAPTCHA_API_BASE = "https://www.google.com/recaptcha/api/siteverify";
+const RATE_LIMIT_KEY = "rateLimitTime";
+const TWEET_TEXT = `gm gm,
 
-const TWEET_TEXT = `Hello everyone! 
+@KakarotZkEvm is now in public testnet, and I just claimed some ETH via their faucet 🧑‍🌾
 
-Just claimed my "Early Farmer 🧑‍🌾" NFT on @KakarotZkEvm testnet phase🥕
-  
-Reach out to the Kakarot team to see if you are eligible for an invite code.
-  
-Carrot season is coming 🥕🥕🥕🥕
+Join me and make your first claim!
+
+The carrot season has begun 🥕🥕
 `;
 
 const FAUCET_URL = "https://faucet-sepolia.kakarot.org";
@@ -45,4 +50,4 @@ const INTENT = `https://x.com/intent/post?text=${encodeURIComponent(TWEET_TEXT)}
 const KKRT_EXPLORER = "https://sepolia.kakarotscan.org";
 const KKRT_RPC_DETAILS = "https://thirdweb.com/kakarot-sepolia";
 
-export { ENV, WALLET_MODAL_OPTIONS, CONFETTI_COLORS, INTENT, KKRT_EXPLORER, KKRT_RPC_DETAILS };
+export { ENV, WALLET_MODAL_OPTIONS, CONFETTI_COLORS, INTENT, KKRT_EXPLORER, KKRT_RPC_DETAILS, RATE_LIMIT_KEY };

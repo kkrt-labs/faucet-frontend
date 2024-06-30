@@ -11,8 +11,20 @@ import {
   RedeemInviteJobResponse,
   RedeemInviteResponse,
 } from "./types";
+import { redirectToRateLimit } from "@/lib/utils";
 
 const instance = axios.create({});
+
+instance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // lock the user out in case of unauthenticated status codes
+    if (error?.response?.status === 429) {
+      redirectToRateLimit(error);
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const requests = {
   get: <T>(url: string, config?: AxiosRequestConfig): Promise<T> =>

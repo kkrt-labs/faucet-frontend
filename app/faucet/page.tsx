@@ -9,7 +9,7 @@ import { useBlockNumber, useWalletBalance } from "thirdweb/react";
 import { toast } from "sonner";
 
 import { KAKAROT_SEPOLIA, client } from "@/lib/thirdweb-client";
-import { CONFETTI_COLORS, KKRT_EXPLORER } from "@/lib/constants";
+import { CONFETTI_COLORS, KKRT_EXPLORER, RATE_LIMIT_KEY } from "@/lib/constants";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useFaucet } from "@/hooks/useFaucet";
 import { useFaucetJob } from "@/queries/useFaucetJob";
@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils";
 const LOCAL_STORAGE_KEY = "faucetJobId";
 
 export default function Faucet() {
-  const { wallet, faucetStats, faucetBalance, refetchFaucet, isFaucetLoading } = useFaucet();
+  const { wallet, faucetStats, faucetBalance, refetchFaucet, isFaucetLoading, activeWallets } = useFaucet();
   const { width: windowWidth } = useWindowSize();
 
   const blockNumber = useBlockNumber({ client, chain: KAKAROT_SEPOLIA });
@@ -71,6 +71,11 @@ export default function Faucet() {
     );
 
   useEffect(() => {
+    const isRateLimited = localStorage.getItem(RATE_LIMIT_KEY);
+    if (isRateLimited) redirect("/rate-limit");
+  });
+
+  useEffect(() => {
     if (claimJobID) {
       const currentJobId = claimJobID.jobID;
       localStorage.setItem(LOCAL_STORAGE_KEY, currentJobId);
@@ -88,9 +93,9 @@ export default function Faucet() {
       // 300 seconds === 5 minutes
       if (diff > 300) {
         localStorage.removeItem(LOCAL_STORAGE_KEY);
-      } else {
-        setJobId(savedJobId);
       }
+    } else {
+      setJobId(savedJobId);
     }
   }, []);
 
@@ -113,7 +118,7 @@ export default function Faucet() {
   }, [isError]);
 
   if (isFaucetLoading) return <SkeletonLoader />;
-  if (!wallet) redirect("/");
+  if (!wallet || !activeWallets) redirect("/");
 
   return (
     <main className="flex flex-col items-center mt-10 h-full">

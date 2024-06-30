@@ -1,11 +1,12 @@
 import Image from "next/image";
 import { useState } from "react";
 import { CommandList } from "cmdk";
-import { useActiveAccount, useDisconnect, useActiveWallet, useWalletBalance } from "thirdweb/react";
+import { useDisconnect, useWalletBalance } from "thirdweb/react";
 import { ChevronDown, LogOut } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { KAKAROT_SEPOLIA, client } from "@/lib/thirdweb-client";
+import { useFaucet } from "@/hooks/useFaucet";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
@@ -15,8 +16,7 @@ import { Button } from "@/components/ui/button";
 import ethereumLogo from "@/public/assets/ethereum.svg";
 
 export const WalletDetails = () => {
-  const wallet = useActiveAccount();
-  const disconnectWallet = useActiveWallet();
+  const { wallet, activeWallets } = useFaucet();
   const { disconnect } = useDisconnect();
   const { data: walletBalance } = useWalletBalance({
     chain: KAKAROT_SEPOLIA,
@@ -27,7 +27,7 @@ export const WalletDetails = () => {
   const [open, setOpen] = useState(false);
   const prettyWallet = wallet?.address.slice(0, 5) + "..." + wallet?.address.slice(-3);
 
-  if (!wallet || !disconnectWallet) return null;
+  if (!wallet || !activeWallets) return null;
 
   return (
     <div className="flex flex-row space-x-1 sm:space-x-3  md:space-x-6">
@@ -75,7 +75,7 @@ export const WalletDetails = () => {
                 <CommandItem
                   value="Logout"
                   onSelect={(_) => {
-                    disconnect(disconnectWallet);
+                    activeWallets?.forEach((wallet) => disconnect(wallet));
                     setOpen(false);
                   }}
                   className="flex items-center justify-between !text-white !bg-[#003E2A] cursor-pointer"

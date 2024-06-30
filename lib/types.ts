@@ -22,7 +22,7 @@ export interface FaucetResponse {
 export interface FaucetJobResponse {
   created_at: string;
   job_id: string;
-  status: "completed" | "pending" | "error";
+  status: "completed" | "processing" | "error";
   transaction_hash: string;
   error: string | null;
 }
