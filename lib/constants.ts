@@ -38,10 +38,10 @@ const GOOGLE_CAPTCHA_API_BASE = "https://www.google.com/recaptcha/api/siteverify
 const RATE_LIMIT_KEY = "rateLimitTime";
 const TWEET_TEXT = `Hello everyone! 
 
-Just claimed my "Early Farmer 🧑‍🌾" NFT on @KakarotZkEvm testnet phase🥕
-  
-Reach out to the Kakarot team to see if you are eligible for an invite code.
-  
+@KakarotZkEvm is now in public testnet, and I just made a claim via their faucet 🧑‍🌾
+
+Join me and make your first claim!
+
 Carrot season is coming 🥕🥕🥕🥕
 `;
 
