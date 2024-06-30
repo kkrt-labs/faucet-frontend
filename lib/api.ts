@@ -20,7 +20,7 @@ instance.interceptors.response.use(
   (error) => {
     // lock the user out in case of unauthenticated status codes
     if (error?.response?.status === 429) {
-      redirectToRateLimit();
+      redirectToRateLimit(error);
     }
     return Promise.reject(error);
   }

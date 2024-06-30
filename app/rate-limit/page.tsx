@@ -14,18 +14,26 @@ export default function RateLimit() {
       return;
     }
 
-    const { rateLimitTime, startTime } = JSON.parse(left);
-    const currentTime = new Date();
-    // if current time is between start and rate limit time show the time left else redirect to faucet
-    if (currentTime < rateLimitTime && currentTime > startTime) {
-      const diff = rateLimitTime - currentTime.getTime();
-      const minutes = Math.floor(diff / 1000 / 60);
-      const seconds = Math.floor((diff / 1000) % 60);
-      setTimeLeft(`${minutes}m ${seconds}s`);
-    } else {
-      localStorage.removeItem(RATE_LIMIT_KEY);
-      window.location.href = "/faucet";
-    }
+    const updateCountdown = () => {
+      const { rateLimitTime, startTime } = JSON.parse(left);
+      const currentTime = new Date();
+      // if current time is between start and rate limit time show the time left else redirect to faucet
+      if (currentTime < rateLimitTime && currentTime > startTime) {
+        const diff = rateLimitTime - currentTime.getTime();
+        const minutes = Math.floor(diff / 1000 / 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+        setTimeLeft(`${minutes}m ${seconds}s`);
+      } else {
+        localStorage.removeItem(RATE_LIMIT_KEY);
+        window.location.href = "/faucet";
+      }
+    };
+
+    // Update countdown every second
+    const intervalId = setInterval(updateCountdown, 1000);
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
