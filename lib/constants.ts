@@ -36,13 +36,13 @@ const WALLET_MODAL_OPTIONS: Partial<UseConnectModalOptions> = {
 const CONFETTI_COLORS = ["#FDA829", "#F6F5FC", "#FF2828"];
 const GOOGLE_CAPTCHA_API_BASE = "https://www.google.com/recaptcha/api/siteverify";
 const RATE_LIMIT_KEY = "rateLimitTime";
-const TWEET_TEXT = `Hello everyone! 
+const TWEET_TEXT = `gm gm,
 
-@KakarotZkEvm is now in public testnet, and I just made a claim via their faucet 🧑‍🌾
+@KakarotZkEvm is now in public testnet, and I just claimed some ETH via their faucet 🧑‍🌾
 
 Join me and make your first claim!
 
-Carrot season is coming 🥕🥕🥕🥕
+The carrot season has begun 🥕🥕
 `;
 
 const FAUCET_URL = "https://faucet-sepolia.kakarot.org";
