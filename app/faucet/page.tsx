@@ -9,7 +9,7 @@ import { useBlockNumber, useWalletBalance } from "thirdweb/react";
 import { toast } from "sonner";
 
 import { KAKAROT_SEPOLIA, client } from "@/lib/thirdweb-client";
-import { CONFETTI_COLORS, KKRT_EXPLORER } from "@/lib/constants";
+import { CONFETTI_COLORS, KKRT_EXPLORER, RATE_LIMIT_KEY } from "@/lib/constants";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useFaucet } from "@/hooks/useFaucet";
 import { useFaucetJob } from "@/queries/useFaucetJob";
@@ -69,6 +69,11 @@ export default function Faucet() {
         </a>
       </div>
     );
+
+  useEffect(() => {
+    const isRateLimited = localStorage.getItem(RATE_LIMIT_KEY);
+    if (isRateLimited) redirect("/rate-limit");
+  });
 
   useEffect(() => {
     if (claimJobID) {

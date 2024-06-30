@@ -155,7 +155,7 @@ export const FaucetClaim = ({
   );
 };
 
-const InfoCarrot = ({ carrotSrc, title = "", description, imageAlt }: InfoCarrotProps) => (
+export const InfoCarrot = ({ carrotSrc, title = "", description, imageAlt }: InfoCarrotProps) => (
   <>
     <Image src={carrotSrc} alt={imageAlt} />
     {title.length > 0 && <h2 className="text-3xl md:text-5xl leading-tight  font-medium">{title}</h2>}
@@ -165,7 +165,7 @@ const InfoCarrot = ({ carrotSrc, title = "", description, imageAlt }: InfoCarrot
   </>
 );
 
-const CarrotContainer: FC<PropsWithChildren> = ({ children }) => (
+export const CarrotContainer: FC<PropsWithChildren> = ({ children }) => (
   <div className="flex flex-col justify-center items-center my-16">
     <div className="w-full sm:w-fit text-center flex flex-col justify-center items-center">{children}</div>
   </div>
