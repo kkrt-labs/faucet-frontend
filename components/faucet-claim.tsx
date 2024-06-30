@@ -5,11 +5,10 @@ import Link from "next/link";
 import { useActiveWallet, useActiveWalletChain } from "thirdweb/react";
 import { Loader2 } from "lucide-react";
 import { KAKAROT_SEPOLIA, client } from "@/lib/thirdweb-client";
-import { ENV, INTENT, KKRT_RPC_DETAILS } from "@/lib/constants";
+import { ENV, KKRT_RPC_DETAILS } from "@/lib/constants";
 import { FaucetJobResponse, FaucetStatsResponse } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 
-import xIcon from "@/public/assets/x-icon-inverted.svg";
 import metamaskLogo from "@/public/assets/metamask.png";
 import cooldownCarrot from "@/public/assets/cooldown-carrot.svg";
 import pendingCarrot from "@/public/assets/pending-carrot.svg";
@@ -166,14 +165,6 @@ export const InfoCarrot = ({ carrotSrc, title = "", description, imageAlt }: Inf
     <div className="flex flex-row items-center justify-center my-4">
       <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">{description}</p>
     </div>
-    {title.length > 0 && (
-      <Link rel="noopener noreferrer" target="_blank" href={INTENT}>
-        <Button variant="outline" className="mt-4 w-full gap-1 !bg-black !text-white">
-          <span>Share on</span>
-          <Image src={xIcon} alt="minting" width={20} height={20} priority />
-        </Button>
-      </Link>
-    )}
   </>
 );
 
