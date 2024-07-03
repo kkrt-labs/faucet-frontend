@@ -82,7 +82,7 @@ export const FaucetClaim = ({
         <InfoCarrot
           imageAlt="Pending Carrot"
           carrotSrc={pendingCarrot}
-          description="Kakarot is currently undergoing scheduled maintenace. We will be back soon!"
+          description="Kakarot is currently undergoing scheduled maintenance. We will be back soon!"
         />
       </CarrotContainer>
     );
