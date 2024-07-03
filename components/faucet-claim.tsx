@@ -47,11 +47,11 @@ export const FaucetClaim = ({
   const isMetaMask = wallet?.id === "io.metamask";
   const isDowntime = false; // to simulate downtime
 
-  // if taking longer tha 45 seconds to process the claim
+  // if taking longer tha 15 seconds to process the claim
   const isNetworkOverloaded =
     faucetJob &&
     faucetJob[0].status === "processing" &&
-    new Date(faucetJob[0].created_at).getTime() + 45000 < Date.now();
+    new Date(faucetJob[0].created_at).getTime() + 15000 < Date.now();
 
   const convertSecondsToTime = (seconds: number) => {
     const hours = String(Math.floor(seconds / 3600)).padStart(2, "0");
