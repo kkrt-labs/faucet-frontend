@@ -43,7 +43,7 @@ export default function RateLimit() {
           <InfoCarrot
             imageAlt="Rate Limit"
             carrotSrc={rateCarrot}
-            description="We have noticed some suspicious activity from you, to resolve this we are keeping you on a cooldown. Please try after the timer ends."
+            description="Looks like you're using the faucet a tad too much. Let's wait together for a few minutes until it cools down. If you feel this is an error, reach out to us."
           />
           <span className="text-kkrtOrange text-3xl font-semibold">{timeLeft}</span>
         </CarrotContainer>
