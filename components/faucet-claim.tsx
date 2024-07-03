@@ -45,7 +45,7 @@ export const FaucetClaim = ({
   const activeChain = wallet?.getChain();
   const recaptchaRef = createRef() as React.RefObject<ReCAPTCHA>;
   const isMetaMask = wallet?.id === "io.metamask";
-  const isDowntime = false; // to simulate downtime
+  const isDowntime = true; // to simulate downtime
 
   // if taking longer tha 45 seconds to process the claim
   const isNetworkOverloaded =
