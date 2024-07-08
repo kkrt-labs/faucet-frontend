@@ -10,7 +10,7 @@ export interface IsValidInviteResponse {
 export interface RedeemInviteJobResponse {
   created_at: string;
   job_id: string;
-  status: "completed" | "pending" | "error";
+  status: "completed" | "pending" | "error" | "processing";
   transaction_hash: string;
   error: string | null;
 }
@@ -22,7 +22,7 @@ export interface FaucetResponse {
 export interface FaucetJobResponse {
   created_at: string;
   job_id: string;
-  status: "completed" | "processing" | "error";
+  status: "completed" | "pending" | "error" | "processing";
   transaction_hash: string;
   error: string | null;
 }
