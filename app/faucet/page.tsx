@@ -41,7 +41,10 @@ export default function Faucet() {
   const { data: faucetJob, isError } = useFaucetJob(jobId ?? "");
 
   const available = `${faucetStats?.dripAmountInEth ?? 0.001} ETH`;
-  const isCooldown = !!faucetStats && (faucetStats?.timeLeftInS !== 0 || faucetStats?.canClaim === false);
+  const isCooldown =
+    !!faucetStats &&
+    (faucetStats?.timeLeftInS !== 0 || faucetStats?.canClaim === false) &&
+    faucetStats.message === "Under cooldown period";
 
   const handleClaim = () => {
     setIsProcessing(true);
@@ -111,11 +114,11 @@ export default function Faucet() {
   }, [faucetJob, refetchFaucet, refetchWallet]);
 
   useEffect(() => {
-    if (isError) {
+    if (isError || faucetJob?.[0].status === "error") {
       toast.error("Failed to claim funds. Please try again later.");
       setIsProcessing(false);
     }
-  }, [isError]);
+  }, [faucetJob, isError]);
 
   if (isFaucetLoading) return <SkeletonLoader />;
   if (!wallet || !activeWallets) redirect("/");
