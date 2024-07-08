@@ -152,8 +152,7 @@ export const FaucetClaim = ({
 
       {!isEligableToClaim && (
         <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">
-          A user&apos;s wallet must hold at least {ENV.NODE_ENV === "production" ? "0.001" : "0.0001"} ETH on Ethereum
-          Mainnet to use the faucet.
+          A user&apos;s wallet must hold at least {minEthRequired} ETH on Ethereum Mainnet to use the faucet.
         </p>
       )}
 
