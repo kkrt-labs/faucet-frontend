@@ -50,7 +50,7 @@ export const FaucetClaim = ({
   // if taking longer tha 15 seconds to process the claim
   const isNetworkOverloaded =
     faucetJob &&
-    faucetJob[0].status === "processing" &&
+    (faucetJob[0].status === "processing" || faucetJob[0].status === "pending") &&
     new Date(faucetJob[0].created_at).getTime() + 15000 < Date.now();
 
   const convertSecondsToTime = (seconds: number) => {
