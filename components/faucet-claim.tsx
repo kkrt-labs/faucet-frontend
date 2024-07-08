@@ -96,7 +96,7 @@ export const FaucetClaim = ({
           imageAlt="Pending Carrot"
           carrotSrc={pendingCarrot}
           title="Your funds are on the way!"
-          description="The faucet is under load, we have recieved your request, and the funds are on the way."
+          description="The faucet is under load, we have received your request, and the funds are on the way."
         />
       </CarrotContainer>
     );
@@ -152,7 +152,7 @@ export const FaucetClaim = ({
 
       {!isEligableToClaim && (
         <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">
-          A user&apos;s wallet must hold at least {minEthRequired} ETH on Ethereum Mainnet to use the faucet.
+          You need at least {minEthRequired} ETH on Ethereum Mainnet to the use the faucet
         </p>
       )}
 
