@@ -45,9 +45,11 @@ export const FaucetClaim = ({
   const activeChain = wallet?.getChain();
   const recaptchaRef = createRef() as React.RefObject<ReCAPTCHA>;
   const isMetaMask = wallet?.id === "io.metamask";
+  const minEthRequired = ENV.NODE_ENV === "production" ? 0.001 : 0.0001;
+  const isEligableToClaim = faucetStats && (faucetStats?.canClaim || faucetStats?.userMainnetBalance >= minEthRequired);
   const isDowntime = false; // to simulate downtime
 
-  // if taking longer tha 15 seconds to process the claim
+  // if taking longer than 15 seconds to process the claim
   const isNetworkOverloaded =
     faucetJob &&
     (faucetJob[0].status === "processing" || faucetJob[0].status === "pending") &&
@@ -94,7 +96,7 @@ export const FaucetClaim = ({
           imageAlt="Pending Carrot"
           carrotSrc={pendingCarrot}
           title="Your funds are on the way!"
-          description="The faucet is under load, we have recieved your request, and the funds are on the way."
+          description="The faucet is under load, we have received your request, and the funds are on the way."
         />
       </CarrotContainer>
     );
@@ -132,7 +134,12 @@ export const FaucetClaim = ({
         sitekey={ENV.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
         onChange={onReCAPTCHAChange}
       />
-      <Button onClick={handleClick} disabled={isProcessing} variant={"main"} className="mt-6 w-full">
+      <Button
+        onClick={handleClick}
+        disabled={isProcessing || !isEligableToClaim}
+        variant={"main"}
+        className="mt-6 w-full"
+      >
         {isProcessing ? (
           <>
             <Loader2 className="animate-spin w-4 h-4 mr-2 text-lg" />
@@ -142,6 +149,12 @@ export const FaucetClaim = ({
           "Claim"
         )}
       </Button>
+
+      {!isEligableToClaim && (
+        <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">
+          You need at least {minEthRequired} ETH on Ethereum Mainnet to the use the faucet
+        </p>
+      )}
 
       {wallet && activeChain?.id !== KAKAROT_SEPOLIA.id && (
         <div className="flex justify-center items-center w-full mt-6 text-sm md:text-md gap-4">

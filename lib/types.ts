@@ -35,6 +35,8 @@ export interface FaucetStatsResponse {
   timeLeftInS: number;
   canClaim: boolean;
   dripAmountInEth: string;
+  message: string;
+  userMainnetBalance: number;
 }
 
 export interface FaucetBalanceResponse {
