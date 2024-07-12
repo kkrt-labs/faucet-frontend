@@ -54,7 +54,7 @@ export const FaucetClaim = ({
 
   const minEthRequired = ENV.NODE_ENV === "production" ? 0.001 : 0.0001;
   const isEligableToClaim =
-    faucetStats && (faucetStats?.canClaim || parseFloat(balance?.displayValue ?? "0") >= minEthRequired);
+    faucetStats && faucetStats?.canClaim && parseFloat(balance?.displayValue ?? "0") >= minEthRequired;
   const isDowntime = false; // to simulate downtime
 
   // if taking longer than 15 seconds to process the claim
@@ -158,7 +158,7 @@ export const FaucetClaim = ({
         )}
       </Button>
 
-      {!isEligableToClaim && (
+      {!isEligableToClaim && !isProcessing && (
         <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">
           You need at least {minEthRequired} ETH on Ethereum Mainnet to the use the faucet
         </p>
