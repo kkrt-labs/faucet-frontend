@@ -53,7 +53,7 @@ export const FaucetClaim = ({
   });
 
   const minEthRequired = ENV.NODE_ENV === "production" ? 0.001 : 0.0001;
-  const isEligableToClaim =
+  const isEligibleToClaim =
     faucetStats && faucetStats?.canClaim && parseFloat(balance?.displayValue ?? "0") >= minEthRequired;
   const isDowntime = false; // to simulate downtime
 
@@ -144,7 +144,7 @@ export const FaucetClaim = ({
       />
       <Button
         onClick={handleClick}
-        disabled={isProcessing || !isEligableToClaim}
+        disabled={isProcessing || !isEligibleToClaim}
         variant={"main"}
         className="mt-6 w-full"
       >
@@ -158,7 +158,7 @@ export const FaucetClaim = ({
         )}
       </Button>
 
-      {!isEligableToClaim && !isProcessing && (
+      {!isEligibleToClaim && !isProcessing && (
         <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">
           You need at least {minEthRequired} ETH on Ethereum Mainnet to the use the faucet
         </p>
