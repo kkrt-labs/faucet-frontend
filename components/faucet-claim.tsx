@@ -2,7 +2,8 @@ import { FC, PropsWithChildren, createRef, useEffect } from "react";
 import Image, { StaticImageData } from "next/image";
 import ReCAPTCHA from "react-google-recaptcha";
 import Link from "next/link";
-import { useActiveWallet, useActiveWalletChain } from "thirdweb/react";
+import { useActiveWallet, useActiveWalletChain, useWalletBalance } from "thirdweb/react";
+import { mainnet } from "thirdweb/chains";
 import { Loader2 } from "lucide-react";
 import { KAKAROT_SEPOLIA, client } from "@/lib/thirdweb-client";
 import { ENV, KKRT_RPC_DETAILS } from "@/lib/constants";
@@ -45,8 +46,15 @@ export const FaucetClaim = ({
   const activeChain = wallet?.getChain();
   const recaptchaRef = createRef() as React.RefObject<ReCAPTCHA>;
   const isMetaMask = wallet?.id === "io.metamask";
+  const { refetch: refetchWallet, data: balance } = useWalletBalance({
+    chain: mainnet,
+    address: wallet?.getAccount()?.address as string,
+    client,
+  });
+
   const minEthRequired = ENV.NODE_ENV === "production" ? 0.001 : 0.0001;
-  const isEligableToClaim = faucetStats && (faucetStats?.canClaim || faucetStats?.userMainnetBalance >= minEthRequired);
+  const isEligableToClaim =
+    faucetStats && (faucetStats?.canClaim || parseFloat(balance?.displayValue ?? "0") >= minEthRequired);
   const isDowntime = false; // to simulate downtime
 
   // if taking longer than 15 seconds to process the claim
