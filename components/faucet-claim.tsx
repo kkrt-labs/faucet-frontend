@@ -55,7 +55,7 @@ export const FaucetClaim = ({
   const minEthRequired = ENV.NODE_ENV === "production" ? 0.001 : 0.0001;
   const isEligibleToClaim =
     faucetStats && faucetStats?.canClaim && parseFloat(balance?.displayValue ?? "0") >= minEthRequired;
-  const isDowntime = false; // to simulate downtime
+  const isDowntime = true; // to simulate downtime
 
   // if taking longer than 15 seconds to process the claim
   const isNetworkOverloaded =
