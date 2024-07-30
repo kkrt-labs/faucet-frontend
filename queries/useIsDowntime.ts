@@ -5,7 +5,7 @@ const useIsDowntime = () => {
   return useQuery({
     queryKey: ["useIsDowntime"],
     queryFn: () => API.general.isDowntime(),
-    refetchInterval: 1000 * 60 * 5, // 5 minutes
+    refetchInterval: 1000 * 10, // 10 seconds
   });
 };
 
