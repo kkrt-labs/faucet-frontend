@@ -6,6 +6,7 @@ import {
   FaucetJobResponse,
   FaucetResponse,
   FaucetStatsResponse,
+  IsDowntimeResponse,
   IsValidInviteResponse,
   IsWhitelistedResponse,
   RedeemInviteJobResponse,
@@ -41,6 +42,7 @@ export const requests = {
 export const API = {
   general: {
     heartBeat: () => requests.get("/health"),
+    isDowntime: (): Promise<IsDowntimeResponse> => requests.get("/isDowntime"),
     isWhitelisted: (address: string): Promise<IsWhitelistedResponse> =>
       requests.get(`/isWhitelisted?address=${address}`),
   },
