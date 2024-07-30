@@ -14,6 +14,7 @@ import metamaskLogo from "@/public/assets/metamask.png";
 import cooldownCarrot from "@/public/assets/cooldown-carrot.svg";
 import pendingCarrot from "@/public/assets/pending-carrot.svg";
 import claimedCarrot from "@/public/assets/claimed-carrot.svg";
+import { useIsDowntime } from "@/queries/useIsDowntime";
 
 interface InfoCarrotProps {
   carrotSrc: StaticImageData;
@@ -46,6 +47,8 @@ export const FaucetClaim = ({
   const activeChain = wallet?.getChain();
   const recaptchaRef = createRef() as React.RefObject<ReCAPTCHA>;
   const isMetaMask = wallet?.id === "io.metamask";
+  const { data: isDowntimeCheck } = useIsDowntime();
+
   const { refetch: refetchWallet, data: balance } = useWalletBalance({
     chain: mainnet,
     address: wallet?.getAccount()?.address as string,
@@ -55,7 +58,6 @@ export const FaucetClaim = ({
   const minEthRequired = ENV.NODE_ENV === "production" ? 0.001 : 0.0001;
   const isEligibleToClaim =
     faucetStats && faucetStats?.canClaim && parseFloat(balance?.displayValue ?? "0") >= minEthRequired;
-  const isDowntime = false; // to simulate downtime
 
   // if taking longer than 15 seconds to process the claim
   const isNetworkOverloaded =
@@ -86,7 +88,7 @@ export const FaucetClaim = ({
     if (wallet) wallet.autoConnect({ client });
   }, [chainId]);
 
-  if (isDowntime)
+  if (isDowntimeCheck?.isDowntime ?? false)
     return (
       <CarrotContainer>
         <InfoCarrot
