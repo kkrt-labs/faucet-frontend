@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Confetti from "react-confetti";
 import { redirect } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useBlockNumber, useWalletBalance } from "thirdweb/react";
 import { toast } from "sonner";
 
@@ -51,27 +51,30 @@ export default function Faucet() {
     claimFunds({ walletAddress: wallet?.address as string, captchaCode });
   };
 
-  const runSuccessToast = (txHash: string) =>
-    toast.message(
-      <div className="flex flex-row justify-around w-full">
-        <div className="flex flex-col w-full">
-          <span className="text-black">Transaction Successful</span>
-          <span className="w-full text-[#666D80]">
-            You have successfully claimed {faucetStats?.dripAmountInEth} ETH on Kakarot Sepolia.
-          </span>
+  const runSuccessToast = useCallback(
+    (txHash: string) =>
+      toast.message(
+        <div className="flex flex-row justify-around w-full">
+          <div className="flex flex-col w-full">
+            <span className="text-black">Transaction Successful</span>
+            <span className="w-full text-[#666D80]">
+              You have successfully claimed {faucetStats?.dripAmountInEth} ETH on Kakarot Sepolia.
+            </span>
+          </div>
+          <span className="h-20 w-[2px] bg-slate-100 -my-4"></span>
+          <a
+            className="text-kkrtOrange flex flex-row items-center space-x-2 text-nowrap p-2"
+            href={`${KKRT_EXPLORER}/tx/${txHash}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="">View on Explorer</span>
+            <Image src="/assets/link-icon.svg" alt="Docs" width={16} height={16} />
+          </a>
         </div>
-        <span className="h-20 w-[2px] bg-slate-100 -my-4"></span>
-        <a
-          className="text-kkrtOrange flex flex-row items-center space-x-2 text-nowrap p-2"
-          href={`${KKRT_EXPLORER}/tx/${txHash}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <span className="">View on Explorer</span>
-          <Image src="/assets/link-icon.svg" alt="Docs" width={16} height={16} />
-        </a>
-      </div>
-    );
+      ),
+    [faucetStats]
+  );
 
   useEffect(() => {
     const isRateLimited = localStorage.getItem(RATE_LIMIT_KEY);
@@ -100,7 +103,7 @@ export default function Faucet() {
     } else {
       setJobId(savedJobId);
     }
-  }, []);
+  }, [faucetJob]);
 
   useEffect(() => {
     if (faucetJob && faucetJob[0].status === "completed") {
@@ -111,7 +114,7 @@ export default function Faucet() {
       refetchFaucet();
       refetchWallet();
     }
-  }, [faucetJob, refetchFaucet, refetchWallet]);
+  }, [faucetJob, refetchFaucet, refetchWallet, runSuccessToast]);
 
   useEffect(() => {
     if (isError || faucetJob?.[0].status === "error") {
