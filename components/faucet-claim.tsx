@@ -86,7 +86,7 @@ export const FaucetClaim = ({
   // keep checking for network switch in background using hook
   useEffect(() => {
     if (wallet) wallet.autoConnect({ client });
-  }, [chainId]);
+  }, [wallet, chainId]);
 
   if (isDowntimeCheck?.isDowntime ?? false)
     return (
@@ -139,18 +139,15 @@ export const FaucetClaim = ({
     <CarrotContainer>
       <h2 className="text-5xl md:text-7xl leading-tight text-[#878794] font-medium">{available}</h2>
       <Turnstile
-        siteKey="0x4AAAAAAAgMW8uP9RE9j-jj"
+        siteKey={ENV.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
         onSuccess={onTurnstileSuccess}
         options={{
           size: !showCloudfare ? "invisible" : "normal",
         }}
       />
       <Button
-        onClick={() => {
-          if (!captchaCode) return;
-          handleClaim(captchaCode);
-        }}
-        disabled={isProcessing || !isEligibleToClaim}
+        onClick={() => handleClaim(captchaCode ?? "")}
+        disabled={isProcessing || !isEligibleToClaim || !captchaCode}
         variant={"main"}
         className="mt-6 w-full"
       >
