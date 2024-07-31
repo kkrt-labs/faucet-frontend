@@ -1,6 +1,7 @@
-import { FC, PropsWithChildren, createRef, useEffect } from "react";
+import { FC, PropsWithChildren, createRef, useEffect, useState } from "react";
 import Image, { StaticImageData } from "next/image";
-import ReCAPTCHA from "react-google-recaptcha";
+import { Turnstile } from "@marsidev/react-turnstile";
+
 import Link from "next/link";
 import { useActiveWallet, useActiveWalletChain, useWalletBalance } from "thirdweb/react";
 import { mainnet } from "thirdweb/chains";
@@ -28,7 +29,7 @@ interface FaucetClaimProps {
   isCooldown: boolean;
   isOutOfFunds: boolean;
   available: string;
-  handleClaim: () => void;
+  handleClaim: (captchaCode: string) => void;
   faucetStats?: FaucetStatsResponse;
   faucetJob?: FaucetJobResponse[];
 }
@@ -45,9 +46,11 @@ export const FaucetClaim = ({
   const wallet = useActiveWallet();
   const chainId = useActiveWalletChain();
   const activeChain = wallet?.getChain();
-  const recaptchaRef = createRef() as React.RefObject<ReCAPTCHA>;
   const isMetaMask = wallet?.id === "io.metamask";
   const { data: isDowntimeCheck } = useIsDowntime();
+
+  const [captchaCode, setCaptchaCode] = useState<string | null>(null);
+  const [showCloudfare, setShowCloudfare] = useState(true);
 
   const { refetch: refetchWallet, data: balance } = useWalletBalance({
     chain: mainnet,
@@ -75,13 +78,10 @@ export const FaucetClaim = ({
     return `${remainingSeconds} seconds`;
   };
 
-  const onReCAPTCHAChange = (captchaCode: string | null) => {
-    if (!captchaCode) return;
-    handleClaim();
-    recaptchaRef.current?.reset();
+  const onTurnstileSuccess = (captchaCode: string) => {
+    setCaptchaCode(captchaCode);
+    setTimeout(() => setShowCloudfare(false), 1000);
   };
-
-  const handleClick = () => recaptchaRef.current?.execute();
 
   // keep checking for network switch in background using hook
   useEffect(() => {
@@ -138,14 +138,18 @@ export const FaucetClaim = ({
   return (
     <CarrotContainer>
       <h2 className="text-5xl md:text-7xl leading-tight text-[#878794] font-medium">{available}</h2>
-      <ReCAPTCHA
-        ref={recaptchaRef}
-        size="invisible"
-        sitekey={ENV.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-        onChange={onReCAPTCHAChange}
+      <Turnstile
+        siteKey="0x4AAAAAAAgMW8uP9RE9j-jj"
+        onSuccess={onTurnstileSuccess}
+        options={{
+          size: !showCloudfare ? "invisible" : "normal",
+        }}
       />
       <Button
-        onClick={handleClick}
+        onClick={() => {
+          if (!captchaCode) return;
+          handleClaim(captchaCode);
+        }}
         disabled={isProcessing || !isEligibleToClaim}
         variant={"main"}
         className="mt-6 w-full"

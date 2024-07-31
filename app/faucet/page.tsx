@@ -46,9 +46,9 @@ export default function Faucet() {
     (faucetStats?.timeLeftInS !== 0 || faucetStats?.canClaim === false) &&
     faucetStats.message === "Under cooldown period";
 
-  const handleClaim = () => {
+  const handleClaim = (captchaCode: string) => {
     setIsProcessing(true);
-    claimFunds({ walletAddress: wallet?.address as string });
+    claimFunds({ walletAddress: wallet?.address as string, captchaCode });
   };
 
   const runSuccessToast = (txHash: string) =>
