@@ -6,6 +6,7 @@ import {
   FaucetJobResponse,
   FaucetResponse,
   FaucetStatsResponse,
+  IsDowntimeResponse,
   IsValidInviteResponse,
   IsWhitelistedResponse,
   RedeemInviteJobResponse,
@@ -41,6 +42,7 @@ export const requests = {
 export const API = {
   general: {
     heartBeat: () => requests.get("/health"),
+    isDowntime: (): Promise<IsDowntimeResponse> => requests.get("/isDowntime"),
     isWhitelisted: (address: string): Promise<IsWhitelistedResponse> =>
       requests.get(`/isWhitelisted?address=${address}`),
   },
@@ -51,7 +53,8 @@ export const API = {
       requests.post(`/redeemInviteCode`, { inviteCode, address }),
   },
   faucet: {
-    claimFunds: (address: string): Promise<FaucetResponse> => requests.post(`/claimFunds`, { to: address }),
+    claimFunds: (address: string, captcha: string): Promise<FaucetResponse> =>
+      requests.post(`/claimFunds`, { to: address, "cf-turnstile-response": captcha }),
     getStats: (address: string): Promise<FaucetStatsResponse> => requests.get(`/stats?address=${address}`),
     getBalance: (): Promise<FaucetBalanceResponse> => requests.get(`/faucetBalance`),
   },
