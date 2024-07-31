@@ -10,7 +10,7 @@ const LinkBanner = () => {
   useEffect(() => {
     const shouldShow = localStorage.getItem("showBanner") ?? "true";
     setShowBanner(shouldShow === "true");
-  });
+  }, []);
 
   return (
     <div
