@@ -9,7 +9,7 @@ interface ClaimFundsParams {
 const useClaimFunds = () => {
   return useMutation({
     mutationKey: ["claimFunds"],
-    mutationFn: (params: ClaimFundsParams) => API.faucet.claimFundsFromNGrok(params.walletAddress, params.captchaCode),
+    mutationFn: (params: ClaimFundsParams) => API.faucet.claimFunds(params.walletAddress, params.captchaCode),
   });
 };
 

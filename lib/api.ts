@@ -15,8 +15,6 @@ import {
 import { redirectToRateLimit } from "@/lib/utils";
 
 const instance = axios.create({});
-// TODO: move to ENV
-const alternateURL = "https://fd4d-146-196-45-43.ngrok-free.app";
 
 instance.interceptors.response.use(
   (response) => response,
@@ -39,8 +37,6 @@ export const requests = {
   delete: <T>(url: string): Promise<T> => instance.delete<T>(`${ENV.API_ROOT}${url}`).then(({ data }) => data),
   patch: <T, Q>(url: string, body?: T): Promise<Q> =>
     instance.patch<Q>(`${ENV.API_ROOT}${url}`, body).then(({ data }) => data),
-  postFunds: <T, Q>(url: string, body?: T): Promise<Q> =>
-    instance.post<Q>(`${alternateURL}${url}`, body).then(({ data }) => data),
 };
 
 export const API = {
@@ -57,14 +53,10 @@ export const API = {
       requests.post(`/redeemInviteCode`, { inviteCode, address }),
   },
   faucet: {
-    claimFunds: (address: string): Promise<FaucetResponse> => requests.post(`/claimFunds`, { to: address }),
+    claimFunds: (address: string, captcha: string): Promise<FaucetResponse> =>
+      requests.post(`/claimFunds`, { to: address, "cf-turnstile-response": captcha }),
     getStats: (address: string): Promise<FaucetStatsResponse> => requests.get(`/stats?address=${address}`),
     getBalance: (): Promise<FaucetBalanceResponse> => requests.get(`/faucetBalance`),
-    claimFundsFromNGrok: (address: string, captcha: string): Promise<FaucetResponse> =>
-      requests.postFunds(`/claimFunds/`, {
-        to: address,
-        "cf-turnstile-response": captcha,
-      }),
   },
   jobs: {
     redeemCode: (jobId: string): Promise<RedeemInviteJobResponse[]> => requests.get(`/job/inviteCode/${jobId}`),
