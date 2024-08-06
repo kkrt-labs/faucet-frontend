@@ -58,7 +58,7 @@ export const FaucetClaim = ({
     client,
   });
 
-  const minEthRequired = ENV.NODE_ENV === "production" ? 0.001 : 0.0001;
+  const minEthRequired = 0.05;
   const isEligibleToClaim =
     faucetStats && faucetStats?.canClaim && parseFloat(balance?.displayValue ?? "0") >= minEthRequired;
 
@@ -163,7 +163,16 @@ export const FaucetClaim = ({
 
       {!isEligibleToClaim && !isProcessing && (
         <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">
-          You need at least {minEthRequired} ETH on Ethereum Mainnet to the use the faucet
+          You need at least {minEthRequired} ETH on Ethereum Mainnet. Or claim from our
+          <Link
+            href="https://discord.gg/kakarotzkevm"
+            rel="noopener noreferrer"
+            target="_blank"
+            className="text-kkrtOrange ml-1"
+          >
+            Discord faucet
+          </Link>
+          .
         </p>
       )}
 
