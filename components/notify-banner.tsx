@@ -23,7 +23,7 @@ const LinkBanner = () => {
     >
       <p className="text-white mt-6 lg:mt-0">
         If you don&apos;t have enough ETH on Ethereum Mainnet, join our Discord server to easily claim your testnet
-        funds through our bot!
+        funds through our discord bot!
         <a
           rel="noopener noreferrer"
           target="_blank"
