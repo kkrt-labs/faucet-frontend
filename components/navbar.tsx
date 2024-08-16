@@ -94,6 +94,7 @@ const DropdownCTA = () => {
         <DropdownMenuItem className="text-[#003d29] hover:underline hover:text-kkrtOrange">
           <Link href="https://discord.gg/kakarotzkevm" rel="noopener noreferrer" target="_blank">
             Discord Faucet
+            <ArrowUpRight size={16} className="inline-block ml-1 mb-1" />
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="text-[#003d29] hover:underline hover:text-kkrtOrange">
@@ -103,6 +104,7 @@ const DropdownCTA = () => {
             ) : (
               <Link href={KKRT_RPC_DETAILS} rel="noopener noreferrer" target="_blank">
                 <span className="">Network Details</span>
+                <ArrowUpRight size={16} className="inline-block ml-1 mb-1" />
               </Link>
             )}
           </div>
@@ -110,6 +112,7 @@ const DropdownCTA = () => {
         <DropdownMenuItem className="text-[#003d29] hover:underline hover:text-kkrtOrange">
           <Link href={FEEDBACK_TYPEFORM} rel="noopener noreferrer" target="_blank">
             Feedback
+            <ArrowUpRight size={16} className="inline-block ml-1 mb-1" />
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
