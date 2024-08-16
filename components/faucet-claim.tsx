@@ -99,6 +99,17 @@ export const FaucetClaim = ({
           title="Your funds are on the way!"
           description="The faucet is under load, we have received your request, and the funds are on the way."
         />
+        <Link
+          href="https://ecosystem.kakarot.org/"
+          rel="noopener noreferrer"
+          target="_blank"
+          className="text-kkrtOrange mt-6 w-full max-w-[350px]"
+        >
+          <Button variant="outline" className="w-full">
+            <GlobeIcon size={24} className="w-4 h-4 mr-2 text-kkrtOrange" />
+            <span className="text-kkrtOrange">Explore our Ecosystem</span>
+          </Button>
+        </Link>
       </CarrotContainer>
     );
 
