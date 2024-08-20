@@ -53,7 +53,7 @@ export default function RootLayout({
           <Provider>
             <LinkBanner />
             <Navbar />
-            <div className=" px-4 sm:px-20 mt-auto">
+            <div className="px-4 sm:px-20 mt-auto">
               {children}
               <Footer />
             </div>

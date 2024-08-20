@@ -17,7 +17,7 @@ const LinkBanner = () => {
   return (
     <div
       className={cn(
-        "sticky w-screen flex bg-[#2A2927] justify-center items-center py-3 px-2 text-center -mx-4 sm:-mx-20",
+        "sticky w-screen flex bg-[#2A2927] justify-center items-center py-3 px-2 text-center",
         !showBanner && "hidden"
       )}
     >
