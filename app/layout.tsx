@@ -48,13 +48,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ThirdwebProvider>
-        <body className={`${inter.className} flex flex-col faucetBackground min-h-svh px-4 sm:px-20`}>
+        <body className={`${inter.className} flex flex-col faucetBackground min-h-svh`}>
           <Toaster />
           <Provider>
             <LinkBanner />
             <Navbar />
-            {children}
-            <Footer />
+            <div className=" px-4 sm:px-20 mt-auto">
+              {children}
+              <Footer />
+            </div>
           </Provider>
           <Analytics />
         </body>

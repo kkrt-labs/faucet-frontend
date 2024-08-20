@@ -34,7 +34,7 @@ const WALLET_MODAL_OPTIONS: Partial<UseConnectModalOptions> = {
 };
 
 const CONFETTI_COLORS = ["#FDA829", "#F6F5FC", "#FF2828"];
-const GOOGLE_CAPTCHA_API_BASE = "https://www.google.com/recaptcha/api/siteverify";
+const FEEDBACK_TYPEFORM = "https://eab2omvihmx.typeform.com/to/eoD6oLfy";
 const RATE_LIMIT_KEY = "rateLimitTime";
 const TWEET_TEXT = `gm gm,
 
@@ -50,4 +50,13 @@ const INTENT = `https://x.com/intent/post?text=${encodeURIComponent(TWEET_TEXT)}
 const KKRT_EXPLORER = "https://sepolia.kakarotscan.org";
 const KKRT_RPC_DETAILS = "https://thirdweb.com/kakarot-sepolia";
 
-export { ENV, WALLET_MODAL_OPTIONS, CONFETTI_COLORS, INTENT, KKRT_EXPLORER, KKRT_RPC_DETAILS, RATE_LIMIT_KEY };
+export {
+  ENV,
+  WALLET_MODAL_OPTIONS,
+  CONFETTI_COLORS,
+  INTENT,
+  KKRT_EXPLORER,
+  KKRT_RPC_DETAILS,
+  RATE_LIMIT_KEY,
+  FEEDBACK_TYPEFORM,
+};

@@ -44,7 +44,7 @@ export const WalletDetails = () => {
         size="withIcon"
       >
         <Image src={ethereumLogo} alt="ethereum" className="bg-white rounded-full w-5" />
-        <span className="text-[#353535]">{walletBalance?.displayValue.substring(0, 6) ?? 0} ETH</span>
+        <span className="text-[#353535]">{walletBalance?.displayValue.substring(0, 4) ?? 0} ETH</span>
       </Button>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>

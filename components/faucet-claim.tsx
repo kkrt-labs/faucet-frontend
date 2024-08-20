@@ -3,15 +3,14 @@ import Image, { StaticImageData } from "next/image";
 import { Turnstile } from "@marsidev/react-turnstile";
 
 import Link from "next/link";
-import { useActiveWallet, useActiveWalletChain, useWalletBalance } from "thirdweb/react";
+import { useActiveWallet, useWalletBalance } from "thirdweb/react";
 import { mainnet } from "thirdweb/chains";
-import { Loader2 } from "lucide-react";
-import { KAKAROT_SEPOLIA, client } from "@/lib/thirdweb-client";
-import { ENV, KKRT_RPC_DETAILS } from "@/lib/constants";
+import { GlobeIcon, Loader2 } from "lucide-react";
+import { client } from "@/lib/thirdweb-client";
+import { ENV } from "@/lib/constants";
 import { FaucetJobResponse, FaucetStatsResponse } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 
-import metamaskLogo from "@/public/assets/metamask.png";
 import cooldownCarrot from "@/public/assets/cooldown-carrot.svg";
 import pendingCarrot from "@/public/assets/pending-carrot.svg";
 import claimedCarrot from "@/public/assets/claimed-carrot.svg";
@@ -44,9 +43,6 @@ export const FaucetClaim = ({
   faucetJob,
 }: FaucetClaimProps) => {
   const wallet = useActiveWallet();
-  const chainId = useActiveWalletChain();
-  const activeChain = wallet?.getChain();
-  const isMetaMask = wallet?.id === "io.metamask";
   const { data: isDowntimeCheck } = useIsDowntime();
 
   const [captchaCode, setCaptchaCode] = useState<string | null>(null);
@@ -83,11 +79,6 @@ export const FaucetClaim = ({
     setTimeout(() => setShowCloudfare(false), 1000);
   };
 
-  // keep checking for network switch in background using hook
-  useEffect(() => {
-    if (wallet) wallet.autoConnect({ client });
-  }, [wallet, chainId]);
-
   if (isDowntimeCheck?.isDowntime ?? false)
     return (
       <CarrotContainer>
@@ -108,6 +99,17 @@ export const FaucetClaim = ({
           title="Your funds are on the way!"
           description="The faucet is under load, we have received your request, and the funds are on the way."
         />
+        <Link
+          href="https://ecosystem.kakarot.org/"
+          rel="noopener noreferrer"
+          target="_blank"
+          className="text-kkrtOrange mt-6 w-full max-w-[350px]"
+        >
+          <Button variant="outline" className="w-full">
+            <GlobeIcon size={24} className="w-4 h-4 mr-2 text-kkrtOrange" />
+            <span className="text-kkrtOrange">Explore our Ecosystem</span>
+          </Button>
+        </Link>
       </CarrotContainer>
     );
 
@@ -160,6 +162,17 @@ export const FaucetClaim = ({
           "Claim"
         )}
       </Button>
+      <Link
+        href="https://ecosystem.kakarot.org/"
+        rel="noopener noreferrer"
+        target="_blank"
+        className="text-kkrtOrange mt-6 w-full"
+      >
+        <Button variant="outline" className="w-full">
+          <GlobeIcon size={24} className="w-4 h-4 mr-2 text-kkrtOrange" />
+          <span className="text-kkrtOrange">Explore our Ecosystem</span>
+        </Button>
+      </Link>
 
       {!isEligibleToClaim && !isProcessing && (
         <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">
@@ -174,18 +187,6 @@ export const FaucetClaim = ({
           </Link>
           .
         </p>
-      )}
-
-      {wallet && activeChain?.id !== KAKAROT_SEPOLIA.id && (
-        <div className="flex justify-center items-center w-full mt-6 text-sm md:text-md gap-4">
-          <Button variant="outline" className="space-x-3" onClick={() => wallet.switchChain(KAKAROT_SEPOLIA)}>
-            {isMetaMask && <Image src={metamaskLogo} alt="metamask" width={16} height={16} />}
-            <span className="text-kkrtOrange">Add Network</span>
-          </Button>
-          <Link href={KKRT_RPC_DETAILS} rel="noopener noreferrer" target="_blank">
-            <span className="text-kkrtOrange underline">Network Details</span>
-          </Link>
-        </div>
       )}
     </CarrotContainer>
   );
