@@ -20,8 +20,9 @@ import { TextPair } from "@/components/text-pair";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { Denomination } from "@/lib/types";
 
-const LOCAL_STORAGE_KEY = "faucetJobId";
+const LOCAL_STORAGE_KEY = "faucetJobStatusId";
 
 export default function Faucet() {
   const { wallet, faucetStats, faucetBalance, refetchFaucet, isFaucetLoading, activeWallets } = useFaucet();
@@ -38,6 +39,7 @@ export default function Faucet() {
   const [isProcessing, setIsProcessing] = useState(isPending);
   const [isClaimed, setIsClaimed] = useState(false);
   const [jobId, setJobId] = useState<string | null>(null);
+  const [lastUsedDenomination, setLastUsedDenomination] = useState<Denomination>("eth");
   const { data: faucetJob, isError } = useFaucetJob(jobId ?? "");
 
   const available = `${faucetStats?.dripAmountInEth ?? 0.001} ETH`;
@@ -46,19 +48,22 @@ export default function Faucet() {
     (faucetStats?.timeLeftInS !== 0 || faucetStats?.canClaim === false) &&
     faucetStats.message === "Under cooldown period";
 
-  const handleClaim = (captchaCode: string) => {
+  const handleClaim = (captchaCode: string, denomination: "eth" | "usdt" | "usdc") => {
     setIsProcessing(true);
-    claimFunds({ walletAddress: wallet?.address as string, captchaCode });
+    setLastUsedDenomination(denomination);
+    claimFunds({ walletAddress: wallet?.address as string, captchaCode, denomination });
   };
 
   const runSuccessToast = useCallback(
-    (txHash: string) =>
+    (txHash: string, denomination: Denomination) =>
       toast.message(
         <div className="flex flex-row justify-around w-full">
           <div className="flex flex-col w-full">
             <span className="text-black">Transaction Successful</span>
             <span className="w-full text-[#666D80]">
-              You have successfully claimed {faucetStats?.dripAmountInEth} ETH on Kakarot Sepolia.
+              You have successfully claimed{" "}
+              {denomination === "eth" ? `${faucetStats?.dripAmountInEth} ETH` : `1 ${denomination.toUpperCase()}`} on
+              Kakarot Sepolia.
             </span>
           </div>
           <span className="h-20 w-[2px] bg-slate-100 -my-4"></span>
@@ -108,7 +113,7 @@ export default function Faucet() {
   useEffect(() => {
     if (faucetJob && faucetJob[0].status === "completed") {
       localStorage.removeItem(LOCAL_STORAGE_KEY);
-      runSuccessToast(faucetJob[0].transaction_hash);
+      runSuccessToast(faucetJob[0].transaction_hash, lastUsedDenomination);
       setIsProcessing(false);
       setIsClaimed(true);
       refetchFaucet();
