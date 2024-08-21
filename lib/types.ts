@@ -45,3 +45,5 @@ export interface FaucetBalanceResponse {
 export interface IsDowntimeResponse {
   isDowntime: boolean;
 }
+
+export type Denomination = "eth" | "usdc" | "usdt";

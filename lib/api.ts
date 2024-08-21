@@ -2,6 +2,7 @@ import axios from "axios";
 import { ENV } from "./constants";
 import type { AxiosRequestConfig } from "axios";
 import {
+  Denomination,
   FaucetBalanceResponse,
   FaucetJobResponse,
   FaucetResponse,
@@ -53,8 +54,8 @@ export const API = {
       requests.post(`/redeemInviteCode`, { inviteCode, address }),
   },
   faucet: {
-    claimFunds: (address: string, captcha: string): Promise<FaucetResponse> =>
-      requests.post(`/claimFunds`, { to: address, "cf-turnstile-response": captcha }),
+    claimFunds: (address: string, captcha: string, denomination: Denomination = "eth"): Promise<FaucetResponse> =>
+      requests.post(`/claimFunds`, { to: address, "cf-turnstile-response": captcha, denomination }),
     getStats: (address: string): Promise<FaucetStatsResponse> => requests.get(`/stats?address=${address}`),
     getBalance: (): Promise<FaucetBalanceResponse> => requests.get(`/faucetBalance`),
   },
