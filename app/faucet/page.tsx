@@ -148,6 +148,7 @@ export default function Faucet() {
         </div>
         {isClaimed ? (
           <FaucetSuccess
+            denomination={lastUsedDenomination}
             txHash={(faucetJob && faucetJob[0].transaction_hash) ?? ""}
             navigateToClaim={() => setIsClaimed(false)}
           />
