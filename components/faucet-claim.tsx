@@ -8,12 +8,16 @@ import { mainnet } from "thirdweb/chains";
 import { GlobeIcon, Loader2 } from "lucide-react";
 import { client } from "@/lib/thirdweb-client";
 import { ENV } from "@/lib/constants";
-import { FaucetJobResponse, FaucetStatsResponse } from "@/lib/types";
+import { Denomination, FaucetJobResponse, FaucetStatsResponse } from "@/lib/types";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import cooldownCarrot from "@/public/assets/cooldown-carrot.svg";
 import pendingCarrot from "@/public/assets/pending-carrot.svg";
 import claimedCarrot from "@/public/assets/claimed-carrot.svg";
+import ethLogo from "@/public/assets/ethereum.svg";
+import usdcLogo from "@/public/assets/usdc.svg";
+import usdtLogo from "@/public/assets/usdt.svg";
 import { useIsDowntime } from "@/queries/useIsDowntime";
 
 interface InfoCarrotProps {
@@ -28,7 +32,7 @@ interface FaucetClaimProps {
   isCooldown: boolean;
   isOutOfFunds: boolean;
   available: string;
-  handleClaim: (captchaCode: string) => void;
+  handleClaim: (captchaCode: string, denomination: "eth" | "usdt" | "usdc") => void;
   faucetStats?: FaucetStatsResponse;
   faucetJob?: FaucetJobResponse[];
 }
@@ -46,6 +50,7 @@ export const FaucetClaim = ({
   const { data: isDowntimeCheck } = useIsDowntime();
 
   const [captchaCode, setCaptchaCode] = useState<string | null>(null);
+  const [denomination, setDenomination] = useState<Denomination>("eth");
   const [showCloudfare, setShowCloudfare] = useState(true);
 
   const { refetch: refetchWallet, data: balance } = useWalletBalance({
@@ -54,7 +59,7 @@ export const FaucetClaim = ({
     client,
   });
 
-  const minEthRequired = 0.05;
+  const minEthRequired = ENV.NODE_ENV === "development" ? 0.005 : 0.05;
   const isEligibleToClaim =
     faucetStats && faucetStats?.canClaim && parseFloat(balance?.displayValue ?? "0") >= minEthRequired;
 
@@ -139,7 +144,32 @@ export const FaucetClaim = ({
 
   return (
     <CarrotContainer>
-      <h2 className="text-5xl md:text-7xl leading-tight text-[#878794] font-medium">{available}</h2>
+      <Tabs defaultValue="eth" className="-mt-14">
+        <TabsList className="py-7 space-x-10">
+          <TabsTrigger value="eth" className="space-x-2" onClick={() => setDenomination("eth")}>
+            <Image src={ethLogo} width={24} height={24} alt="ETH" />
+            <span>ETH</span>
+          </TabsTrigger>
+          <TabsTrigger value="usdc" className="space-x-2" onClick={() => setDenomination("usdc")}>
+            <Image src={usdcLogo} width={24} height={24} alt="USDC" />
+            <span>USDC</span>
+          </TabsTrigger>
+          <TabsTrigger value="usdt" className="space-x-2" onClick={() => setDenomination("usdt")}>
+            <Image src={usdtLogo} width={24} height={24} alt="USDT" />
+            <span>USDT</span>
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="eth">
+          <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">{available}</h2>
+        </TabsContent>
+        <TabsContent value="usdc">
+          <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">1 USDC</h2>
+        </TabsContent>
+        <TabsContent value="usdt">
+          <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">1 USDT</h2>
+        </TabsContent>
+      </Tabs>
+
       <Turnstile
         siteKey={ENV.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
         onSuccess={onTurnstileSuccess}
@@ -148,7 +178,7 @@ export const FaucetClaim = ({
         }}
       />
       <Button
-        onClick={() => handleClaim(captchaCode ?? "")}
+        onClick={() => handleClaim(captchaCode ?? "", denomination)}
         disabled={isProcessing || !isEligibleToClaim || !captchaCode}
         variant={"main"}
         className="mt-6 w-full"

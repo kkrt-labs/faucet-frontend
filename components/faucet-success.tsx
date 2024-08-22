@@ -6,13 +6,15 @@ import { INTENT, KKRT_EXPLORER } from "@/lib/constants";
 
 import xIcon from "@/public/assets/x-icon-inverted.svg";
 import successCarrot from "@/public/assets/success-carrot.svg";
+import { Denomination } from "@/lib/types";
 
 interface FaucetSuccessProps {
   navigateToClaim: () => void;
   txHash: string;
+  denomination?: Denomination;
 }
 
-export const FaucetSuccess = ({ navigateToClaim, txHash }: FaucetSuccessProps) => (
+export const FaucetSuccess = ({ navigateToClaim, txHash, denomination = "eth" }: FaucetSuccessProps) => (
   <div className="flex flex-col justify-center items-center my-16 sm:my-24">
     <div className="w-full sm:w-fit text-center flex flex-col justify-center items-center">
       <Image src={successCarrot} alt="Success Carrot" />
@@ -34,7 +36,7 @@ export const FaucetSuccess = ({ navigateToClaim, txHash }: FaucetSuccessProps) =
 
       <div className="flex flex-row items-center justify-center my-4">
         <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[300px]">
-          You just got some testnet ETH! Your wallet should reflect this transaction soon!
+          You just got some testnet {denomination.toUpperCase()}! Your wallet should reflect this transaction soon!
         </p>
       </div>
     </div>
