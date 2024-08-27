@@ -40,6 +40,8 @@ export interface FaucetStatsResponse {
 
 export interface FaucetBalanceResponse {
   faucetBalanceInEth: string;
+  usdcBalance: string;
+  usdtBalance: string;
 }
 
 export interface IsDowntimeResponse {
