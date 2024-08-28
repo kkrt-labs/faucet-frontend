@@ -33,6 +33,8 @@ interface FaucetClaimProps {
   isOutOfFunds: boolean;
   available: string;
   handleClaim: (captchaCode: string, denomination: "eth" | "usdt" | "usdc") => void;
+  currentDenomination: Denomination;
+  setDenomination: (denomination: Denomination) => void;
   faucetStats?: FaucetStatsResponse;
   faucetJob?: FaucetJobResponse[];
 }
@@ -43,6 +45,8 @@ export const FaucetClaim = ({
   isProcessing,
   available,
   handleClaim,
+  currentDenomination: denomination,
+  setDenomination,
   faucetStats,
   faucetJob,
 }: FaucetClaimProps) => {
@@ -50,7 +54,6 @@ export const FaucetClaim = ({
   const { data: isDowntimeCheck } = useIsDowntime();
 
   const [captchaCode, setCaptchaCode] = useState<string | null>(null);
-  const [denomination, setDenomination] = useState<Denomination>("eth");
   const [showCloudfare, setShowCloudfare] = useState(true);
 
   const { refetch: refetchWallet, data: balance } = useWalletBalance({

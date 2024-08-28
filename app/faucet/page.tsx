@@ -143,7 +143,16 @@ export default function Faucet() {
           hidden={!isClaimed}
         />
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between">
-          <DetailAndText title="Faucet Balance" text={`${faucetBalance?.faucetBalanceInEth.substring(0, 6) ?? 0}ETH`} />
+          <DetailAndText
+            title={`Faucet Balance (${lastUsedDenomination.toUpperCase()})`}
+            text={
+              lastUsedDenomination === "eth"
+                ? `${faucetBalance?.faucetBalanceInEth.substring(0, 6) ?? 0} ETH`
+                : lastUsedDenomination === "usdc"
+                ? `${faucetBalance?.usdcBalance.substring(0, 6) ?? 0} USDC`
+                : `${faucetBalance?.usdtBalance.substring(0, 6) ?? 0} USDT`
+            }
+          />
           <DetailAndText title="Block Number" text={blockNumber?.toString() ?? "0x"} isBlock />
         </div>
         {isClaimed ? (
@@ -163,6 +172,8 @@ export default function Faucet() {
             handleClaim={handleClaim}
             faucetStats={faucetStats}
             faucetJob={faucetJob}
+            currentDenomination={lastUsedDenomination}
+            setDenomination={setLastUsedDenomination}
           />
         )}
       </div>
