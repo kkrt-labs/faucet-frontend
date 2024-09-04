@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Confetti from "react-confetti";
 import { redirect } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { useBlockNumber, useWalletBalance } from "thirdweb/react";
 import { toast } from "sonner";
 
@@ -41,12 +41,14 @@ export default function Faucet() {
   const [jobId, setJobId] = useState<string | null>(null);
   const [lastUsedDenomination, setLastUsedDenomination] = useState<Denomination>("eth");
   const { data: faucetJob, isError } = useFaucetJob(jobId ?? "");
+  const processedJobRef = useRef<string | null>(null);
 
   const available = `${faucetStats?.dripAmountInEth ?? 0.001} ETH`;
   const isCooldown =
     !!faucetStats &&
-    (faucetStats?.timeLeftInS !== 0 || faucetStats?.canClaim === false) &&
-    faucetStats.message === "Under cooldown period";
+    ((lastUsedDenomination === "eth" && (faucetStats.timeLeftETHInS !== 0 || !faucetStats.canClaimETH)) ||
+      (lastUsedDenomination === "usdc" && (faucetStats.timeLeftUSDCInS !== 0 || !faucetStats.canClaimUSDC)) ||
+      (lastUsedDenomination === "usdt" && (faucetStats.timeLeftUSDTInS !== 0 || !faucetStats.canClaimUSDT)));
 
   const handleClaim = (captchaCode: string, denomination: "eth" | "usdt" | "usdc") => {
     setIsProcessing(true);
@@ -111,7 +113,8 @@ export default function Faucet() {
   }, [faucetJob]);
 
   useEffect(() => {
-    if (faucetJob && faucetJob[0].status === "completed") {
+    if (faucetJob && faucetJob[0].status === "completed" && faucetJob[0].job_id !== processedJobRef.current) {
+      processedJobRef.current = faucetJob[0].job_id;
       localStorage.removeItem(LOCAL_STORAGE_KEY);
       runSuccessToast(faucetJob[0].transaction_hash, lastUsedDenomination);
       setIsProcessing(false);
@@ -119,7 +122,7 @@ export default function Faucet() {
       refetchFaucet();
       refetchWallet();
     }
-  }, [faucetJob, refetchFaucet, refetchWallet, runSuccessToast]);
+  }, [faucetJob, refetchFaucet, refetchWallet, runSuccessToast, lastUsedDenomination]);
 
   useEffect(() => {
     if (isError || faucetJob?.[0].status === "error") {
