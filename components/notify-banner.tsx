@@ -12,7 +12,7 @@ const LinkBanner = () => {
   useEffect(() => {
     const shouldShow = localStorage.getItem(LOCAL_STORAGE_KEY) ?? "true";
     setShowBanner(shouldShow === "true");
-  });
+  }, []);
 
   return (
     <div

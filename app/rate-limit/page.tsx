@@ -1,7 +1,8 @@
 "use client";
-import { CarrotContainer, InfoCarrot } from "@/components/faucet-claim";
-import { RATE_LIMIT_KEY } from "@/lib/constants";
 import { useEffect, useState } from "react";
+import { RATE_LIMIT_KEY } from "@/lib/constants";
+import { CarrotContainer } from "@/components/carrot-container";
+import { InfoCarrot } from "@/components/info-carrot";
 import rateCarrot from "@/public/assets/carrot-limit.svg";
 
 export default function RateLimit() {
