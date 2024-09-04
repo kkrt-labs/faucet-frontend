@@ -39,6 +39,48 @@ interface FaucetClaimProps {
   faucetJob?: FaucetJobResponse[];
 }
 
+const TokenTabs = ({
+  setDenomination,
+  faucetStats,
+}: {
+  setDenomination: (denomination: Denomination) => void;
+  faucetStats?: FaucetStatsResponse;
+}) => {
+  return (
+    <Tabs defaultValue="eth" className="-mt-14">
+      <TabsList className="py-7 space-x-10">
+        <TabsTrigger value="eth" className="space-x-2" onClick={() => setDenomination("eth")}>
+          <Image src={ethLogo} width={24} height={24} alt="ETH" />
+          <span>ETH</span>
+        </TabsTrigger>
+        <TabsTrigger value="usdc" className="space-x-2" onClick={() => setDenomination("usdc")}>
+          <Image src={usdcLogo} width={24} height={24} alt="USDC" />
+          <span>USDC</span>
+        </TabsTrigger>
+        <TabsTrigger value="usdt" className="space-x-2" onClick={() => setDenomination("usdt")}>
+          <Image src={usdtLogo} width={24} height={24} alt="USDT" />
+          <span>USDT</span>
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="eth">
+        <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">
+          {faucetStats?.dripAmountInEth} ETH
+        </h2>
+      </TabsContent>
+      <TabsContent value="usdc">
+        <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">
+          {faucetStats?.dripAmountUSDC} USDC
+        </h2>
+      </TabsContent>
+      <TabsContent value="usdt">
+        <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">
+          {faucetStats?.dripAmountUSDT} USDT
+        </h2>
+      </TabsContent>
+    </Tabs>
+  );
+};
+
 export const FaucetClaim = ({
   isCooldown,
   isOutOfFunds,
@@ -62,9 +104,13 @@ export const FaucetClaim = ({
     client,
   });
 
-  const minEthRequired = ENV.NODE_ENV === "development" ? 0.005 : 0.05;
+  const minEthRequired = 0;
   const isEligibleToClaim =
-    faucetStats && faucetStats?.canClaim && parseFloat(balance?.displayValue ?? "0") >= minEthRequired;
+    faucetStats &&
+    ((denomination === "eth" && faucetStats.canClaimETH) ||
+      (denomination === "usdc" && faucetStats.canClaimUSDC) ||
+      (denomination === "usdt" && faucetStats.canClaimUSDT)) &&
+    parseFloat(balance?.displayValue ?? "0") >= minEthRequired;
 
   // if taking longer than 15 seconds to process the claim
   const isNetworkOverloaded =
@@ -124,11 +170,16 @@ export const FaucetClaim = ({
   if (isCooldown && !isProcessing)
     return (
       <CarrotContainer>
+        <TokenTabs setDenomination={setDenomination} faucetStats={faucetStats} />
         <InfoCarrot
           imageAlt="Cooldown Carrot"
           carrotSrc={cooldownCarrot}
           description={`You're on a cooldown period! Try the Kakarot faucet again in ${convertSecondsToTime(
-            faucetStats?.timeLeftInS ?? 0
+            denomination === "eth"
+              ? faucetStats?.timeLeftETHInS ?? 0
+              : denomination === "usdc"
+              ? faucetStats?.timeLeftUSDCInS ?? 0
+              : faucetStats?.timeLeftUSDTInS ?? 0
           )}.`}
         />
       </CarrotContainer>
@@ -147,32 +198,7 @@ export const FaucetClaim = ({
 
   return (
     <CarrotContainer>
-      <Tabs defaultValue="eth" className="-mt-14">
-        <TabsList className="py-7 space-x-10">
-          <TabsTrigger value="eth" className="space-x-2" onClick={() => setDenomination("eth")}>
-            <Image src={ethLogo} width={24} height={24} alt="ETH" />
-            <span>ETH</span>
-          </TabsTrigger>
-          <TabsTrigger value="usdc" className="space-x-2" onClick={() => setDenomination("usdc")}>
-            <Image src={usdcLogo} width={24} height={24} alt="USDC" />
-            <span>USDC</span>
-          </TabsTrigger>
-          <TabsTrigger value="usdt" className="space-x-2" onClick={() => setDenomination("usdt")}>
-            <Image src={usdtLogo} width={24} height={24} alt="USDT" />
-            <span>USDT</span>
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="eth">
-          <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">{available}</h2>
-        </TabsContent>
-        <TabsContent value="usdc">
-          <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">1 USDC</h2>
-        </TabsContent>
-        <TabsContent value="usdt">
-          <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">1 USDT</h2>
-        </TabsContent>
-      </Tabs>
-
+      <TokenTabs setDenomination={setDenomination} faucetStats={faucetStats} />
       <Turnstile
         siteKey={ENV.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
         onSuccess={onTurnstileSuccess}
