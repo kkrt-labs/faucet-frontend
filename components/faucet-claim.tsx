@@ -116,7 +116,12 @@ export const FaucetClaim = ({
   if (isCooldown && !isProcessing)
     return (
       <CarrotContainer>
-        <TokenTabs setDenomination={setDenomination} faucetStats={faucetStats} />
+        <TokenTabs
+          denomination={denomination}
+          setDenomination={setDenomination}
+          faucetStats={faucetStats}
+          claimInProgress={isProcessing}
+        />
         <InfoCarrot
           imageAlt="Cooldown Carrot"
           carrotSrc={cooldownCarrot}
@@ -144,7 +149,12 @@ export const FaucetClaim = ({
 
   return (
     <CarrotContainer>
-      <TokenTabs setDenomination={setDenomination} faucetStats={faucetStats} />
+      <TokenTabs
+        denomination={denomination}
+        setDenomination={setDenomination}
+        faucetStats={faucetStats}
+        claimInProgress={isProcessing}
+      />
       <Turnstile
         siteKey={ENV.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
         onSuccess={onTurnstileSuccess}
