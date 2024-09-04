@@ -43,7 +43,6 @@ export default function Faucet() {
   const { data: faucetJob, isError } = useFaucetJob(jobId ?? "");
   const processedJobRef = useRef<string | null>(null);
 
-  const available = `${faucetStats?.dripAmountInEth ?? 0.001} ETH`;
   const isCooldown =
     !!faucetStats &&
     ((lastUsedDenomination === "eth" && (faucetStats.timeLeftETHInS !== 0 || !faucetStats.canClaimETH)) ||
@@ -171,7 +170,6 @@ export default function Faucet() {
             }
             isCooldown={isCooldown}
             isProcessing={isProcessing}
-            available={available}
             handleClaim={handleClaim}
             faucetStats={faucetStats}
             faucetJob={faucetJob}
