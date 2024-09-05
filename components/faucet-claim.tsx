@@ -125,7 +125,7 @@ export const FaucetClaim = ({
         <InfoCarrot
           imageAlt="Cooldown Carrot"
           carrotSrc={cooldownCarrot}
-          description={`You're on a cooldown period! Try the Kakarot faucet again in ${convertSecondsToTime(
+          description={`You're on a cooldown period for ${denomination.toUpperCase()}! Try the Kakarot faucet again in ${convertSecondsToTime(
             denomination === "eth"
               ? faucetStats?.timeLeftETHInS ?? 0
               : denomination === "usdc"

@@ -19,7 +19,7 @@ const TokenTabs = ({ denomination, setDenomination, faucetStats, claimInProgress
           value="eth"
           className="space-x-2"
           onClick={() => setDenomination("eth")}
-          disabled={!faucetStats?.canClaimETH || claimInProgress}
+          disabled={claimInProgress}
         >
           <Image src={ethLogo} width={24} height={24} alt="ETH" />
           <span>ETH</span>
@@ -28,7 +28,7 @@ const TokenTabs = ({ denomination, setDenomination, faucetStats, claimInProgress
           value="usdc"
           className="space-x-2"
           onClick={() => setDenomination("usdc")}
-          disabled={!faucetStats?.canClaimUSDC || claimInProgress}
+          disabled={claimInProgress}
         >
           <Image src={usdcLogo} width={24} height={24} alt="USDC" />
           <span>USDC</span>
@@ -37,7 +37,7 @@ const TokenTabs = ({ denomination, setDenomination, faucetStats, claimInProgress
           value="usdt"
           className="space-x-2"
           onClick={() => setDenomination("usdt")}
-          disabled={!faucetStats?.canClaimUSDT || claimInProgress}
+          disabled={claimInProgress}
         >
           <Image src={usdtLogo} width={24} height={24} alt="USDT" />
           <span>USDT</span>
