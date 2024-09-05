@@ -1,5 +1,4 @@
-import { FC, PropsWithChildren, createRef, useEffect, useState } from "react";
-import Image, { StaticImageData } from "next/image";
+import { useState } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 
 import Link from "next/link";
@@ -10,28 +9,18 @@ import { client } from "@/lib/thirdweb-client";
 import { ENV } from "@/lib/constants";
 import { Denomination, FaucetJobResponse, FaucetStatsResponse } from "@/lib/types";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
+import { useIsDowntime } from "@/queries/useIsDowntime";
+import { TokenTabs } from "@/components/token-tabs";
+import { CarrotContainer } from "@/components/carrot-container";
+import { InfoCarrot } from "@/components/info-carrot";
 import cooldownCarrot from "@/public/assets/cooldown-carrot.svg";
 import pendingCarrot from "@/public/assets/pending-carrot.svg";
 import claimedCarrot from "@/public/assets/claimed-carrot.svg";
-import ethLogo from "@/public/assets/ethereum.svg";
-import usdcLogo from "@/public/assets/usdc.svg";
-import usdtLogo from "@/public/assets/usdt.svg";
-import { useIsDowntime } from "@/queries/useIsDowntime";
-
-interface InfoCarrotProps {
-  carrotSrc: StaticImageData;
-  imageAlt: string;
-  title?: string;
-  description: string;
-}
 
 interface FaucetClaimProps {
   isProcessing: boolean;
   isCooldown: boolean;
   isOutOfFunds: boolean;
-  available: string;
   handleClaim: (captchaCode: string, denomination: "eth" | "usdt" | "usdc") => void;
   currentDenomination: Denomination;
   setDenomination: (denomination: Denomination) => void;
@@ -43,7 +32,6 @@ export const FaucetClaim = ({
   isCooldown,
   isOutOfFunds,
   isProcessing,
-  available,
   handleClaim,
   currentDenomination: denomination,
   setDenomination,
@@ -64,7 +52,11 @@ export const FaucetClaim = ({
 
   const minEthRequired = ENV.NODE_ENV === "development" ? 0.005 : 0.05;
   const isEligibleToClaim =
-    faucetStats && faucetStats?.canClaim && parseFloat(balance?.displayValue ?? "0") >= minEthRequired;
+    faucetStats &&
+    ((denomination === "eth" && faucetStats.canClaimETH) ||
+      (denomination === "usdc" && faucetStats.canClaimUSDC) ||
+      (denomination === "usdt" && faucetStats.canClaimUSDT)) &&
+    parseFloat(balance?.displayValue ?? "0") >= minEthRequired;
 
   // if taking longer than 15 seconds to process the claim
   const isNetworkOverloaded =
@@ -124,11 +116,21 @@ export const FaucetClaim = ({
   if (isCooldown && !isProcessing)
     return (
       <CarrotContainer>
+        <TokenTabs
+          denomination={denomination}
+          setDenomination={setDenomination}
+          faucetStats={faucetStats}
+          claimInProgress={isProcessing}
+        />
         <InfoCarrot
           imageAlt="Cooldown Carrot"
           carrotSrc={cooldownCarrot}
-          description={`You're on a cooldown period! Try the Kakarot faucet again in ${convertSecondsToTime(
-            faucetStats?.timeLeftInS ?? 0
+          description={`You're on a cooldown period for ${denomination.toUpperCase()}! Try the Kakarot faucet again in ${convertSecondsToTime(
+            denomination === "eth"
+              ? faucetStats?.timeLeftETHInS ?? 0
+              : denomination === "usdc"
+              ? faucetStats?.timeLeftUSDCInS ?? 0
+              : faucetStats?.timeLeftUSDTInS ?? 0
           )}.`}
         />
       </CarrotContainer>
@@ -147,32 +149,12 @@ export const FaucetClaim = ({
 
   return (
     <CarrotContainer>
-      <Tabs defaultValue="eth" className="-mt-14">
-        <TabsList className="py-7 space-x-10">
-          <TabsTrigger value="eth" className="space-x-2" onClick={() => setDenomination("eth")}>
-            <Image src={ethLogo} width={24} height={24} alt="ETH" />
-            <span>ETH</span>
-          </TabsTrigger>
-          <TabsTrigger value="usdc" className="space-x-2" onClick={() => setDenomination("usdc")}>
-            <Image src={usdcLogo} width={24} height={24} alt="USDC" />
-            <span>USDC</span>
-          </TabsTrigger>
-          <TabsTrigger value="usdt" className="space-x-2" onClick={() => setDenomination("usdt")}>
-            <Image src={usdtLogo} width={24} height={24} alt="USDT" />
-            <span>USDT</span>
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="eth">
-          <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">{available}</h2>
-        </TabsContent>
-        <TabsContent value="usdc">
-          <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">1 USDC</h2>
-        </TabsContent>
-        <TabsContent value="usdt">
-          <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">1 USDT</h2>
-        </TabsContent>
-      </Tabs>
-
+      <TokenTabs
+        denomination={denomination}
+        setDenomination={setDenomination}
+        faucetStats={faucetStats}
+        claimInProgress={isProcessing}
+      />
       <Turnstile
         siteKey={ENV.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
         onSuccess={onTurnstileSuccess}
@@ -224,19 +206,3 @@ export const FaucetClaim = ({
     </CarrotContainer>
   );
 };
-
-export const InfoCarrot = ({ carrotSrc, title = "", description, imageAlt }: InfoCarrotProps) => (
-  <>
-    <Image src={carrotSrc} alt={imageAlt} />
-    {title.length > 0 && <h2 className="text-3xl md:text-5xl leading-tight  font-medium">{title}</h2>}
-    <div className="flex flex-row items-center justify-center my-4">
-      <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">{description}</p>
-    </div>
-  </>
-);
-
-export const CarrotContainer: FC<PropsWithChildren> = ({ children }) => (
-  <div className="flex flex-col justify-center items-center my-16">
-    <div className="w-full sm:w-fit text-center flex flex-col justify-center items-center">{children}</div>
-  </div>
-);
