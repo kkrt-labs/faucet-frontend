@@ -2,7 +2,7 @@
 
 > The fast, native Sepolia Testnet faucet to kickstart your journey in the Kakarot ecosystem.
 
-checkout the current deployment ✨ [faucet](https://faucet-staging.kakarot.org/) ✨
+checkout the current deployment ✨ [faucet](https://sepolia-faucet.kakarot.org/) ✨
 
 `faucet` gets you test tokens to build apps on the Kakarot Testnet!
 <div align="center">
