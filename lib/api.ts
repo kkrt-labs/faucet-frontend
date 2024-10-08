@@ -7,11 +7,14 @@ import {
   FaucetJobResponse,
   FaucetResponse,
   FaucetStatsResponse,
+  GenerateImageResponse,
   IsDowntimeResponse,
+  IsEligibleResponse,
   IsValidInviteResponse,
   IsWhitelistedResponse,
   RedeemInviteJobResponse,
   RedeemInviteResponse,
+  ToggleEligibilityResponse,
 } from "./types";
 import { redirectToRateLimit } from "@/lib/utils";
 
@@ -46,8 +49,14 @@ export const API = {
     isDowntime: (): Promise<IsDowntimeResponse> => requests.get("/isDowntime"),
     isWhitelisted: (address: string): Promise<IsWhitelistedResponse> =>
       requests.get(`/isWhitelisted?address=${address}`),
+    generateImage: (address: string): Promise<GenerateImageResponse> =>
+      requests.get(`/generateImage?address=${address}`),
   },
   invite: {
+    isEligible: (walletAddress: string): Promise<IsEligibleResponse> =>
+      requests.get(`/isEligible?walletAddress=${walletAddress}`),
+    toggleEligibility: (walletAddress: string): Promise<ToggleEligibilityResponse> =>
+      requests.post(`/toggleEligibility`, { walletAddress }),
     isValid: (inviteCode: string): Promise<IsValidInviteResponse> =>
       requests.get(`/isValidInviteCode?inviteCode=${inviteCode}`),
     redeemCode: (inviteCode: string, address: string): Promise<RedeemInviteResponse> =>
