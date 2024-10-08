@@ -56,3 +56,23 @@ export interface IsDowntimeResponse {
 }
 
 export type Denomination = "eth" | "usdc" | "usdt";
+
+export interface IsEligibleResponse {
+  isEligible: boolean;
+  proof?: string[];
+}
+
+export interface ToggleEligibilityResponse {
+  walletAddress: string;
+  isEligible: boolean;
+}
+
+export interface GenerateImageResponse {
+  image: {
+    created: number;
+    data: {
+      revised_prompt: string;
+      url: string;
+    }[];
+  };
+}
