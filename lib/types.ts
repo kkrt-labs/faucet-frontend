@@ -68,11 +68,11 @@ export interface ToggleEligibilityResponse {
 }
 
 export interface GenerateImageResponse {
-  image: {
-    created: number;
-    data: {
-      revised_prompt: string;
-      url: string;
-    }[];
+  imageUrl: string;
+  description: string;
+  walletProperties: {
+    coin_balance_category: string;
+    token_count_category: string;
+    tx_count_category: string;
   };
 }
