@@ -53,10 +53,8 @@ export default function RootLayout({
           <Provider>
             <LinkBanner />
             <Navbar />
-            <div className="px-4 sm:px-20 mt-auto">
-              {children}
-              <Footer />
-            </div>
+            <div className="px-4 sm:px-20 my-auto overflow-x-hidden">{children}</div>
+            <Footer />
           </Provider>
           <Analytics />
         </body>
