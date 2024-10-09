@@ -55,14 +55,26 @@ const SpiritKarrot = () => {
   const mintKarrot = async () => {
     if (!wallet || !captchaCode) return;
 
-    const provider = new ethers.providers.JsonRpcProvider("https://sepolia-rpc.kakarot.org");
-    const signer = await provider.getSigner(wallet.address);
-    const contract = new ethers.Contract(KAKAROT_CONTRACT_ADDRESS, contractAbi.abi, signer);
+    const contract = getContract({
+      client,
+      address: KAKAROT_CONTRACT_ADDRESS,
+      chain: KAKAROT_SEPOLIA,
+    });
 
-    const tx = await contract.mint(proof);
-    console.log(tx, "tx");
-    const receipt = await tx.wait();
-    console.log(receipt, "receipt");
+    console.log(proof, contract);
+    const transaction = prepareContractCall({
+      contract,
+      method: "function mint(bytes32[] calldata _merkleProof)",
+      params: proof as any,
+    });
+    console.log(transaction);
+
+    const result = await sendTransaction({
+      transaction,
+      account: wallet,
+    });
+
+    console.log(result);
 
     setMintingProgress("generating");
 
