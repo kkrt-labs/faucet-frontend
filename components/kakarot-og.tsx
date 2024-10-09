@@ -51,7 +51,8 @@ function KakarotOG() {
               <DialogTitle>⚠️ Are you sure?</DialogTitle>
               <DialogDescription>
                 <p>
-                  You only have the chance to meet your Spirit Karrot once. It will disappear if you don't do it now.
+                  You only have the chance to meet your Spirit Karrot once. It will disappear if you don&apos;t do it
+                  now.
                 </p>
                 <div className="flex flex-row w-full space-x-2 mt-4">
                   <Link href={"/faucet"} className="w-full">
