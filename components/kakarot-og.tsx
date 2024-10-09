@@ -61,7 +61,7 @@ function KakarotOG() {
                   </Link>
                   <Link href={"/spirit-karrot"} className="w-full">
                     <Button variant="main" className="w-full">
-                      Okay then, let's meet!
+                      Okay then, let&apos;s meet!
                     </Button>
                   </Link>
                 </div>
