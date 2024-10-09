@@ -56,13 +56,14 @@ const SpiritKarrot = () => {
 
   const generateTweet = (karrotName: string, imageURI: string) => {
     return `🧑‍🌾 I'm a @KakarotZKEVM OG, and this is ${karrotName}, the Spirit Karrot that tells the story of my journey on Kakarot Testnet, now in its final mile before mainnet.
-💧 Get the drip and join me on Kakarot Starknet Sepolia`;
+💧 Get the drip and join me on Kakarot Starknet Sepolia
+`;
   };
 
   const generateIntent = (tweet: string, imageUrl: string) => {
     return `https://x.com/intent/post?text=${encodeURIComponent(
       tweet
-    )}&url=https://localhost:3001/api/?ipfsUrl=${imageUrl}`;
+    )}&url=https://sepolia-faucet.kakarot.org/api/?ipfsUrl=${imageUrl}`;
   };
 
   const handleMintTransaction = async () => {
@@ -104,9 +105,10 @@ const SpiritKarrot = () => {
       const tweet = generateTweet(karrotName, uris);
       const intent = generateIntent(tweet, uris);
       window.open(intent);
-      redirect("/faucet");
+      window.location.reload();
     } catch (error) {
       toast.error("An error occurred while minting. Please try again.");
+      setIsMinting(false);
     }
   };
 
@@ -147,6 +149,7 @@ const SpiritKarrot = () => {
       console.error("Error minting Karrot:", error);
       toast.error("An error occurred during the minting process. Please try again.");
       setMintingProgress("not-started");
+      setIsMinting(false);
     }
   };
 
