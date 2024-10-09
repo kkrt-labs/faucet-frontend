@@ -8,7 +8,9 @@ import { useState } from "react";
 
 import { getContract, prepareContractCall, sendTransaction } from "thirdweb";
 
-import { KAKAROT_SEPOLIA } from "@/lib/thirdweb-client";
+import { client, KAKAROT_SEPOLIA } from "@/lib/thirdweb-client";
+import contractAbi from "@/public/contracts/AirdropNFTABI.json";
+import { ethers } from "ethers";
 
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useGenerateImage } from "@/mutations/useGenerateImage";
@@ -37,7 +39,7 @@ const SpiritKarrot = () => {
 
   const queryClient = useQueryClient();
   const proof: string[] | undefined = queryClient.getQueryData(["isEligible", wallet?.address]);
-  const image = !spiritKarrot ? "/assets/carrot-limit.svg" : spiritKarrot?.image.data[0].url ?? "";
+  const image = !spiritKarrot ? "/assets/kakarot-og.png" : spiritKarrot?.image.data[0].url ?? "";
 
   const onTurnstileSuccess = (captchaCode: string) => {
     setCaptchaCode(captchaCode);
@@ -51,27 +53,17 @@ const SpiritKarrot = () => {
   };
 
   const mintKarrot = async () => {
-    // const contract = getContract({
-    //   client,
-    //   address: KAKAROT_CONTRACT_ADDRESS,
-    //   chain: KAKAROT_SEPOLIA,
-    // });
-
-    // console.log(proof, contract);
-    // const transaction = prepareContractCall({
-    //   contract,
-    //   method: "function mint(bytes32[] calldata _merkleProof)",
-    //   params: proof as any,
-    // });
-    // console.log(transaction);
-
-    // const result = await sendTransaction({
-    //   transaction,
-    //   account: wallet,
-    // });
-
-    // console.log(result);
     if (!wallet || !captchaCode) return;
+
+    const provider = new ethers.providers.JsonRpcProvider("https://sepolia-rpc.kakarot.org");
+    const signer = await provider.getSigner(wallet.address);
+    const contract = new ethers.Contract(KAKAROT_CONTRACT_ADDRESS, contractAbi.abi, signer);
+
+    const tx = await contract.mint(proof);
+    console.log(tx, "tx");
+    const receipt = await tx.wait();
+    console.log(receipt, "receipt");
+
     setMintingProgress("generating");
 
     generateImage(
