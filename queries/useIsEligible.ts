@@ -5,6 +5,7 @@ const useIsEligible = (address: string) => {
   return useQuery({
     queryKey: ["useIsEligible"],
     queryFn: () => API.invite.isEligible(address),
+    enabled: !!address,
   });
 };
 
