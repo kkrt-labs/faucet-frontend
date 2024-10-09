@@ -130,7 +130,7 @@ export default function Faucet() {
     }
   }, [faucetJob, isError]);
 
-  if (isFaucetLoading) return <SkeletonLoader />;
+  // if (isFaucetLoading) return <SkeletonLoader />;
   if (!wallet || !activeWallets) redirect("/");
 
   return (
