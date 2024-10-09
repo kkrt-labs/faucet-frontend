@@ -24,10 +24,12 @@ function KakarotOG() {
     <main className="flex flex-col items-center text-center my-20 h-full">
       <h1 className="scroll-m-20 text-4xl font-medium tracking-tight lg:text-[52px]">
         {" "}
-        Woo-hoo, welcome back <br /> OG Kakarot Farmer!
+        Welcome back &#59;&#41;
+        <br /> Kakarot OG Farmer!
       </h1>
-      <p className="leading-7 [&:not(:first-child)]:mt-6 text-foreground">
-        Welcome back OG Kakarot Farmer! Our testnet was reset, but your Spirit Karrot will live on forever.
+      <p className="leading-7 [&:not(:first-child)]:mt-6 text-foreground max-w-lg">
+        Good to see you again, farmer. Testnet has moved to Starknet Sepolia, but your Spirit Karrot will live on
+        forever.
       </p>
 
       <div className="max-w-7xl">
@@ -46,9 +48,11 @@ function KakarotOG() {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>⚠️ Are you absolutely sure?</DialogTitle>
+              <DialogTitle>⚠️ Are you sure?</DialogTitle>
               <DialogDescription>
-                <p>Warning: OG Kakarot farmers can only meet their spirit Karrot once.</p>
+                <p>
+                  You only have the chance to meet your Spirit Karrot once. It will disappear if you don't do it now.
+                </p>
                 <div className="flex flex-row w-full space-x-2 mt-4">
                   <Link href={"/faucet"} className="w-full">
                     <Button
