@@ -18,7 +18,7 @@ export async function GET(request: Request) {
   const cid = ipfsUrl.split("/")[2];
 
   const IPFS_URL = `https://dweb.link/ipfs/${cid}/0`;
-  const BASE_URL = "http://localhost:3001";
+  const BASE_URL = "https://sepolia-faucet.kakarot.org/";
 
   return new ImageResponse(
     (
