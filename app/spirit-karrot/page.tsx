@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Confetti from "react-confetti";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getContract, prepareContractCall, sendTransaction } from "thirdweb";
 import { client, KAKAROT_SEPOLIA } from "@/lib/thirdweb-client";
 import { useWindowSize } from "@/hooks/useWindowSize";
@@ -22,6 +22,7 @@ import { redirect } from "next/navigation";
 import { upload } from "thirdweb/storage";
 import { MediaRenderer, useWalletBalance } from "thirdweb/react";
 import { useToggleEligibility } from "@/mutations/useToggleEligibility";
+import { useFaucetJob } from "@/queries/useFaucetJob";
 
 type MintState = "completed" | "pending" | "generating" | "not-started";
 
@@ -36,6 +37,8 @@ const SpiritKarrot = () => {
   const { mutate: generateImage, data: spiritKarrot, isPending: isSpiritKarrotLoading } = useGenerateImage();
   const { mutate: claimFunds, isPending: isClaimingFunds } = useClaimFunds();
   const { mutate: toggleEligibility } = useToggleEligibility();
+  const [jobId, setJobId] = useState<string | null>(null);
+  const { data: faucetJob, isError } = useFaucetJob(jobId ?? "");
   const { data: walletBalance } = useWalletBalance({
     chain: KAKAROT_SEPOLIA,
     address: wallet?.address as string,
@@ -119,8 +122,8 @@ const SpiritKarrot = () => {
       { walletAddress: wallet.address, captchaCode, denomination: "eth" },
       {
         onSuccess: () => {
-          toast.success("Claimed ETH, minting now ...");
-          handleMintTransaction();
+          toast.info("Claiming some ETH to cover gas fees...");
+          setJobId(faucetJob?.[0]?.job_id ?? null);
         },
         onError: (error) => {
           console.error("Error claiming funds, check if you have enough mainnet ETH!", error);
@@ -139,7 +142,7 @@ const SpiritKarrot = () => {
       // Check if user needs to claim funds
       setIsMinting(true);
       const balance = Number(walletBalance?.displayValue);
-      const dripAmount = 0.05;
+      const dripAmount = 0.001;
       if (balance < dripAmount) {
         handleClaim();
       } else {
@@ -173,6 +176,19 @@ const SpiritKarrot = () => {
       }
     );
   };
+
+  useEffect(() => {
+    if (faucetJob?.[0]?.status === "completed") {
+      toast.success("Claimed ETH, minting now ...");
+      handleMintTransaction();
+    }
+  }, [faucetJob]);
+
+  useEffect(() => {
+    if (isError || faucetJob?.[0]?.status === "error") {
+      toast.error("An error occurred while claiming funds. Check if you have enough mainnet ETH. Then try again!");
+    }
+  }, [isError]);
 
   return (
     <div className="flex flex-col justify-center items-center w-full py-16 px-3 rounded-md">
@@ -217,7 +233,7 @@ const HeaderSection = ({ mintStatus, karrotName }: { mintStatus: MintState; karr
 const KarrotImage = ({ image, mintStatus }: { image: string; mintStatus: MintState }) => (
   <div className="grid items-start justify-center mt-12">
     <div className="relative group">
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-[#5585f1] via-[#eba1f9] to-[#9192f8] rounded-md blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-[#5585f1] via-[#eba1f9] to-[#9192f8] rounded-md blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt max-h-[350px]"></div>
       <MediaRenderer
         width="400px"
         height="400px"

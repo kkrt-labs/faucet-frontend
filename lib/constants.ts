@@ -49,7 +49,7 @@ const FAUCET_URL = "https://faucet-sepolia.kakarot.org";
 const INTENT = `https://x.com/intent/post?text=${encodeURIComponent(TWEET_TEXT)}&url=${FAUCET_URL}`;
 const KKRT_EXPLORER = "https://sepolia.kakarotscan.org";
 const KKRT_RPC_DETAILS = "https://thirdweb.com/kakarot-sepolia";
-const KAKAROT_CONTRACT_ADDRESS = "0xbaeF5a0Accf3D08DE3E0374D96C98f7cb855CE1b";
+const KAKAROT_CONTRACT_ADDRESS = "0x9d20E9c53e8d3887B40f34866021445fD48d03Fc";
 
 export {
   ENV,
