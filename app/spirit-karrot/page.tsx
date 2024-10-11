@@ -107,8 +107,7 @@ const SpiritKarrot = () => {
 
       const tweet = generateTweet(karrotName, uris);
       const intent = generateIntent(tweet, uris);
-      window.open(intent);
-      window.location.reload();
+      window.open(intent, "_blank");
     } catch (error) {
       toast.error("An error occurred while minting. Please try again.");
       setIsMinting(false);
