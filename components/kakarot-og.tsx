@@ -22,7 +22,7 @@ function KakarotOG() {
   const { mutate: toggleEligibility } = useToggleEligibility();
   return (
     <main className="flex flex-col items-center text-center my-20 h-full">
-      <h1 className="scroll-m-20 text-4xl font-medium tracking-tight lg:text-[52px]">
+      <h1 className="scroll-m-20 text-3xl md:text-4xl font-medium tracking-tight md:leading-[3rem] lg:text-[52px]">
         {" "}
         Welcome back &#59;&#41;
         <br /> Kakarot OG Farmer!

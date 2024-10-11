@@ -123,8 +123,8 @@ const SpiritKarrot = () => {
           handleMintTransaction();
         },
         onError: (error) => {
-          console.error("Error claiming funds:", error);
-          toast.error("An error occurred while claiming funds. Please try again.");
+          console.error("Error claiming funds, check if you have enough mainnet ETH!", error);
+          toast.error("An error occurred while claiming funds. Check if you have enough mainnet ETH. Then try again!");
           setMintingProgress("not-started");
           setKarrotDescription("");
         },
