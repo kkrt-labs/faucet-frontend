@@ -39,4 +39,12 @@ export const recommendedWallets = [
   createWallet("org.uniswap"),
 ];
 
-export const KAKAROT_SEPOLIA = defineChain(1802203764);
+export const KAKAROT_SEPOLIA = defineChain({
+  id: 920637907288165,
+  name: "Kakarot Starknet Sepolia",
+  rpcUrls: {
+    public: { http: ["https://sepolia-rpc.kakarot.org"] },
+    default: { http: ["https://sepolia-rpc.kakarot.org"] },
+  },
+  nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
+});
