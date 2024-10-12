@@ -7,10 +7,11 @@ import { KakarotOG } from "@/components/kakarot-og";
 import { useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { SkeletonLoading } from "@/components/skeleton-loading";
 
 export default function Home() {
-  const { wallet, activeWallets } = useFaucet();
-  const { data: isEligible } = useIsEligible(wallet?.address ?? "");
+  const { wallet, activeWallets, isFaucetLoading } = useFaucet();
+  const { data: isEligible, isLoading: isEligibleLoading } = useIsEligible(wallet?.address ?? "");
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -19,7 +20,7 @@ export default function Home() {
     }
   }, [isEligible, wallet?.address, queryClient]);
 
-  // if (isFaucetLoading || isEligibleLoading) return <SkeletonLoading />;
+  if (isEligibleLoading || isFaucetLoading) return <SkeletonLoading />;
   // if (wallet && activeWallets && !isEligible?.isEligible) redirect("/faucet");
   if (isEligible?.isEligible) return <KakarotOG />;
 

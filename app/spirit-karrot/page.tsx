@@ -32,13 +32,15 @@ const SpiritKarrot = () => {
   const [karrotDescription, setKarrotDescription] = useState<string>("");
   const [captchaCode, setCaptchaCode] = useState<string | null>(null);
   const [mintingProgress, setMintingProgress] = useState<MintState>("not-started");
+  const [canShareOnX, setCanShareOnX] = useState(false);
+  const [shareUri, setShareUri] = useState<string>("");
   const [isMinting, setIsMinting] = useState(false);
   const { width: windowWidth } = useWindowSize();
   const { mutate: generateImage, data: spiritKarrot, isPending: isSpiritKarrotLoading } = useGenerateImage();
   const { mutate: claimFunds, isPending: isClaimingFunds } = useClaimFunds();
   const { mutate: toggleEligibility } = useToggleEligibility();
-  const [jobId, setJobId] = useState<string | null>(null);
-  const { data: faucetJob, isError } = useFaucetJob(jobId ?? "");
+  const [jobId, setJobId] = useState<string>("");
+  const { data: faucetJob, isError } = useFaucetJob(jobId);
   const { data: walletBalance } = useWalletBalance({
     chain: KAKAROT_SEPOLIA,
     address: wallet?.address as string,
@@ -58,9 +60,8 @@ const SpiritKarrot = () => {
   };
 
   const generateTweet = (karrotName: string, imageURI: string) => {
-    return `🧑‍🌾 I'm a @KakarotZKEVM OG, and this is ${karrotName}, the Spirit Karrot that tells the story of my journey on Kakarot Testnet, now in its final mile before mainnet.
-💧 Get the drip and join me on Kakarot Starknet Sepolia
-`;
+    return `🧑‍🌾 I'm a @KakarotZKEVM OG, and this is ${karrotName}, the Spirit Karrot that tells the story of my journey on Kakarot Testnet, now in its final mile before mainnet.\n
+💧 Get the drip and join me on Kakarot Starknet Sepolia\n`;
   };
 
   const generateIntent = (tweet: string, imageUrl: string) => {
@@ -94,6 +95,7 @@ const SpiritKarrot = () => {
         contract,
         method: "function mint(bytes32[] calldata _merkleProof, string memory _tokenUri)",
         params: [proof, uris] as any,
+        maxFeePerBlobGas: BigInt(10000000000000),
       });
 
       const result = await sendTransaction({
@@ -101,14 +103,15 @@ const SpiritKarrot = () => {
         account: wallet,
       });
 
+      console.log(result.transactionHash);
+
       toggleEligibility({ walletAddress: wallet.address });
       toast.success("Minted successfully!");
       setIsMinting(false);
-
-      const tweet = generateTweet(karrotName, uris);
-      const intent = generateIntent(tweet, uris);
-      window.open(intent, "_blank");
+      setShareUri(uris);
+      setCanShareOnX(true);
     } catch (error) {
+      console.error("Error minting Karrot:", error);
       toast.error("An error occurred while minting. Please try again.");
       setIsMinting(false);
     }
@@ -120,9 +123,9 @@ const SpiritKarrot = () => {
     claimFunds(
       { walletAddress: wallet.address, captchaCode, denomination: "eth" },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
           toast.info("Claiming some ETH to cover gas fees...");
-          setJobId(faucetJob?.[0]?.job_id ?? null);
+          setJobId(data.jobID);
         },
         onError: (error) => {
           console.error("Error claiming funds, check if you have enough mainnet ETH!", error);
@@ -186,8 +189,10 @@ const SpiritKarrot = () => {
   useEffect(() => {
     if (isError || faucetJob?.[0]?.status === "error") {
       toast.error("An error occurred while claiming funds. Check if you have enough mainnet ETH. Then try again!");
+      setMintingProgress("not-started");
+      setIsMinting(false);
     }
-  }, [isError]);
+  }, [isError, faucetJob]);
 
   return (
     <div className="flex flex-col justify-center items-center w-full py-16 px-3 rounded-md">
@@ -210,6 +215,8 @@ const SpiritKarrot = () => {
         minting={isMinting}
         mintingProgress={mintingProgress}
         onMintClick={generateSpiritKarrot}
+        intent={generateIntent(generateTweet(karrotName, shareUri), shareUri)}
+        canShareOnX={canShareOnX}
         isDisabled={isClaimingFunds || isSpiritKarrotLoading || !captchaCode}
       />
     </div>
@@ -251,12 +258,16 @@ const ActionButton = ({
   isDisabled,
   mintKarrot,
   minting,
+  intent,
+  canShareOnX,
 }: {
   mintingProgress: MintState;
   onMintClick: () => void;
   isDisabled: boolean;
   mintKarrot: () => void;
   minting: boolean;
+  intent: string;
+  canShareOnX: boolean;
 }) => {
   switch (mintingProgress) {
     case "not-started":
@@ -281,17 +292,25 @@ const ActionButton = ({
     case "completed":
       return (
         <div className="flex w-full space-x-3  max-w-[400px]">
-          {/* <Link rel="noopener noreferrer" target="_blank" href={INTENT} className="w-full"> */}
-          <Button
-            variant="outline"
-            className="mt-4 w-full gap-1 !bg-black !text-white"
-            onClick={mintKarrot}
-            disabled={minting}
-          >
-            <span>Share on</span>
-            <Image src={xIcon} alt="minting" width={20} height={20} priority />
-            to mint this NFT
-          </Button>
+          {canShareOnX ? (
+            <Link rel="noopener noreferrer" target="_blank" href={intent} className="w-full">
+              <Button variant="outline" className="mt-4 w-full gap-1 !bg-black !text-white" disabled={minting}>
+                <span>Share on</span>
+                <Image src={xIcon} alt="minting" width={20} height={20} priority />
+              </Button>
+            </Link>
+          ) : (
+            <Button
+              variant="outline"
+              className="mt-4 w-full gap-1 !bg-black !text-white"
+              onClick={mintKarrot}
+              disabled={minting}
+            >
+              <span>Mint NFT to share on </span>
+              <Image src={xIcon} alt="minting" width={20} height={20} priority />
+            </Button>
+          )}
+
           {/* </Link> */}
           <Link href={"/faucet"} className="w-full">
             <Button variant="outline" className="mt-4 w-full text-[#878794] gap-1">
