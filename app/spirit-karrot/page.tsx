@@ -3,8 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import Confetti from "react-confetti";
-import { useEffect, useState } from "react";
-import { getContract, prepareContractCall, sendTransaction } from "thirdweb";
+import { useEffect, useMemo, useState } from "react";
+import { getContract, prepareContractCall, sendTransaction, waitForReceipt } from "thirdweb";
 import { client, KAKAROT_SEPOLIA } from "@/lib/thirdweb-client";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useGenerateImage } from "@/mutations/useGenerateImage";
@@ -23,8 +23,117 @@ import { upload } from "thirdweb/storage";
 import { MediaRenderer, useWalletBalance } from "thirdweb/react";
 import { useToggleEligibility } from "@/mutations/useToggleEligibility";
 import { useFaucetJob } from "@/queries/useFaucetJob";
+import { abi as AirdropNFTABI } from "@/lib/nftAirdropABI";
+import React, { useCallback } from 'react';
 
 type MintState = "completed" | "pending" | "generating" | "not-started";
+
+const generateTweet = (karrotName: string, imageURI: string) => {
+  console.log("imageURI", imageURI);
+  return `🧑‍🌾 I'm a @KakarotZKEVM OG, and this is ${karrotName}, the Spirit Karrot that tells the story of my journey on Kakarot Testnet, now in its final mile before mainnet. 💧 Get the drip and join me on Kakarot Starknet Sepolia`;
+};
+
+const generateIntent = (tweet: string, imageUrl: string) => {
+  console.log("imageUrl", imageUrl);
+  return `https://x.com/intent/post?text=${encodeURIComponent(
+    tweet
+  )}&url=${encodeURIComponent(`https://sepolia-faucet.kakarot.org/api/spirit-karrot?ipfsUrl=${imageUrl}`)}`;
+};
+
+const MeetKarrotButton: React.FC<{ onClick: () => void; isDisabled: boolean }> = ({ onClick, isDisabled }) => (
+  <Button
+    variant="main"
+    className="mt-4 md:mt-8 w-full max-w-[400px]"
+    onClick={onClick}
+    disabled={isDisabled}
+  >
+    Meet the Karrot
+  </Button>
+);
+
+const CreatingKarrotButton: React.FC = () => (
+  <Button variant="outline" className="mt-4 w-full max-w-[400px] text-[#878794] pointer-events-none">
+    <Image src={mintingIcon} alt="minting" width={24} height={24} priority className="w-[30px] h-6 mr-3" />
+    <span>Kreating your Karrot</span>
+  </Button>
+);
+
+const ShareOnXButton: React.FC<{ href: string; disabled: boolean }> = ({ href, disabled }) => (
+  <Link rel="noopener noreferrer" target="_blank" href={href} className="w-full">
+    <Button variant="outline" className="mt-4 w-full gap-1 !bg-black !text-white" disabled={disabled}>
+      <span>Share on</span>
+      <Image src={xIcon} alt="X icon" width={20} height={20} priority />
+    </Button>
+  </Link>
+);
+
+const MintNFTButton: React.FC<{ onClick: () => void; disabled: boolean }> = ({ onClick, disabled }) => (
+  <Button
+    variant="outline"
+    className="mt-4 w-full gap-1 !bg-black !text-white"
+    onClick={onClick}
+    disabled={disabled}
+  >
+    <span>Mint NFT to share on </span>
+    <Image src={xIcon} alt="X icon" width={20} height={20} priority />
+  </Button>
+);
+
+const GoToFaucetButton: React.FC = () => (
+  <Link href="/faucet" className="w-full">
+    <Button variant="outline" className="mt-4 w-full text-[#878794] gap-1">
+      <span>Go To Faucet</span>
+      <Image src={linkIcon} alt="link icon" width={20} height={20} priority />
+    </Button>
+  </Link>
+);
+
+const ActionButton: React.FC<{
+  mintingProgress: MintState;
+  onMintClick: () => void;
+  isDisabled: boolean;
+  mintKarrot: () => void;
+  minting: boolean;
+  intent: string;
+  canShareOnX: boolean;
+}> = ({
+  mintingProgress,
+  onMintClick,
+  isDisabled,
+  mintKarrot,
+  minting,
+  intent,
+  canShareOnX,
+}) => {
+  const handleMintClick = useCallback(() => {
+    onMintClick();
+  }, [onMintClick]);
+
+  const handleMintKarrot = useCallback(() => {
+    mintKarrot();
+  }, [mintKarrot]);
+
+  switch (mintingProgress) {
+    case "not-started":
+      return <MeetKarrotButton onClick={handleMintClick} isDisabled={isDisabled} />;
+    case "generating":
+    case "pending":
+      return <CreatingKarrotButton />;
+    case "completed":
+      return (
+        <div className="flex w-full space-x-3 max-w-[400px]">
+          {canShareOnX && intent ? (
+            <ShareOnXButton href={intent} disabled={minting} />
+          ) : (
+            <MintNFTButton onClick={handleMintKarrot} disabled={minting} />
+          )}
+          <GoToFaucetButton />
+        </div>
+      );
+    default:
+      return null;
+  }
+};
 
 const SpiritKarrot = () => {
   const { wallet } = useFaucet();
@@ -34,6 +143,7 @@ const SpiritKarrot = () => {
   const [mintingProgress, setMintingProgress] = useState<MintState>("not-started");
   const [canShareOnX, setCanShareOnX] = useState(false);
   const [shareUri, setShareUri] = useState<string>("");
+  const [imageIPFSUrl, setImageIPFSUrl] = useState<string>("");
   const [isMinting, setIsMinting] = useState(false);
   const { width: windowWidth } = useWindowSize();
   const { mutate: generateImage, data: spiritKarrot, isPending: isSpiritKarrotLoading } = useGenerateImage();
@@ -59,16 +169,8 @@ const SpiritKarrot = () => {
     setCaptchaCode(captchaCode);
   };
 
-  const generateTweet = (karrotName: string, imageURI: string) => {
-    return `🧑‍🌾 I'm a @KakarotZKEVM OG, and this is ${karrotName}, the Spirit Karrot that tells the story of my journey on Kakarot Testnet, now in its final mile before mainnet.\n
-💧 Get the drip and join me on Kakarot Starknet Sepolia\n`;
-  };
-
-  const generateIntent = (tweet: string, imageUrl: string) => {
-    return `https://x.com/intent/post?text=${encodeURIComponent(
-      tweet
-    )}&url=https://sepolia-faucet.kakarot.org/api/?ipfsUrl=${imageUrl}`;
-  };
+  const tweet = useMemo(() => generateTweet(karrotName, shareUri), [karrotName, shareUri]);
+const intent = useMemo(() => generateIntent(tweet, shareUri), [tweet, shareUri]);
 
   const handleMintTransaction = async () => {
     if (!wallet || !proof || !spiritKarrot) return;
@@ -85,10 +187,13 @@ const SpiritKarrot = () => {
         ],
       });
 
+      setShareUri(spiritKarrot.imageUrl);
+
       const contract = getContract({
         client,
         address: KAKAROT_CONTRACT_ADDRESS,
         chain: KAKAROT_SEPOLIA,
+        abi: AirdropNFTABI as any,
       });
 
       const transaction = prepareContractCall({
@@ -96,6 +201,7 @@ const SpiritKarrot = () => {
         method: "function mint(bytes32[] calldata _merkleProof, string memory _tokenUri)",
         params: [proof, uris] as any,
         maxFeePerBlobGas: BigInt(10000000000000),
+        gas: BigInt(1000000),
       });
 
       const result = await sendTransaction({
@@ -103,13 +209,24 @@ const SpiritKarrot = () => {
         account: wallet,
       });
 
-      console.log(result.transactionHash);
+      console.log("transaction", result);
+      console.log("transaction hash", result.transactionHash);
 
-      toggleEligibility({ walletAddress: wallet.address });
-      toast.success("Minted successfully!");
-      setIsMinting(false);
-      setShareUri(uris);
-      setCanShareOnX(true);
+      const receipt = await waitForReceipt({
+        client,
+        chain: KAKAROT_SEPOLIA,
+        transactionHash: result.transactionHash,
+      });
+
+      if (receipt.status === "success") {
+        toggleEligibility({ walletAddress: wallet.address });
+        toast.success("Minted successfully!");
+        setIsMinting(false);
+        setShareUri(spiritKarrot.imageUrl); // Make sure this is set to a valid URL
+        setCanShareOnX(true); // Only set this to true after setShareUri
+      } else {
+        throw new Error("Transaction failed");
+      }
     } catch (error) {
       console.error("Error minting Karrot:", error);
       toast.error("An error occurred while minting. Please try again.");
@@ -211,13 +328,13 @@ const SpiritKarrot = () => {
       )}
 
       <ActionButton
-        mintKarrot={mintKarrot}
-        minting={isMinting}
         mintingProgress={mintingProgress}
         onMintClick={generateSpiritKarrot}
-        intent={generateIntent(generateTweet(karrotName, shareUri), shareUri)}
-        canShareOnX={canShareOnX}
         isDisabled={isClaimingFunds || isSpiritKarrotLoading || !captchaCode}
+        mintKarrot={mintKarrot}
+        minting={isMinting}
+        intent={intent}
+        canShareOnX={canShareOnX}
       />
     </div>
   );
@@ -251,76 +368,5 @@ const KarrotImage = ({ image, mintStatus }: { image: string; mintStatus: MintSta
     </div>
   </div>
 );
-
-const ActionButton = ({
-  mintingProgress,
-  onMintClick,
-  isDisabled,
-  mintKarrot,
-  minting,
-  intent,
-  canShareOnX,
-}: {
-  mintingProgress: MintState;
-  onMintClick: () => void;
-  isDisabled: boolean;
-  mintKarrot: () => void;
-  minting: boolean;
-  intent: string;
-  canShareOnX: boolean;
-}) => {
-  switch (mintingProgress) {
-    case "not-started":
-      return (
-        <Button
-          variant="main"
-          className="mt-4 md:mt-8 w-full max-w-[400px]"
-          onClick={onMintClick}
-          disabled={isDisabled}
-        >
-          Meet the Karrot
-        </Button>
-      );
-    case "generating":
-    case "pending":
-      return (
-        <Button variant="outline" className="mt-4 w-full max-w-[400px] text-[#878794] pointer-events-none">
-          <Image src={mintingIcon} alt="minting" width={24} height={24} priority className="w-[30px] h-6 mr-3" />
-          <span>Kreating your Karrot</span>
-        </Button>
-      );
-    case "completed":
-      return (
-        <div className="flex w-full space-x-3  max-w-[400px]">
-          {canShareOnX ? (
-            <Link rel="noopener noreferrer" target="_blank" href={intent} className="w-full">
-              <Button variant="outline" className="mt-4 w-full gap-1 !bg-black !text-white" disabled={minting}>
-                <span>Share on</span>
-                <Image src={xIcon} alt="minting" width={20} height={20} priority />
-              </Button>
-            </Link>
-          ) : (
-            <Button
-              variant="outline"
-              className="mt-4 w-full gap-1 !bg-black !text-white"
-              onClick={mintKarrot}
-              disabled={minting}
-            >
-              <span>Mint NFT to share on </span>
-              <Image src={xIcon} alt="minting" width={20} height={20} priority />
-            </Button>
-          )}
-
-          {/* </Link> */}
-          <Link href={"/faucet"} className="w-full">
-            <Button variant="outline" className="mt-4 w-full text-[#878794] gap-1">
-              <span>Go To Faucet</span>
-              <Image src={linkIcon} alt="minting" width={20} height={20} priority />
-            </Button>
-          </Link>
-        </div>
-      );
-  }
-};
 
 export default SpiritKarrot;
