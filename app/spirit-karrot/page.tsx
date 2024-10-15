@@ -23,30 +23,23 @@ import { upload } from "thirdweb/storage";
 import { MediaRenderer, useWalletBalance } from "thirdweb/react";
 import { useToggleEligibility } from "@/mutations/useToggleEligibility";
 import { useFaucetJob } from "@/queries/useFaucetJob";
-import { abi as AirdropNFTABI } from "@/lib/nftAirdropABI";
-import React, { useCallback } from 'react';
+import { abi as AirdropNFTABI } from "@/public/contracts/nftAirdropABI";
+import React, { useCallback } from "react";
 
 type MintState = "completed" | "pending" | "generating" | "not-started";
 
-const generateTweet = (karrotName: string, imageURI: string) => {
-  console.log("imageURI", imageURI);
-  return `🧑‍🌾 I'm a @KakarotZKEVM OG, and this is ${karrotName}, the Spirit Karrot that tells the story of my journey on Kakarot Testnet, now in its final mile before mainnet. 💧 Get the drip and join me on Kakarot Starknet Sepolia`;
-};
+const generateTweet = (karrotName: string, imageURI: string) =>
+  `🧑‍🌾 I'm a @KakarotZKEVM OG, and this is ${karrotName}, the Spirit Karrot that tells the story of my journey on Kakarot Testnet, now in its final mile before mainnet.
 
-const generateIntent = (tweet: string, imageUrl: string) => {
-  console.log("imageUrl", imageUrl);
-  return `https://x.com/intent/post?text=${encodeURIComponent(
-    tweet
-  )}&url=${encodeURIComponent(`https://sepolia-faucet.kakarot.org/api/spirit-karrot?ipfsUrl=${imageUrl}`)}`;
-};
+💧 Get the drip and join me on Kakarot Starknet Sepolia\n`;
+
+const generateIntent = (tweet: string, imageUrl: string) =>
+  `https://x.com/intent/post?text=${encodeURIComponent(tweet)}&url=${encodeURIComponent(
+    `https://sepolia-faucet.kakarot.org/api/spirit-karrot?ipfsUrl=${imageUrl}`
+  )}`;
 
 const MeetKarrotButton: React.FC<{ onClick: () => void; isDisabled: boolean }> = ({ onClick, isDisabled }) => (
-  <Button
-    variant="main"
-    className="mt-4 md:mt-8 w-full max-w-[400px]"
-    onClick={onClick}
-    disabled={isDisabled}
-  >
+  <Button variant="main" className="mt-4 md:mt-8 w-full max-w-[400px]" onClick={onClick} disabled={isDisabled}>
     Meet the Karrot
   </Button>
 );
@@ -68,12 +61,7 @@ const ShareOnXButton: React.FC<{ href: string; disabled: boolean }> = ({ href, d
 );
 
 const MintNFTButton: React.FC<{ onClick: () => void; disabled: boolean }> = ({ onClick, disabled }) => (
-  <Button
-    variant="outline"
-    className="mt-4 w-full gap-1 !bg-black !text-white"
-    onClick={onClick}
-    disabled={disabled}
-  >
+  <Button variant="outline" className="mt-4 w-full gap-1 !bg-black !text-white" onClick={onClick} disabled={disabled}>
     <span>Mint NFT to share on </span>
     <Image src={xIcon} alt="X icon" width={20} height={20} priority />
   </Button>
@@ -96,15 +84,7 @@ const ActionButton: React.FC<{
   minting: boolean;
   intent: string;
   canShareOnX: boolean;
-}> = ({
-  mintingProgress,
-  onMintClick,
-  isDisabled,
-  mintKarrot,
-  minting,
-  intent,
-  canShareOnX,
-}) => {
+}> = ({ mintingProgress, onMintClick, isDisabled, mintKarrot, minting, intent, canShareOnX }) => {
   const handleMintClick = useCallback(() => {
     onMintClick();
   }, [onMintClick]);
@@ -170,7 +150,7 @@ const SpiritKarrot = () => {
   };
 
   const tweet = useMemo(() => generateTweet(karrotName, shareUri), [karrotName, shareUri]);
-const intent = useMemo(() => generateIntent(tweet, shareUri), [tweet, shareUri]);
+  const intent = useMemo(() => generateIntent(tweet, shareUri), [tweet, shareUri]);
 
   const handleMintTransaction = async () => {
     if (!wallet || !proof || !spiritKarrot) return;
@@ -208,9 +188,6 @@ const intent = useMemo(() => generateIntent(tweet, shareUri), [tweet, shareUri])
         transaction,
         account: wallet,
       });
-
-      console.log("transaction", result);
-      console.log("transaction hash", result.transactionHash);
 
       const receipt = await waitForReceipt({
         client,

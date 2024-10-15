@@ -4,7 +4,7 @@ import { useFaucet } from "@/hooks/useFaucet";
 import { ConnectWallet } from "@/components/connect-wallet";
 import { useIsEligible } from "@/queries/useIsEligible";
 import { KakarotOG } from "@/components/kakarot-og";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SkeletonLoading } from "@/components/skeleton-loading";
@@ -14,8 +14,19 @@ export default function Home() {
   const { data: isEligible, isLoading: isEligibleLoading } = useIsEligible(wallet?.address ?? "");
   const queryClient = useQueryClient();
 
-  const isToggledOff = localStorage.getItem(`toggleEligibility/${wallet?.address}`) === "false";
-  const isEligibleCheck = isToggledOff ? false : isEligible?.isEligible;
+  const [isToggledOff, setIsToggledOff] = useState(false);
+  const [isEligibleCheck, setIsEligibleCheck] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && wallet?.address) {
+      const storedValue = localStorage.getItem(`toggleEligibility/${wallet.address}`);
+      setIsToggledOff(storedValue === "false");
+    }
+  }, [wallet?.address]);
+
+  useEffect(() => {
+    setIsEligibleCheck(isToggledOff ? false : isEligible?.isEligible ?? false);
+  }, [isToggledOff, isEligible?.isEligible]);
 
   useEffect(() => {
     if (isEligibleCheck && isEligible) {
@@ -26,8 +37,8 @@ export default function Home() {
   }, [isEligible, wallet?.address, queryClient]);
 
   if (isEligibleLoading || isFaucetLoading) return <SkeletonLoading />;
-  // if (wallet && activeWallets && !isEligible?.isEligible) redirect("/faucet");
   if (isEligibleCheck) return <KakarotOG />;
+  // if (wallet && activeWallets && !isEligible?.isEligible) redirect("/faucet");
 
   return (
     <main className="flex flex-col items-center text-center my-20 h-full">

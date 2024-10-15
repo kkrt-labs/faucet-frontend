@@ -2,6 +2,14 @@ import { ImageResponse } from "next/og";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
+  const userAgent = request.headers.get("User-Agent") || "";
+  const isSocialMediaBot = /facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegram/i.test(userAgent);
+
+  if (!isSocialMediaBot) {
+    // Redirect to the main app if it's not a social media bot
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
   const { searchParams } = new URL(request.url);
   const ipfsUrl = searchParams.get("ipfsUrl");
 
@@ -11,8 +19,7 @@ export async function GET(request: Request) {
   const cid = ipfsUrl.split("/")[2];
 
   const IPFS_URL = `https://dweb.link/ipfs/${cid}/0`;
-  const BASE_URL = "https://sepolia-faucet.kakarot.org";
-  console.log("IPFS_URL", IPFS_URL);
+  const BASE_URL = new URL(request.url).origin;
 
   // Fetch the background image
   let backgroundImageData;
@@ -20,7 +27,6 @@ export async function GET(request: Request) {
     const backgroundImageResponse = await fetch(`${BASE_URL}/assets/spirit-og-base.png`);
     backgroundImageData = await backgroundImageResponse.arrayBuffer();
   } catch (error) {
-    console.error("Error fetching background image:", error);
     return new Response("Error fetching background image", { status: 500 });
   }
 
@@ -30,7 +36,6 @@ export async function GET(request: Request) {
     const ipfsImageResponse = await fetch(IPFS_URL);
     ipfsImageData = await ipfsImageResponse.arrayBuffer();
   } catch (error) {
-    console.error("Error fetching IPFS image:", error);
     return new Response("Error fetching IPFS image", { status: 500 });
   }
 
@@ -41,7 +46,7 @@ export async function GET(request: Request) {
           display: "flex",
           width: "100%",
           height: "100%",
-          backgroundImage: `url(data:image/png;base64,${Buffer.from(backgroundImageData).toString('base64')})`,
+          backgroundImage: `url(data:image/png;base64,${Buffer.from(backgroundImageData).toString("base64")})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -66,16 +71,7 @@ export async function GET(request: Request) {
             marginRight: "80px",
           }}
         >
-          <img
-            src={`data:image/png;base64,${Buffer.from(ipfsImageData).toString('base64')}`}
-            style={{
-              maxWidth: "100%",
-              maxHeight: "100%",
-              objectFit: "contain",
-              width: "400px",
-              height: "400px",
-            }}
-          />
+          <img src={`data:image/png;base64,${Buffer.from(ipfsImageData).toString("base64")}`} />
         </div>
       </div>
     ),
