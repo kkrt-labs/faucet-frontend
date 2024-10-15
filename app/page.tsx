@@ -14,15 +14,20 @@ export default function Home() {
   const { data: isEligible, isLoading: isEligibleLoading } = useIsEligible(wallet?.address ?? "");
   const queryClient = useQueryClient();
 
+  const isToggledOff = localStorage.getItem(`toggleEligibility/${wallet?.address}`) === "false";
+  const isEligibleCheck = isToggledOff ? false : isEligible?.isEligible;
+
   useEffect(() => {
-    if (isEligible) {
+    if (isEligibleCheck && isEligible) {
       queryClient.setQueryData(["isEligible", wallet?.address], isEligible.proof);
+    } else if (isToggledOff) {
+      queryClient.setQueryData(["isEligible", wallet?.address], false);
     }
   }, [isEligible, wallet?.address, queryClient]);
 
   if (isEligibleLoading || isFaucetLoading) return <SkeletonLoading />;
   // if (wallet && activeWallets && !isEligible?.isEligible) redirect("/faucet");
-  if (isEligible?.isEligible) return <KakarotOG />;
+  if (isEligibleCheck) return <KakarotOG />;
 
   return (
     <main className="flex flex-col items-center text-center my-20 h-full">
