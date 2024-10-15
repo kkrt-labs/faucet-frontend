@@ -55,8 +55,10 @@ export const API = {
   invite: {
     isEligible: (walletAddress: string): Promise<IsEligibleResponse> =>
       requests.get(`/isEligible?walletAddress=${walletAddress}`),
-    toggleEligibility: (walletAddress: string): Promise<ToggleEligibilityResponse> =>
-      requests.post(`/toggleEligibility`, { walletAddress }),
+    toggleEligibility: (walletAddress: string): Promise<ToggleEligibilityResponse> => {
+      localStorage.setItem(`toggleEligibility/${walletAddress}`, "false");
+      return requests.post(`/toggleEligibility`, { walletAddress });
+    },
     isValid: (inviteCode: string): Promise<IsValidInviteResponse> =>
       requests.get(`/isValidInviteCode?inviteCode=${inviteCode}`),
     redeemCode: (inviteCode: string, address: string): Promise<RedeemInviteResponse> =>

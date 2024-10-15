@@ -9,6 +9,7 @@ export async function GET(request: Request) {
     // Redirect to the main app if it's not a social media bot
     return NextResponse.redirect(new URL("/", request.url));
   }
+
   const { searchParams } = new URL(request.url);
   const ipfsUrl = searchParams.get("ipfsUrl");
 
@@ -18,7 +19,25 @@ export async function GET(request: Request) {
   const cid = ipfsUrl.split("/")[2];
 
   const IPFS_URL = `https://dweb.link/ipfs/${cid}/0`;
-  const BASE_URL = "https://sepolia-faucet.kakarot.org/";
+  const BASE_URL = new URL(request.url).origin;
+
+  // Fetch the background image
+  let backgroundImageData;
+  try {
+    const backgroundImageResponse = await fetch(`${BASE_URL}/assets/spirit-og-base.png`);
+    backgroundImageData = await backgroundImageResponse.arrayBuffer();
+  } catch (error) {
+    return new Response("Error fetching background image", { status: 500 });
+  }
+
+  // Fetch the IPFS image
+  let ipfsImageData;
+  try {
+    const ipfsImageResponse = await fetch(IPFS_URL);
+    ipfsImageData = await ipfsImageResponse.arrayBuffer();
+  } catch (error) {
+    return new Response("Error fetching IPFS image", { status: 500 });
+  }
 
   return new ImageResponse(
     (
@@ -27,7 +46,7 @@ export async function GET(request: Request) {
           display: "flex",
           width: "100%",
           height: "100%",
-          backgroundImage: `url("${BASE_URL}/assets/spirit-og-base.png")`,
+          backgroundImage: `url(data:image/png;base64,${Buffer.from(backgroundImageData).toString("base64")})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -52,14 +71,7 @@ export async function GET(request: Request) {
             marginRight: "80px",
           }}
         >
-          <img
-            src={IPFS_URL || "https://placeholder.com/400x400"}
-            style={{
-              maxWidth: "100%",
-              maxHeight: "100%",
-              objectFit: "contain",
-            }}
-          />
+          <img src={`data:image/png;base64,${Buffer.from(ipfsImageData).toString("base64")}`} />
         </div>
       </div>
     ),
