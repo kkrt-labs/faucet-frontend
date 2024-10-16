@@ -15,7 +15,6 @@ export default function Home() {
   const queryClient = useQueryClient();
 
   const [isToggledOff, setIsToggledOff] = useState(false);
-  const [isEligibleCheck, setIsEligibleCheck] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined" && wallet?.address) {
@@ -24,17 +23,17 @@ export default function Home() {
     }
   }, [wallet?.address]);
 
-  useEffect(() => {
-    setIsEligibleCheck(isToggledOff ? false : isEligible?.isEligible ?? false);
-  }, [isToggledOff, isEligible?.isEligible]);
+  const isEligibleCheck = !isToggledOff && isEligible?.isEligible;
 
   useEffect(() => {
-    if (isEligibleCheck && isEligible) {
-      queryClient.setQueryData(["isEligible", wallet?.address], isEligible.proof);
-    } else if (isToggledOff) {
-      queryClient.setQueryData(["isEligible", wallet?.address], false);
+    if (wallet?.address) {
+      if (isEligibleCheck && isEligible?.proof) {
+        queryClient.setQueryData(["isEligible", wallet.address], isEligible.proof);
+      } else if (isToggledOff) {
+        queryClient.setQueryData(["isEligible", wallet.address], false);
+      }
     }
-  }, [isEligible, wallet?.address, queryClient]);
+  }, [isEligibleCheck, isEligible, wallet?.address, queryClient, isToggledOff]);
 
   if (isEligibleLoading || isFaucetLoading) return <SkeletonLoading />;
   if (isEligibleCheck) return <KakarotOG />;
