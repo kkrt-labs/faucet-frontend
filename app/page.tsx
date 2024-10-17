@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SkeletonLoading } from "@/components/skeleton-loading";
+import { DUMMY_PROOF } from "@/lib/whitelisted";
+import { WHITELISTED_ADDRESSES } from "@/lib/whitelisted";
 
 export default function Home() {
   const { wallet, activeWallets, isFaucetLoading } = useFaucet();
@@ -31,6 +33,8 @@ export default function Home() {
         queryClient.setQueryData(["isEligible", wallet.address], isEligible.proof);
       } else if (isToggledOff) {
         queryClient.setQueryData(["isEligible", wallet.address], false);
+      } else if (WHITELISTED_ADDRESSES.includes(wallet.address)) {
+        queryClient.setQueryData(["isEligible", wallet.address], DUMMY_PROOF);
       }
     }
   }, [isEligibleCheck, isEligible, wallet?.address, queryClient, isToggledOff]);
