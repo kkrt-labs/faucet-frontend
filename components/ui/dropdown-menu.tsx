@@ -63,10 +63,12 @@ const DropdownMenuContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        "z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md",
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        "z-50 min-w-[10rem] overflow-hidden rounded-lg border bg-[#FFF4E0]",
+        "p-2 shadow-xl transition-transform duration-300 ease-out",
+        "data-[state=open]:scale-100 data-[state=closed]:scale-95 data-[state=closed]:opacity-0 data-[state=open]:opacity-100",
         className
       )}
+      style={{ transformOrigin: "var(--radix-dropdown-menu-content-transform-origin)" }}
       {...props}
     />
   </DropdownMenuPrimitive.Portal>
@@ -75,15 +77,17 @@ DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;
 
 const DropdownMenuItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
-    inset?: boolean;
-  }
->(({ className, inset, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>
+>(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors  data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      inset && "pl-8",
+      "relative flex cursor-pointer select-none items-center rounded-md px-3 py-2 text-sm",
+      "bg-[#FFF4E0] hover:bg-[#FF8C42] text-[#2C2C2C] hover:text-white",
+      "transition-all duration-200 ease-in-out transform hover:scale-105",
+      "focus:outline-none focus:z-10 hover:z-10",
+      "hover:shadow-lg hover:shadow-[#FF7602]/30",
+      "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className
     )}
     {...props}
@@ -94,11 +98,16 @@ DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
 const DropdownMenuCheckboxItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.CheckboxItem>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>
->(({ className, children, checked, ...props }, ref) => (
+>(({ className, checked, children, ...props }, ref) => (
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
     className={cn(
-      "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "relative flex cursor-pointer select-none items-center rounded-md px-3 py-2 text-sm",
+      "bg-[#FFF4E0] hover:bg-[#FF8C42] text-[#2C2C2C] hover:text-white",
+      "transition-all duration-200 ease-in-out transform hover:scale-105",
+      "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FF7602]",
+      "hover:shadow-lg hover:shadow-[#FF7602]/30",
+      "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className
     )}
     checked={checked}
@@ -106,7 +115,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
   >
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
-        <CheckIcon className="h-4 w-4" />
+        <CheckIcon className="h-4 w-4 text-[#FF7602]" />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}
