@@ -76,3 +76,12 @@ export interface GenerateImageResponse {
     tx_count_category: string;
   };
 }
+
+export interface SpiritKarrotResponse {
+  name: string;
+  fullName: string;
+  description: string;
+  imageUrl: string;
+  isEligible: boolean;
+  proof: string[];
+}

@@ -14,6 +14,7 @@ import {
   IsWhitelistedResponse,
   RedeemInviteJobResponse,
   RedeemInviteResponse,
+  SpiritKarrotResponse,
   ToggleEligibilityResponse,
 } from "./types";
 import { redirectToRateLimit } from "@/lib/utils";
@@ -51,14 +52,14 @@ export const API = {
       requests.get(`/isWhitelisted?address=${address}`),
     generateImage: (address: string): Promise<GenerateImageResponse> =>
       requests.get(`/generateImage?address=${address}`),
+    spiritKarrot: (walletAddress: string): Promise<SpiritKarrotResponse> =>
+      requests.get(`/spiritKarrot?walletAddress=${walletAddress}`),
   },
   invite: {
     isEligible: (walletAddress: string): Promise<IsEligibleResponse> =>
       requests.get(`/isEligible?walletAddress=${walletAddress}`),
-    toggleEligibility: (walletAddress: string): Promise<ToggleEligibilityResponse> => {
-      localStorage.setItem(`toggleEligibility/${walletAddress}`, "false");
-      return requests.post(`/toggleEligibility`, { walletAddress });
-    },
+    toggleEligibility: (walletAddress: string): Promise<ToggleEligibilityResponse> =>
+      requests.post(`/toggleEligibility`, { walletAddress, isEligible: false }),
     isValid: (inviteCode: string): Promise<IsValidInviteResponse> =>
       requests.get(`/isValidInviteCode?inviteCode=${inviteCode}`),
     redeemCode: (inviteCode: string, address: string): Promise<RedeemInviteResponse> =>
