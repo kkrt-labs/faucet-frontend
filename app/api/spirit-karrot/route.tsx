@@ -2,23 +2,20 @@ import { ImageResponse } from "next/og";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  const userAgent = request.headers.get("User-Agent") || "";
-  const isSocialMediaBot = /facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegram/i.test(userAgent);
+  // const userAgent = request.headers.get("User-Agent") || "";
+  // const isSocialMediaBot = /facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegram/i.test(userAgent);
 
-  if (!isSocialMediaBot) {
-    // Redirect to the main app if it's not a social media bot
-    return NextResponse.redirect(new URL("/", request.url));
-  }
+  // if (!isSocialMediaBot) {
+  //   // Redirect to the main app if it's not a social media bot
+  //   return NextResponse.redirect(new URL("/", request.url));
+  // }
 
   const { searchParams } = new URL(request.url);
-  const ipfsUrl = searchParams.get("ipfsUrl");
+  const karrotName = searchParams.get("karrot");
 
-  if (!ipfsUrl) {
+  if (!karrotName) {
     return new Response("No IPFS URL provided", { status: 400 });
   }
-  const cid = ipfsUrl.split("/")[2];
-
-  const IPFS_URL = `https://dweb.link/ipfs/${cid}/0`;
   const BASE_URL = new URL(request.url).origin;
 
   // Fetch the background image
@@ -30,13 +27,13 @@ export async function GET(request: Request) {
     return new Response("Error fetching background image", { status: 500 });
   }
 
-  // Fetch the IPFS image
-  let ipfsImageData;
+  // Fetch the Karrot image
+  let karrotImageData;
   try {
-    const ipfsImageResponse = await fetch(IPFS_URL);
-    ipfsImageData = await ipfsImageResponse.arrayBuffer();
+    const karrotImageResponse = await fetch(`${BASE_URL}/assets/spirit-karrots/${karrotName}.png`);
+    karrotImageData = await karrotImageResponse.arrayBuffer();
   } catch (error) {
-    return new Response("Error fetching IPFS image", { status: 500 });
+    return new Response("Error fetching Karrot image", { status: 500 });
   }
 
   return new ImageResponse(
@@ -71,7 +68,7 @@ export async function GET(request: Request) {
             marginRight: "80px",
           }}
         >
-          <img src={`data:image/png;base64,${Buffer.from(ipfsImageData).toString("base64")}`} />
+          <img src={`data:image/png;base64,${Buffer.from(karrotImageData).toString("base64")}`} />
         </div>
       </div>
     ),
