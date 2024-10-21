@@ -10,24 +10,26 @@ import { SkeletonLoading } from "@/components/skeleton-loading";
 import { useSpiritKarrot } from "@/queries/useSpiritKarrot";
 import { Account, Wallet } from "thirdweb/wallets";
 
+type ProgressState = "loading" | "eligible" | "not-eligible";
+
 export default function Home() {
   const { wallet, activeWallets } = useFaucet();
   const { data: spiritKarrot, isLoading: isSpiritKarrotLoading, isError } = useSpiritKarrot(wallet?.address ?? "");
-  const [progress, setProgress] = useState<"not-started" | "is-eligible" | "not-eligible">("not-started");
+  const [progress, setProgress] = useState<ProgressState>("loading");
 
   useEffect(() => {
-    if (!wallet || !spiritKarrot) return;
-
-    if (spiritKarrot?.isEligible && !isError) {
-      setProgress("is-eligible");
+    if (isSpiritKarrotLoading) {
+      setProgress("loading");
+    } else if (spiritKarrot?.isEligible && !isError) {
+      setProgress("eligible");
     } else {
       setProgress("not-eligible");
     }
-  }, [wallet, activeWallets, isSpiritKarrotLoading, spiritKarrot]);
+  }, [isSpiritKarrotLoading, spiritKarrot, isError]);
 
-  if (progress === "is-eligible") return <KakarotOG />;
-  else if (progress === "not-eligible") return <GoToWallet wallet={wallet} activeWallets={activeWallets} />;
-  return <SkeletonLoading />;
+  if (progress === "loading") return <SkeletonLoading />;
+  if (progress === "eligible") return <KakarotOG />;
+  return <GoToWallet wallet={wallet} activeWallets={activeWallets} />;
 }
 
 interface GoToWalletProps {

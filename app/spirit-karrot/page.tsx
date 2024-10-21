@@ -198,7 +198,7 @@ const SpiritKarrot = () => {
             : "It represents all the activity you had on our older testnet. "}
         </p>
       </div>
-      <div className="grid items-start justify-center mt-12 max-w-[400px] max-w-[320px]">
+      <div className="grid items-start justify-center mt-12 max-h-[400px] max-w-[320px]">
         <div className="relative group">
           <div className="absolute inset-0 bg-gradient-to-r from-[#5585f1] via-[#eba1f9] to-[#9192f8] rounded-md blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt" />
           <MediaRenderer
@@ -222,7 +222,7 @@ const SpiritKarrot = () => {
           onClick={mintKarrot}
           disabled={!wallet || !captchaCode || !spiritKarrot}
         >
-          Kreate your Karrot
+          Mint your Karrot
         </Button>
       )}
 
