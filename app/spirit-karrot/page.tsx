@@ -211,9 +211,10 @@ const SpiritKarrot = () => {
           />
         </div>
       </div>
-      {mintingProgress === "completed" && (
-        <p className="text-center text-sm text-[#878794] max-w-[400px] mt-4">{spiritKarrot?.description}</p>
-      )}
+
+      <p className="text-center text-sm text-[#878794] max-w-[400px] mt-4">
+        {mintingProgress === "completed" ? spiritKarrot?.description : "Your Karrot gets revealed after the mint"}
+      </p>
 
       {mintingProgress === "not-started" && (
         <Button
