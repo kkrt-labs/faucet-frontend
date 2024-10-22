@@ -27,7 +27,7 @@ export default function Home() {
     }
   }, [isSpiritKarrotLoading, spiritKarrot, isError]);
 
-  if (progress === "loading") return <SkeletonLoading />;
+  // if (progress === "loading") return <SkeletonLoading />;
   if (progress === "eligible") return <KakarotOG />;
   return <GoToWallet wallet={wallet} activeWallets={activeWallets} />;
 }

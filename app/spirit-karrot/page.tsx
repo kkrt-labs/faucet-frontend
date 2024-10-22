@@ -54,9 +54,11 @@ const SpiritKarrot = () => {
 
 💧 Get the drip and join me on Kakarot Starknet Sepolia\n`;
 
+  const BASE_URL = new URL(window.location.href).origin;
+
   const generateIntent = () =>
     `https://x.com/intent/post?text=${encodeURIComponent(generateTweet())}&url=${encodeURIComponent(
-      `https://sepolia-faucet.kakarot.org/api/spirit-karrot?karrot=${spiritKarrot?.name}`
+      `${BASE_URL}/api/spirit-karrot?karrot=${spiritKarrot?.name}`
     )}`;
 
   const handleMintTransaction = async () => {
@@ -120,7 +122,7 @@ const SpiritKarrot = () => {
     if (!wallet?.address || !captchaCode) return;
 
     claimFunds(
-      { walletAddress: wallet.address, captchaCode, denomination: "eth" },
+      { walletAddress: wallet.address, captchaCode, denomination: "eth", isSpiritClaim: true },
       {
         onSuccess: (data) => {
           toast.info("Claiming some ETH to cover gas fees...");
@@ -156,7 +158,7 @@ const SpiritKarrot = () => {
 
   useEffect(() => {
     setMintingProgress("not-started");
-  }, [wallet]);
+  }, [wallet?.address]);
 
   useEffect(() => {
     if (spiritKarrot?.isEligible !== true && !isSpiritKarrotLoading) {
@@ -168,7 +170,9 @@ const SpiritKarrot = () => {
   useEffect(() => {
     if (faucetJob?.[0]?.status === "completed") {
       toast.success("Claimed ETH, minting now ...");
-      handleMintTransaction();
+      setTimeout(() => {
+        handleMintTransaction();
+      }, 15 * 1000);
     }
   }, [faucetJob]);
 
@@ -179,13 +183,10 @@ const SpiritKarrot = () => {
     }
   }, [isError, faucetJob]);
 
+  const showTurnstile = !wallet || !captchaCode || !spiritKarrot;
+
   return (
     <div className="flex flex-col justify-center items-center w-full py-16 px-3 rounded-md">
-      <Turnstile
-        siteKey={ENV.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-        onSuccess={onTurnstileSuccess}
-        options={{ size: "invisible" }}
-      />
       <Confetti colors={CONFETTI_COLORS} run={runConfetti} numberOfPieces={800} recycle={false} width={windowWidth} />
 
       <div className="flex flex-col justify-center items-center text-center max-w-xl">
@@ -215,13 +216,18 @@ const SpiritKarrot = () => {
       <p className="text-center text-sm text-[#878794] max-w-[400px] mt-4">
         {mintingProgress === "completed" ? spiritKarrot?.description : "Your Karrot gets revealed after the mint"}
       </p>
+      <Turnstile
+        siteKey={ENV.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+        onSuccess={onTurnstileSuccess}
+        options={{ size: showTurnstile ? "normal" : "invisible" }}
+      />
 
       {mintingProgress === "not-started" && (
         <Button
           variant="main"
           className="mt-4 md:mt-8 w-full max-w-[400px]"
           onClick={mintKarrot}
-          disabled={!wallet || !captchaCode || !spiritKarrot}
+          disabled={showTurnstile}
         >
           Mint your Karrot
         </Button>
