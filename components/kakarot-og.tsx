@@ -25,7 +25,6 @@ function KakarotOG() {
       <h1 className="scroll-m-20 text-3xl md:text-4xl font-medium tracking-tight md:leading-[3rem] lg:text-[52px]">
         {" "}
         Welcome back &#59;&#41;
-        <br /> Kakarot OG Farmer!
       </h1>
       <p className="leading-7 [&:not(:first-child)]:mt-6 text-foreground max-w-lg">
         Good to see you again, farmer. Testnet has moved to Starknet Sepolia, but your Spirit Karrot will live on

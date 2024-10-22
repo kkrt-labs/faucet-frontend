@@ -190,17 +190,17 @@ const SpiritKarrot = () => {
 
       <div className="flex flex-col justify-center items-center text-center max-w-xl">
         <h1 className="scroll-m-20 text-3xl md:text-4xl font-medium tracking-tight md:leading-[3rem] lg:text-[52px]">
-          {mintingProgress === "completed" ? `${spiritKarrot?.fullName} 🥕` : "Time to meet your Spirit Karrot 🥕"}
+          {mintingProgress === "completed" ? `${spiritKarrot?.fullName} 🥕` : "Meet your Spirit Karrot 🥕"}
         </h1>
         <p className="leading-7 [&:not(:first-child)]:mt-6  text-[#878794]">
           {mintingProgress === "completed"
-            ? "Welcome to Kakarot Starknet Sepolia! 🎉"
-            : "It represents all the activity you had on our older testnet. "}
+            ? "Meet your Spirit Karrot!"
+            : "It embodies your activity on the previous version of our testnet"}
         </p>
       </div>
       <div className="grid items-start justify-center mt-12 max-h-[400px] max-w-[320px]">
         <div className="relative group">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#5585f1] via-[#eba1f9] to-[#9192f8] rounded-md blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt" />
+          <div className="absolute inset-0 bg-gradient-to-r from-kkrtOrange  to-[#0DAB0D] rounded-md blur opacity-85 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt" />
           <MediaRenderer
             src={mintingProgress === "completed" ? spiritKarrot?.imageUrl : "/assets/kakarot-og.png"}
             client={client}
