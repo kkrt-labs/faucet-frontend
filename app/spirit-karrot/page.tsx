@@ -43,10 +43,13 @@ const SpiritKarrot = () => {
   const [runConfetti, setRunConfetti] = useState(false);
 
   const [mintingProgress, setMintingProgress] = useState<MintState>("not-started");
+  const [baseUrl, setBaseUrl] = useState<string>("");
+  const [showTurnstile, setShowTurnstile] = useState<boolean>(true);
   const { mutate: toggleEligibility } = useToggleEligibility();
 
   const onTurnstileSuccess = (captchaCode: string) => {
     setCaptchaCode(captchaCode);
+    setTimeout(() => setShowTurnstile(false), 1000);
   };
 
   const generateTweet = () =>
@@ -54,11 +57,14 @@ const SpiritKarrot = () => {
 
 💧 Get the drip and join me on Kakarot Starknet Sepolia\n`;
 
-  const BASE_URL = new URL(window.location.href).origin;
+  useEffect(() => {
+    // Set the base URL only after the component has mounted
+    setBaseUrl(window.location.origin);
+  }, []);
 
   const generateIntent = () =>
     `https://x.com/intent/post?text=${encodeURIComponent(generateTweet())}&url=${encodeURIComponent(
-      `${BASE_URL}/api/spirit-karrot?karrot=${spiritKarrot?.name}`
+      `${baseUrl}/api/spirit-karrot?karrot=${spiritKarrot?.name}`
     )}`;
 
   const handleMintTransaction = async () => {
@@ -183,8 +189,6 @@ const SpiritKarrot = () => {
     }
   }, [isError, faucetJob]);
 
-  const showTurnstile = !wallet || !captchaCode || !spiritKarrot;
-
   return (
     <div className="flex flex-col justify-center items-center w-full py-16 px-3 rounded-md">
       <Confetti colors={CONFETTI_COLORS} run={runConfetti} numberOfPieces={800} recycle={false} width={windowWidth} />
@@ -203,7 +207,7 @@ const SpiritKarrot = () => {
         <div className="relative group">
           <div className="absolute inset-0 bg-gradient-to-r from-kkrtOrange  to-[#0DAB0D] rounded-md blur opacity-85 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt" />
           <MediaRenderer
-            src={mintingProgress === "completed" ? spiritKarrot?.imageUrl : "/assets/kakarot-og.png"}
+            src={mintingProgress === "completed" ? spiritKarrot?.imageUrl : "/assets/og-border.png"}
             client={client}
             width="400px"
             height="400px"
@@ -227,7 +231,7 @@ const SpiritKarrot = () => {
           variant="main"
           className="mt-4 md:mt-8 w-full max-w-[400px]"
           onClick={mintKarrot}
-          disabled={showTurnstile}
+          disabled={!wallet || !captchaCode || !spiritKarrot}
         >
           Mint your Karrot
         </Button>
