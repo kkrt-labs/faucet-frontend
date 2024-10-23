@@ -5,7 +5,7 @@ import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
-const LOCAL_STORAGE_KEY = "discordBotAnnouncement";
+const LOCAL_STORAGE_KEY = "kkrtSepolia";
 
 const LinkBanner = () => {
   const [showBanner, setShowBanner] = useState(false);
