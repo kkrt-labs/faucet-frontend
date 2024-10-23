@@ -20,15 +20,20 @@ import { abi as AirdropNFTABI } from "@/public/contracts/nftAirdropABI";
 import { toast } from "sonner";
 import { useToggleEligibility } from "@/mutations/useToggleEligibility";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import { redirect } from "next/navigation";
 import { useClaimFunds } from "@/mutations/useClaimFunds";
 import { useFaucetJob } from "@/queries/useFaucetJob";
+import { ConnectWallet } from "@/components/connect-wallet";
+import { Skeleton } from "@/components/ui/skeleton";
 
-type MintState = "completed" | "pending" | "generating" | "not-started";
+type MintState = "completed" | "pending" | "generating" | "not-started" | "not-eligible" | "loading";
 
 const SpiritKarrot = () => {
   const { wallet } = useFaucet();
-  const { data: spiritKarrot, isLoading: isSpiritKarrotLoading } = useSpiritKarrot(wallet?.address ?? "");
+  const {
+    data: spiritKarrot,
+    isLoading: isSpiritKarrotLoading,
+    isPending: isSpiritKarrotPending,
+  } = useSpiritKarrot(wallet?.address ?? "");
   const { data: walletBalance } = useWalletBalance({
     chain: KAKAROT_SEPOLIA,
     address: wallet?.address as string,
@@ -42,7 +47,7 @@ const SpiritKarrot = () => {
   const { width: windowWidth } = useWindowSize();
   const [runConfetti, setRunConfetti] = useState(false);
 
-  const [mintingProgress, setMintingProgress] = useState<MintState>("not-started");
+  const [mintingProgress, setMintingProgress] = useState<MintState>("loading");
   const [baseUrl, setBaseUrl] = useState<string>("");
   const [showTurnstile, setShowTurnstile] = useState<boolean>(true);
   const { mutate: toggleEligibility } = useToggleEligibility();
@@ -162,15 +167,19 @@ const SpiritKarrot = () => {
     }
   };
 
-  useEffect(() => {
-    setMintingProgress("not-started");
-  }, [wallet?.address]);
+  // useEffect(() => {
+  //   setMintingProgress("not-started");
+  // }, [wallet?.address]);
+
+  // useEffect(() => {
+  //   if (!spiritKarrot?.isEligible && spiritKarrot?.error) setMintingProgress("not-eligible");
+  //   else if (spiritKarrot?.isEligible !== true && !isSpiritKarrotLoading) setMintingProgress("completed");
+  // }, [spiritKarrot, isSpiritKarrotLoading]);
 
   useEffect(() => {
-    if (spiritKarrot?.isEligible !== true && !isSpiritKarrotLoading) {
-      setMintingProgress("completed");
-    }
-    if (!spiritKarrot && !isSpiritKarrotLoading) redirect("/");
+    if (spiritKarrot?.error) setMintingProgress("not-eligible");
+    else if (spiritKarrot?.isEligible) setMintingProgress("not-started");
+    else if (!spiritKarrot?.error && !spiritKarrot?.isEligible) setMintingProgress("completed");
   }, [spiritKarrot, isSpiritKarrotLoading]);
 
   useEffect(() => {
@@ -189,16 +198,43 @@ const SpiritKarrot = () => {
     }
   }, [isError, faucetJob]);
 
+  if (isSpiritKarrotPending)
+    return (
+      <div className="flex flex-col justify-center items-center w-full py-16 px-3 rounded-md">
+        <Skeleton className="w-2/5 h-14 bg-slate-200 rounded-md" />
+        <Skeleton className="mt-6 w-2/5 h-10 bg-slate-200 rounded-md" />
+
+        <div className="grid items-start justify-center mt-12 max-h-[400px] max-w-[320px]">
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-kkrtOrange  to-[#0DAB0D] rounded-md blur opacity-85 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt" />
+            <Image
+              src={"/assets/og-border.png"}
+              width={400}
+              height={400}
+              className="relative rounded-md leading-none flex items-center divide-x divide-gray-600"
+              alt="Spirit Karrot"
+            />
+          </div>
+        </div>
+      </div>
+    );
+
   return (
     <div className="flex flex-col justify-center items-center w-full py-16 px-3 rounded-md">
       <Confetti colors={CONFETTI_COLORS} run={runConfetti} numberOfPieces={800} recycle={false} width={windowWidth} />
 
       <div className="flex flex-col justify-center items-center text-center max-w-xl">
-        <h1 className="scroll-m-20 text-3xl md:text-4xl font-medium tracking-tight md:leading-[3rem] lg:text-[52px]">
-          {mintingProgress === "completed" ? `${spiritKarrot?.fullName} 🥕` : "Meet your Spirit Karrot 🥕"}
+        <h1 className="scroll-m-20 text-3xl md:text-4xl font-medium tracking-tight md:leading-[3rem] lg:text-[52px] text-nowrap">
+          {mintingProgress === "not-eligible"
+            ? "🧑‍🌾 You are not eligible for a Spirit Karrot"
+            : mintingProgress === "completed"
+            ? `${spiritKarrot?.fullName} 🥕`
+            : "Meet your Spirit Karrot 🥕"}
         </h1>
         <p className="leading-7 [&:not(:first-child)]:mt-6  text-[#878794]">
-          {mintingProgress === "completed"
+          {mintingProgress === "not-eligible"
+            ? "Spirit Karrots are only available to OG farmers"
+            : mintingProgress === "completed"
             ? "Meet your Spirit Karrot!"
             : "It embodies your activity on the previous version of our testnet"}
         </p>
@@ -218,13 +254,25 @@ const SpiritKarrot = () => {
       </div>
 
       <p className="text-center text-sm text-[#878794] max-w-[400px] mt-4">
-        {mintingProgress === "completed" ? spiritKarrot?.description : "Your Karrot gets revealed after the mint"}
+        {mintingProgress !== "not-eligible" && mintingProgress !== "completed"
+          ? "Your Karrot gets revealed after the mint"
+          : spiritKarrot?.description}
       </p>
       <Turnstile
         siteKey={ENV.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
         onSuccess={onTurnstileSuccess}
-        options={{ size: showTurnstile ? "normal" : "invisible" }}
+        options={{ size: showTurnstile && mintingProgress === "not-started" ? "normal" : "invisible" }}
       />
+
+      {!wallet && <ConnectWallet />}
+
+      {mintingProgress === "not-eligible" && wallet && (
+        <Link href={"/faucet"} className="w-full max-w-[400px]">
+          <Button className="w-full  mt-10" variant="main">
+            <span>Back to Faucet</span>
+          </Button>
+        </Link>
+      )}
 
       {mintingProgress === "not-started" && (
         <Button

@@ -8,6 +8,7 @@ import { Footer } from "@/components/mobile-footer";
 import { LinkBanner } from "@/components/notify-banner";
 import { ThirdwebProvider } from "@/lib/thirdweb-provider";
 import { Provider } from "@/lib/query-provider";
+import SpiritKarrotModal from "@/components/spirit-karrot-modal";
 
 export const metadata: Metadata = {
   title: "Kakarot Faucet",
@@ -53,6 +54,7 @@ export default function RootLayout({
           <Provider>
             <LinkBanner />
             <Navbar />
+            <SpiritKarrotModal />
             <div className="px-4 sm:px-20 my-auto overflow-x-hidden">{children}</div>
             <Footer />
           </Provider>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const LOCAL_STORAGE_KEY = "discordBotAnnouncement";
 
@@ -22,16 +23,10 @@ const LinkBanner = () => {
       )}
     >
       <p className="text-white mt-6 lg:mt-0">
-        If you don&apos;t have enough ETH on Ethereum Mainnet, join our Discord server to easily claim your testnet
-        funds through our discord bot!
-        <a
-          rel="noopener noreferrer"
-          target="_blank"
-          href="https://discord.gg/kakarotzkevm"
-          className="text-kkrtOrange ml-1"
-        >
-          Join Discord
-        </a>
+        We are officially on Kakarot Starknet Sepolia! If you&apos;re an OG farmer, claim your
+        <Link rel="noopener noreferrer" target="_blank" href="/spirit-karrot" className="text-kkrtOrange ml-1">
+          Spirit Karrot!
+        </Link>
       </p>
       <button
         className="absolute right-5 top-3"

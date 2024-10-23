@@ -6,7 +6,7 @@ import { ConnectWallet } from "@/components/connect-wallet";
 import { KakarotOG } from "@/components/kakarot-og";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { SkeletonLoading } from "@/components/skeleton-loading";
+
 import { useSpiritKarrot } from "@/queries/useSpiritKarrot";
 import { Account, Wallet } from "thirdweb/wallets";
 
@@ -14,21 +14,7 @@ type ProgressState = "loading" | "eligible" | "not-eligible";
 
 export default function Home() {
   const { wallet, activeWallets } = useFaucet();
-  const { data: spiritKarrot, isLoading: isSpiritKarrotLoading, isError } = useSpiritKarrot(wallet?.address ?? "");
-  const [progress, setProgress] = useState<ProgressState>("loading");
 
-  useEffect(() => {
-    if (isSpiritKarrotLoading) {
-      setProgress("loading");
-    } else if (spiritKarrot?.isEligible && !isError) {
-      setProgress("eligible");
-    } else {
-      setProgress("not-eligible");
-    }
-  }, [isSpiritKarrotLoading, spiritKarrot, isError]);
-
-  if (progress === "loading") return <SkeletonLoading />;
-  if (progress === "eligible") return <KakarotOG />;
   return <GoToWallet wallet={wallet} activeWallets={activeWallets} />;
 }
 

@@ -114,6 +114,12 @@ const DropdownCTA = () => {
             <ArrowUpRight size={16} className="inline-block ml-1 mb-1" />
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuItem className="text-[#003d29] hover:underline hover:text-kkrtOrange">
+          <Link href={"/spirit-karrot"}>
+            Spirit Karrot
+            <ArrowUpRight size={16} className="inline-block ml-1 mb-1" />
+          </Link>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
