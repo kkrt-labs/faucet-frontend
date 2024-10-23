@@ -84,4 +84,5 @@ export interface SpiritKarrotResponse {
   imageUrl: string;
   isEligible: boolean;
   proof: string[];
+  error?: string;
 }
