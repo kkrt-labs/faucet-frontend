@@ -5,7 +5,8 @@ interface FaucetJobParams {
   jobId: string;
 }
 
-const isComplete = (query: any) => query.state.data && query.state.data[0].status === "completed";
+const isComplete = (query: any) =>
+  query.state.data && (query.state.data[0].status === "completed" || query.state.data[0].status === "error");
 
 const useFaucetJob = (jobId: string) => {
   return useQuery({

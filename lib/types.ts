@@ -56,3 +56,33 @@ export interface IsDowntimeResponse {
 }
 
 export type Denomination = "eth" | "usdc" | "usdt";
+
+export interface IsEligibleResponse {
+  isEligible: boolean;
+  proof?: string[];
+}
+
+export interface ToggleEligibilityResponse {
+  walletAddress: string;
+  isEligible: boolean;
+}
+
+export interface GenerateImageResponse {
+  imageUrl: string;
+  description: string;
+  walletProperties: {
+    coin_balance_category: string;
+    token_count_category: string;
+    tx_count_category: string;
+  };
+}
+
+export interface SpiritKarrotResponse {
+  name: string;
+  fullName: string;
+  description: string;
+  imageUrl: string;
+  isEligible: boolean;
+  proof: string[];
+  error?: string;
+}

@@ -7,11 +7,15 @@ import {
   FaucetJobResponse,
   FaucetResponse,
   FaucetStatsResponse,
+  GenerateImageResponse,
   IsDowntimeResponse,
+  IsEligibleResponse,
   IsValidInviteResponse,
   IsWhitelistedResponse,
   RedeemInviteJobResponse,
   RedeemInviteResponse,
+  SpiritKarrotResponse,
+  ToggleEligibilityResponse,
 } from "./types";
 import { redirectToRateLimit } from "@/lib/utils";
 
@@ -46,16 +50,34 @@ export const API = {
     isDowntime: (): Promise<IsDowntimeResponse> => requests.get("/isDowntime"),
     isWhitelisted: (address: string): Promise<IsWhitelistedResponse> =>
       requests.get(`/isWhitelisted?address=${address}`),
+    generateImage: (address: string): Promise<GenerateImageResponse> =>
+      requests.get(`/generateImage?address=${address}`),
+    spiritKarrot: (walletAddress: string): Promise<SpiritKarrotResponse> =>
+      requests.get(`/spiritKarrot?walletAddress=${walletAddress}`),
   },
   invite: {
+    isEligible: (walletAddress: string): Promise<IsEligibleResponse> =>
+      requests.get(`/isEligible?walletAddress=${walletAddress}`),
+    toggleEligibility: (walletAddress: string): Promise<ToggleEligibilityResponse> =>
+      requests.post(`/toggleEligibility`, { walletAddress, isEligible: false }),
     isValid: (inviteCode: string): Promise<IsValidInviteResponse> =>
       requests.get(`/isValidInviteCode?inviteCode=${inviteCode}`),
     redeemCode: (inviteCode: string, address: string): Promise<RedeemInviteResponse> =>
       requests.post(`/redeemInviteCode`, { inviteCode, address }),
   },
   faucet: {
-    claimFunds: (address: string, captcha: string, denomination: Denomination = "eth"): Promise<FaucetResponse> =>
-      requests.post(`/claimFunds`, { to: address, "cf-turnstile-response": captcha, denomination }),
+    claimFunds: (
+      address: string,
+      captcha: string,
+      denomination: Denomination = "eth",
+      isSpiritClaim: boolean = false
+    ): Promise<FaucetResponse> =>
+      requests.post(`/claimFunds`, {
+        to: address,
+        "cf-turnstile-response": captcha,
+        denomination,
+        isSpiritKarrotEligible: isSpiritClaim,
+      }),
     getStats: (address: string): Promise<FaucetStatsResponse> => requests.get(`/stats?address=${address}`),
     getBalance: (): Promise<FaucetBalanceResponse> => requests.get(`/faucetBalance`),
   },

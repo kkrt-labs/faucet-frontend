@@ -6,13 +6,14 @@ interface ClaimFundsParams {
   walletAddress: string;
   captchaCode: string;
   denomination?: Denomination;
+  isSpiritClaim?: boolean;
 }
 
 const useClaimFunds = () => {
   return useMutation({
     mutationKey: ["claimFunds"],
     mutationFn: (params: ClaimFundsParams) =>
-      API.faucet.claimFunds(params.walletAddress, params.captchaCode, params.denomination),
+      API.faucet.claimFunds(params.walletAddress, params.captchaCode, params.denomination, params.isSpiritClaim),
   });
 };
 
