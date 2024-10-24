@@ -167,15 +167,6 @@ const SpiritKarrot = () => {
     }
   };
 
-  // useEffect(() => {
-  //   setMintingProgress("not-started");
-  // }, [wallet?.address]);
-
-  // useEffect(() => {
-  //   if (!spiritKarrot?.isEligible && spiritKarrot?.error) setMintingProgress("not-eligible");
-  //   else if (spiritKarrot?.isEligible !== true && !isSpiritKarrotLoading) setMintingProgress("completed");
-  // }, [spiritKarrot, isSpiritKarrotLoading]);
-
   useEffect(() => {
     if (spiritKarrot?.error) setMintingProgress("not-eligible");
     else if (spiritKarrot?.isEligible) setMintingProgress("not-started");
@@ -236,7 +227,7 @@ const SpiritKarrot = () => {
             ? "Spirit Karrots are only available to OG farmers"
             : mintingProgress === "completed"
             ? "Meet your Spirit Karrot!"
-            : "It embodies your activity on the previous version of our testnet"}
+            : "This Karrot embodies your activity on the previous version of our testnet"}
         </p>
       </div>
       <div className="grid items-start justify-center mt-12 max-h-[400px] max-w-[320px]">
