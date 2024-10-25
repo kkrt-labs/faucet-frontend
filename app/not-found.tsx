@@ -9,7 +9,7 @@ export default function FourOFour() {
       <Image src={image404} alt="404" className="mb-16 mt-10" />
       <TextPair
         heading="Need more testnet ETH?"
-        description="Reach out to us @Kakarot Discord and raise a ticket if you need large amount of testnet ETH."
+        description="Contact us on Discord in the support channel if you need large amount of testnet ETH."
       />
       <Button className="space-x-2 max-w-[120px] mt-6" variant="outline" size="withIcon">
         <span>Reach Out</span>

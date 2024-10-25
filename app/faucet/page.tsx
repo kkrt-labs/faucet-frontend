@@ -180,7 +180,7 @@ export default function Faucet() {
       </div>
       <TextPair
         heading="Need more testnet ETH?"
-        description="Reach out to us on Discord and raise a ticket if you need large amount of testnet ETH."
+        description="Contact us on Discord in the support channel if you need large amount of testnet ETH."
       />
       <Link href="https://discord.gg/kakarotzkevm" rel="noopener noreferrer" target="_blank" className="pb-10">
         <Button className="space-x-2 max-w-[120px] mt-6" variant="outline" size="withIcon">
