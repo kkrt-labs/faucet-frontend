@@ -1,8 +1,6 @@
 import { ImageResponse } from "next/og";
 import { NextResponse } from "next/server";
 
-export const dynamic = "edge";
-
 export async function GET(request: Request) {
   const userAgent = request.headers.get("User-Agent") || "";
   const isSocialMediaBot = /facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegram/i.test(userAgent);
