@@ -2,14 +2,6 @@ import { ImageResponse } from "next/og";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  const userAgent = request.headers.get("User-Agent") || "";
-  const isSocialMediaBot = /facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegram/i.test(userAgent);
-
-  if (!isSocialMediaBot) {
-    // Redirect to the main app if it's not a social media bot
-    return NextResponse.redirect(new URL("/", request.url));
-  }
-
   const { searchParams } = new URL(request.url);
   const karrotName = searchParams.get("karrot");
 
