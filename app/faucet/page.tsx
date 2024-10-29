@@ -82,10 +82,10 @@ export default function Faucet() {
     [faucetStats]
   );
 
-  useEffect(() => {
-    const isRateLimited = localStorage.getItem(RATE_LIMIT_KEY);
-    if (isRateLimited) redirect("/rate-limit");
-  });
+useEffect(() => {
+  const isRateLimited = localStorage.getItem(RATE_LIMIT_KEY);
+  if (isRateLimited) redirect("/rate-limit");
+}, []);
 
   useEffect(() => {
     if (claimJobID) {
