@@ -85,7 +85,7 @@ export default function Faucet() {
   useEffect(() => {
     const isRateLimited = localStorage.getItem(RATE_LIMIT_KEY);
     if (isRateLimited) redirect("/rate-limit");
-  });
+  }, []);
 
   useEffect(() => {
     if (claimJobID) {
