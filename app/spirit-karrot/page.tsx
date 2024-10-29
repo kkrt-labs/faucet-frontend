@@ -69,7 +69,7 @@ const SpiritKarrot = () => {
 
   const generateIntent = () =>
     `https://x.com/intent/post?text=${encodeURIComponent(generateTweet())}&url=${encodeURIComponent(
-      `${baseUrl}/spirit-karrot/${spiritKarrot?.name}`
+      `${baseUrl}/spirit-karrot/${spiritKarrot?.name.toLowerCase()}`
     )}`;
 
   const handleMintTransaction = async () => {
