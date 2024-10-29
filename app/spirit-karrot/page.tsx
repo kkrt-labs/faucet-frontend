@@ -140,7 +140,7 @@ const SpiritKarrot = () => {
           setJobId(data.jobID);
         },
         onError: () => {
-          toast.error("An error occurred while claiming funds. Check if you have enough mainnet ETH. Then try again!");
+          toast.error("Faucet is under a lot of load right now. Wait a bit and try again!");
           setMintingProgress("not-started");
         },
       }

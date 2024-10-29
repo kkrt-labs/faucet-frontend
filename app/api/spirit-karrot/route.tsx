@@ -14,27 +14,9 @@ export async function GET(request: Request) {
   const karrotName = searchParams.get("karrot");
 
   if (!karrotName) {
-    return new Response("No IPFS URL provided", { status: 400 });
+    return new Response("No Karrot provided", { status: 400 });
   }
-  const BASE_URL = new URL(request.url).origin;
-
-  // Fetch the background image
-  let backgroundImageData;
-  try {
-    const backgroundImageResponse = await fetch(`${BASE_URL}/assets/spirit-og-base.png`);
-    backgroundImageData = await backgroundImageResponse.arrayBuffer();
-  } catch (error) {
-    return new Response("Error fetching background image", { status: 500 });
-  }
-
-  // Fetch the Karrot image
-  let karrotImageData;
-  try {
-    const karrotImageResponse = await fetch(`${BASE_URL}/assets/spirit-karrots/${karrotName}.png`);
-    karrotImageData = await karrotImageResponse.arrayBuffer();
-  } catch (error) {
-    return new Response("Error fetching Karrot image", { status: 500 });
-  }
+  const BASE_URL = "https://sepolia-faucet.kakarot.org/";
 
   return new ImageResponse(
     (
@@ -43,7 +25,7 @@ export async function GET(request: Request) {
           display: "flex",
           width: "100%",
           height: "100%",
-          backgroundImage: `url(data:image/png;base64,${Buffer.from(backgroundImageData).toString("base64")})`,
+          backgroundImage: `url("${BASE_URL}/assets/spirit-og-base.png")`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -68,7 +50,7 @@ export async function GET(request: Request) {
             marginRight: "80px",
           }}
         >
-          <img src={`data:image/png;base64,${Buffer.from(karrotImageData).toString("base64")}`} />
+          <img src={`${BASE_URL}/assets/spirit-karrots/${karrotName}.jpeg`} />
         </div>
       </div>
     ),
