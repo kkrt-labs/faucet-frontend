@@ -192,10 +192,21 @@ const SpiritKarrot = () => {
   if (isSpiritKarrotPending)
     return (
       <div className="flex flex-col justify-center items-center w-full py-16 px-3 rounded-md">
-        <Skeleton className="w-2/5 h-14 bg-slate-200 rounded-md" />
-        <Skeleton className="mt-6 w-2/5 h-10 bg-slate-200 rounded-md" />
-
-        <div className="grid items-start justify-center mt-12 max-h-[400px] max-w-[320px]">
+        {wallet ? (
+          <Skeleton className="w-2/5 h-14 bg-slate-200 rounded-md" />
+        ) : (
+          <h1 className="scroll-m-20 text-3xl md:text-4xl font-medium tracking-tight md:leading-[3rem] lg:text-[52px] text-nowrap">
+            Unknown Karrot Detected ⁉️
+          </h1>
+        )}
+        {wallet ? (
+          <Skeleton className="mt-6 w-2/5 h-10 bg-slate-200 rounded-md" />
+        ) : (
+          <p className="leading-7 [&:not(:first-child)]:mt-6  text-[#878794]">
+            You need to connect your wallet to continue
+          </p>
+        )}
+        <div className="grid items-start justify-center mt-12 max-h-[400px] max-w-[320px] mb-10">
           <div className="relative group">
             <div className="absolute inset-0 bg-gradient-to-r from-kkrtOrange  to-[#0DAB0D] rounded-md blur opacity-85 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt" />
             <Image
@@ -207,6 +218,7 @@ const SpiritKarrot = () => {
             />
           </div>
         </div>
+        {!wallet && <ConnectWallet />}
       </div>
     );
 
@@ -254,8 +266,6 @@ const SpiritKarrot = () => {
         onSuccess={onTurnstileSuccess}
         options={{ size: showTurnstile && mintingProgress === "not-started" ? "normal" : "invisible" }}
       />
-
-      {!wallet && <ConnectWallet />}
 
       {mintingProgress === "not-eligible" && wallet && (
         <Link href={"/faucet"} className="w-full max-w-[400px]">
