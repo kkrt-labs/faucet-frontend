@@ -189,6 +189,31 @@ const SpiritKarrot = () => {
     }
   }, [isError, faucetJob]);
 
+  const isDowntime = true; // TODO: remove this when downtime is fixed | set it to false
+  if (isDowntime)
+    return (
+      <div className="flex flex-col justify-center items-center w-full py-16 px-3 rounded-md">
+        <h1 className="scroll-m-20 text-3xl md:text-4xl font-medium tracking-tight md:leading-[3rem] lg:text-[52px] text-nowrap">
+          Uh oh, we are under maintenance!
+        </h1>
+
+        <p className="leading-7 [&:not(:first-child)]:mt-6  text-[#878794]">Please check back in a bit!</p>
+
+        <div className="grid items-start justify-center mt-12 max-h-[400px] max-w-[320px] mb-10">
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-kkrtOrange  to-[#0DAB0D] rounded-md blur opacity-85 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt" />
+            <Image
+              src={"/assets/og-border.png"}
+              width={400}
+              height={400}
+              className="relative rounded-md leading-none flex items-center divide-x divide-gray-600"
+              alt="Spirit Karrot"
+            />
+          </div>
+        </div>
+      </div>
+    );
+
   if (isSpiritKarrotPending)
     return (
       <div className="flex flex-col justify-center items-center w-full py-16 px-3 rounded-md">
