@@ -189,7 +189,7 @@ const SpiritKarrot = () => {
     }
   }, [isError, faucetJob]);
 
-  const isDowntime = true; // TODO: remove this when downtime is fixed | set it to false
+  const isDowntime = false; // TODO: remove this when downtime is fixed | set it to false
   if (isDowntime)
     return (
       <div className="flex flex-col justify-center items-center w-full py-16 px-3 rounded-md">
