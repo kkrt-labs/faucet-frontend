@@ -130,7 +130,7 @@ export default function Faucet() {
     }
   }, [faucetJob, isError]);
 
-  if (isFaucetLoading) return <SkeletonLoader />;
+  // if (isFaucetLoading) return <SkeletonLoader />; // TODO: revert to this when downtime is fixed
   if (!wallet || !activeWallets) redirect("/");
 
   return (
