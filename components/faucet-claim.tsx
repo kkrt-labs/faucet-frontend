@@ -79,7 +79,9 @@ export const FaucetClaim = ({
     setTimeout(() => setShowCloudfare(false), 1000);
   };
 
-  if (isDowntimeCheck?.isDowntime ?? false)
+  const isDowntime = true; // TODO: remove this when downtime is fixed
+  // if (isDowntimeCheck?.isDowntime ?? false) // TODO: revert to this when downtime is fixed
+  if (isDowntime)
     return (
       <CarrotContainer>
         <InfoCarrot
