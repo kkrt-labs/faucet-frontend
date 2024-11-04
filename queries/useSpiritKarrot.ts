@@ -6,7 +6,7 @@ const useSpiritKarrot = (walletAddress: string) => {
     queryKey: ["spiritKarrot", walletAddress],
     queryFn: () => API.general.spiritKarrot(walletAddress),
     enabled: !!walletAddress,
-    refetchInterval: 5000,
+    // refetchInterval: 5000,
   });
 };
 
