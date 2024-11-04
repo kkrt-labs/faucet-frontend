@@ -6,7 +6,6 @@ const useFaucetStats = (address: string) => {
   return useQuery({
     queryKey: ["useFaucetStats"],
     queryFn: () => API.faucet.getStats(address),
-    refetchInterval: 1000,
     enabled: !!address,
   });
 };

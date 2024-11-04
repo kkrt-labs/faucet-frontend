@@ -27,18 +27,17 @@ export const Navbar = () => {
   return (
     <nav className="flex w-full justify-center pt-5">
       <ul className="flex flex-row justify-between md:justify-around items-center w-full max-w-7xl px-6">
-        <li>
-          <Link className="pointer-events-none flex place-items-center gap-2 py-6" href="/">
-            <Image
-              src={isMobile ? "/assets/kakarot-logo-mobile.svg" : "/assets/kakarot-logo.svg"}
-              alt="Kakarot Logo"
-              className={cn("dark:invert shrink-0", !isMobile && "min-w-24")}
-              width={isMobile ? 28 : 137}
-              height={isMobile ? 28 : 40}
-              priority
-            />
-          </Link>
-        </li>
+        <Link className=" flex place-items-center gap-2 py-6" href="/">
+          <Image
+            src={isMobile ? "/assets/kakarot-logo-mobile.svg" : "/assets/kakarot-logo.svg"}
+            alt="Kakarot Logo"
+            className={cn("dark:invert shrink-0", !isMobile && "min-w-24")}
+            width={isMobile ? 28 : 137}
+            height={isMobile ? 28 : 40}
+            priority
+          />
+        </Link>
+
         <li className="hidden sm:flex flex-row items-center space-x-3">
           <Link
             className="font-medium text-[#003e2a] lg:text-lg flex-nowrap"
@@ -134,6 +133,12 @@ const DropdownCTA = () => {
               size={16}
               className="inline-block mb-1 transition-transform duration-300 ease-in-out group-hover:translate-x-1 group-hover:-translate-y-1"
             />
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="text-[#003d29] hover:underline hover:text-kkrtOrange">
+          <Link href={"/spirit-karrot"}>
+            Spirit Karrot
+            <ArrowUpRight size={16} className="inline-block ml-1 mb-1" />
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
