@@ -8,21 +8,27 @@ interface Environment {
   THIRDWEB_CLIENT_SECRET: string;
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: string;
   RECAPTCHA_SECRET_KEY: string;
+  NEXT_PUBLIC_DRIP_AMOUNT_ETH: string;
 }
 
 const ENV: Environment = {
   NODE_ENV: process.env.NODE_ENV || "development",
   API_ROOT: process.env.NEXT_PUBLIC_API_ROOT || "",
-  NEXT_PUBLIC_THIRDWEB_CLIENT_ID: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID || "",
+  NEXT_PUBLIC_THIRDWEB_CLIENT_ID:
+    process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID || "",
   THIRDWEB_CLIENT_SECRET: process.env.THIRDWEB_CLIENT_SECRET || "",
-  NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "",
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY:
+    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "",
   RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY || "",
+  NEXT_PUBLIC_DRIP_AMOUNT_ETH:
+    process.env.NEXT_PUBLIC_DRIP_AMOUNT_ETH || "0.001",
 };
 
 const WALLET_MODAL_OPTIONS: Partial<UseConnectModalOptions> = {
   size: "wide",
   title: "Select Wallet",
-  titleIcon: "https://sepolia-faucet.kakarot.org/assets/kakarot-logo-mobile.svg",
+  titleIcon:
+    "https://sepolia-faucet.kakarot.org/assets/kakarot-logo-mobile.svg",
   showThirdwebBranding: false,
   theme: lightTheme({
     colors: {

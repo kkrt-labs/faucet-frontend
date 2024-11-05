@@ -42,7 +42,7 @@ export interface FaucetStatsResponse {
   dripAmountInEth: string;
   dripAmountUSDC: string;
   dripAmountUSDT: string;
-  discordDripAmountInEth: string;
+  discordDripAmountInEth?: string;
 }
 
 export interface FaucetBalanceResponse {

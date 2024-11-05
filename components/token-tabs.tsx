@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ethLogo from "@/public/assets/ethereum.svg";
 import usdcLogo from "@/public/assets/usdc.svg";
 import usdtLogo from "@/public/assets/usdt.svg";
+import { ENV } from "@/lib/constants";
 
 interface TokenTabsProps {
   denomination: Denomination;
@@ -11,7 +12,12 @@ interface TokenTabsProps {
   faucetStats?: FaucetStatsResponse;
   claimInProgress: boolean;
 }
-const TokenTabs = ({ denomination, setDenomination, faucetStats, claimInProgress }: TokenTabsProps) => {
+const TokenTabs = ({
+  denomination,
+  setDenomination,
+  faucetStats,
+  claimInProgress,
+}: TokenTabsProps) => {
   return (
     <Tabs defaultValue={denomination} className="-mt-14">
       <TabsList className="py-7 space-x-10">
@@ -44,25 +50,19 @@ const TokenTabs = ({ denomination, setDenomination, faucetStats, claimInProgress
         </TabsTrigger>
       </TabsList>
       <TabsContent value="eth">
-        {(faucetStats?.canClaimETH || claimInProgress) && (
-          <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">
-            {faucetStats?.dripAmountInEth} ETH
-          </h2>
-        )}
+        <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">
+          {ENV.NEXT_PUBLIC_DRIP_AMOUNT_ETH} ETH
+        </h2>
       </TabsContent>
       <TabsContent value="usdc">
-        {(faucetStats?.canClaimUSDC || claimInProgress) && (
-          <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">
-            {faucetStats?.dripAmountUSDC} USDC
-          </h2>
-        )}
+        <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">
+          1.0 USDC
+        </h2>
       </TabsContent>
       <TabsContent value="usdt">
-        {(faucetStats?.canClaimUSDT || claimInProgress) && (
-          <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">
-            {faucetStats?.dripAmountUSDT} USDT
-          </h2>
-        )}
+        <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">
+          1.0 USDT
+        </h2>
       </TabsContent>
     </Tabs>
   );
