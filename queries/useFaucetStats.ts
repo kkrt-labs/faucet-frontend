@@ -3,7 +3,9 @@ import { Contract, providers, ethers } from "ethers";
 import FAUCET_ABI from "@/public/contracts/Faucet.json";
 import { ENV } from "@/lib/constants";
 
-const FAUCET_ADDRESS = "0xC98B2948D087f601415b694c81dE3e9D0B5C5141";
+const FAUCET_ADDRESS = ENV.NEXT_PUBLIC_IS_DEVELOPMENT
+  ? "0xC98B2948D087f601415b694c81dE3e9D0B5C5141"
+  : "0xe4A429142811A75611991405f66689510bc86E67";
 
 const useFaucetStats = (address: string) => {
   const rpcProvider = new providers.JsonRpcProvider(

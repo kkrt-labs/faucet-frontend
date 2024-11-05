@@ -2,10 +2,17 @@ import { useQuery } from "@tanstack/react-query";
 import { Contract, providers, ethers } from "ethers";
 import FAUCET_ABI from "@/public/contracts/Faucet.json";
 import ERC20_ABI from "@/public/contracts/Token.json";
+import { ENV } from "@/lib/constants";
 
-const FAUCET_ADDRESS = "0xC98B2948D087f601415b694c81dE3e9D0B5C5141";
-const USDC_ADDRESS = "0x1B4C0bc8703D3af59322849bE01559fdb920c904";
-const USDT_ADDRESS = "0x2BF1004D9e80ca087BD1e089d75bc8c471995aC1";
+const FAUCET_ADDRESS = ENV.NEXT_PUBLIC_IS_DEVELOPMENT
+  ? "0xC98B2948D087f601415b694c81dE3e9D0B5C5141"
+  : "0xe4A429142811A75611991405f66689510bc86E67";
+const USDC_ADDRESS = ENV.NEXT_PUBLIC_IS_DEVELOPMENT
+  ? "0x1B4C0bc8703D3af59322849bE01559fdb920c904"
+  : "0x1B4C0bc8703D3af59322849bE01559fdb920c904";
+const USDT_ADDRESS = ENV.NEXT_PUBLIC_IS_DEVELOPMENT
+  ? "0x2BF1004D9e80ca087BD1e089d75bc8c471995aC1"
+  : "0x2BF1004D9e80ca087BD1e089d75bc8c471995aC1";
 
 async function getStableCoinBalance(
   tokenAddress: string,

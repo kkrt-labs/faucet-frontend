@@ -50,19 +50,25 @@ const TokenTabs = ({
         </TabsTrigger>
       </TabsList>
       <TabsContent value="eth">
-        <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">
-          {ENV.NEXT_PUBLIC_DRIP_AMOUNT_ETH} ETH
-        </h2>
+        {(faucetStats?.canClaimETH || claimInProgress) && (
+          <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">
+            {ENV.NEXT_PUBLIC_DRIP_AMOUNT_ETH} ETH
+          </h2>
+        )}
       </TabsContent>
       <TabsContent value="usdc">
-        <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">
-          1.0 USDC
-        </h2>
+        {(faucetStats?.canClaimUSDC || claimInProgress) && (
+          <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">
+            1.0 USDC
+          </h2>
+        )}
       </TabsContent>
       <TabsContent value="usdt">
-        <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">
-          1.0 USDT
-        </h2>
+        {(faucetStats?.canClaimUSDT || claimInProgress) && (
+          <h2 className="mt-10 text-5xl md:text-7xl leading-tight text-[#878794] font-medium">
+            1.0 USDT
+          </h2>
+        )}
       </TabsContent>
     </Tabs>
   );
