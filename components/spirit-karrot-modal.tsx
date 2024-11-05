@@ -5,8 +5,20 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 import { useSpiritKarrot } from "@/queries/useSpiritKarrot";
 import { useFaucet } from "@/hooks/useFaucet";
@@ -37,7 +49,11 @@ export default function SpiritKarrotModal() {
 
   React.useEffect(() => {
     const hasSeenModal = localStorage.getItem("hasSeenSpiritKarrotModal");
-    if (spiritKarrot?.isEligible && !hasSeenModal && pathname !== "/spirit-karrot") {
+    if (
+      spiritKarrot?.isEligible &&
+      !hasSeenModal &&
+      pathname !== "/spirit-karrot"
+    ) {
       setIsOpen(true);
     }
   }, [spiritKarrot?.isEligible]);
@@ -70,9 +86,18 @@ export default function SpiritKarrotModal() {
           </Link>
         </div>
         <Link href={"/faucet"} onClick={handleClose} className="w-full">
-          <Button className="space-x-2 w-full" variant="outline" size="withIcon">
+          <Button
+            className="space-x-2 w-full"
+            variant="outline"
+            size="withIcon"
+          >
             <span>Back to Faucet</span>
-            <Image src="/assets/link-icon.svg" alt="Docs" width={16} height={16} />
+            <Image
+              src="/assets/link-icon.svg"
+              alt="Docs"
+              width={16}
+              height={16}
+            />
           </Button>
         </Link>
       </div>
@@ -84,10 +109,12 @@ export default function SpiritKarrotModal() {
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-3xl">🥕 Welcome back &#59;&#41;</DialogTitle>
+            <DialogTitle className="text-3xl">
+              🥕 Welcome back &#59;&#41;
+            </DialogTitle>
             <DialogDescription>
-              Good to see you again, farmer. Testnet has moved to Starknet Sepolia, but your Spirit Karrot will live on
-              forever.
+              Good to see you again, farmer. Testnet has moved to Starknet
+              Sepolia, but your Spirit Karrot will live on forever.
             </DialogDescription>
           </DialogHeader>
           <Content />
@@ -100,10 +127,12 @@ export default function SpiritKarrotModal() {
     <Drawer open={isOpen} onOpenChange={handleClose}>
       <DrawerContent>
         <DrawerHeader>
-          <DrawerTitle className="text-3xl">🥕 Welcome back &#59;&#41;</DrawerTitle>
+          <DrawerTitle className="text-3xl">
+            🥕 Welcome back &#59;&#41;
+          </DrawerTitle>
           <DrawerDescription>
-            Good to see you again, farmer. Testnet has moved to Starknet Sepolia, but your Spirit Karrot will live on
-            forever.
+            Good to see you again, farmer. Testnet has moved to Starknet
+            Sepolia, but your Spirit Karrot will live on forever.
           </DrawerDescription>
         </DrawerHeader>
         <Content />

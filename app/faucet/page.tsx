@@ -34,6 +34,7 @@ export default function Faucet() {
     faucetStats,
     faucetBalance,
     refetchFaucet,
+    refetchFaucetStats,
     isFaucetLoading,
     activeWallets,
   } = useFaucet();
@@ -151,12 +152,14 @@ export default function Faucet() {
       runSuccessToast(faucetJob[0].transaction_hash, lastUsedDenomination);
       setIsProcessing(false);
       setIsClaimed(true);
+      refetchFaucetStats();
       refetchFaucet();
       refetchWallet();
     }
   }, [
     faucetJob,
     refetchFaucet,
+    refetchFaucetStats,
     refetchWallet,
     runSuccessToast,
     lastUsedDenomination,

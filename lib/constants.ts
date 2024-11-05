@@ -9,6 +9,7 @@ interface Environment {
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: string;
   RECAPTCHA_SECRET_KEY: string;
   NEXT_PUBLIC_DRIP_AMOUNT_ETH: string;
+  NEXT_PUBLIC_IS_DEVELOPMENT: boolean;
 }
 
 const ENV: Environment = {
@@ -22,6 +23,7 @@ const ENV: Environment = {
   RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY || "",
   NEXT_PUBLIC_DRIP_AMOUNT_ETH:
     process.env.NEXT_PUBLIC_DRIP_AMOUNT_ETH || "0.001",
+  NEXT_PUBLIC_IS_DEVELOPMENT: process.env.NEXT_PUBLIC_IS_DEVELOPMENT === "true",
 };
 
 const WALLET_MODAL_OPTIONS: Partial<UseConnectModalOptions> = {

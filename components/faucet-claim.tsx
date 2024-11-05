@@ -7,7 +7,11 @@ import { mainnet } from "thirdweb/chains";
 import { GlobeIcon, Loader2 } from "lucide-react";
 import { client } from "@/lib/thirdweb-client";
 import { ENV } from "@/lib/constants";
-import { Denomination, FaucetJobResponse, FaucetStatsResponse } from "@/lib/types";
+import {
+  Denomination,
+  FaucetJobResponse,
+  FaucetStatsResponse,
+} from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { useIsDowntime } from "@/queries/useIsDowntime";
 import { TokenTabs } from "@/components/token-tabs";
@@ -21,7 +25,10 @@ interface FaucetClaimProps {
   isProcessing: boolean;
   isCooldown: boolean;
   isOutOfFunds: boolean;
-  handleClaim: (captchaCode: string, denomination: "eth" | "usdt" | "usdc") => void;
+  handleClaim: (
+    captchaCode: string,
+    denomination: "eth" | "usdt" | "usdc",
+  ) => void;
   currentDenomination: Denomination;
   setDenomination: (denomination: Denomination) => void;
   faucetStats?: FaucetStatsResponse;
@@ -61,7 +68,8 @@ export const FaucetClaim = ({
   // if taking longer than 15 seconds to process the claim
   const isNetworkOverloaded =
     faucetJob &&
-    (faucetJob[0].status === "processing" || faucetJob[0].status === "pending") &&
+    (faucetJob[0].status === "processing" ||
+      faucetJob[0].status === "pending") &&
     new Date(faucetJob[0].created_at).getTime() + 15000 < Date.now();
 
   const convertSecondsToTime = (seconds: number) => {
@@ -127,10 +135,10 @@ export const FaucetClaim = ({
           carrotSrc={cooldownCarrot}
           description={`You're on a cooldown period for ${denomination.toUpperCase()}! Try the Kakarot faucet again in ${convertSecondsToTime(
             denomination === "eth"
-              ? faucetStats?.timeLeftETHInS ?? 0
+              ? (faucetStats?.timeLeftETHInS ?? 0)
               : denomination === "usdc"
-              ? faucetStats?.timeLeftUSDCInS ?? 0
-              : faucetStats?.timeLeftUSDTInS ?? 0
+                ? (faucetStats?.timeLeftUSDCInS ?? 0)
+                : (faucetStats?.timeLeftUSDTInS ?? 0),
           )}.`}
         />
       </CarrotContainer>
@@ -168,10 +176,10 @@ export const FaucetClaim = ({
         variant={"main"}
         className="mt-6 w-full"
       >
-        {isProcessing ? (
+        {isProcessing || !isEligibleToClaim || !captchaCode ? (
           <>
             <Loader2 className="animate-spin w-4 h-4 mr-2 text-lg" />
-            <span>Claiming..</span>
+            <span>{!isEligibleToClaim ? "Loading..." : "Claiming.."} </span>
           </>
         ) : (
           "Claim"
@@ -191,7 +199,8 @@ export const FaucetClaim = ({
 
       {!isEligibleToClaim && !isProcessing && (
         <p className="leading-5 [&:not(:first-child)]:mt-4 text-[#878794] max-w-[350px]">
-          You need at least {minEthRequired} ETH on Ethereum Mainnet. Or claim from our
+          You need at least {minEthRequired} ETH on Ethereum Mainnet. Or claim
+          from our
           <Link
             href="https://discord.gg/kakarotzkevm"
             rel="noopener noreferrer"
