@@ -19,9 +19,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-import { useSpiritKarrot } from "@/queries/useSpiritKarrot";
-import { useFaucet } from "@/hooks/useFaucet";
 import { usePathname } from "next/navigation";
 
 function useMediaQuery(query: string) {
@@ -42,21 +39,18 @@ function useMediaQuery(query: string) {
 
 export default function SpiritKarrotModal() {
   const [isOpen, setIsOpen] = React.useState(false);
-  const { wallet } = useFaucet();
-  const { data: spiritKarrot } = useSpiritKarrot(wallet?.address ?? "");
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const pathname = usePathname();
 
   React.useEffect(() => {
     const hasSeenModal = localStorage.getItem("hasSeenSpiritKarrotModal");
     if (
-      spiritKarrot?.isEligible &&
       !hasSeenModal &&
       pathname !== "/spirit-karrot"
     ) {
       setIsOpen(true);
     }
-  }, [spiritKarrot?.isEligible]);
+  }, []);
 
   const handleClose = () => {
     setIsOpen(false);
