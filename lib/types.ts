@@ -32,7 +32,7 @@ export interface IsWhitelistedResponse {
 }
 
 export interface FaucetStatsResponse {
-  message: string;
+  message?: string;
   timeLeftETHInS: number;
   timeLeftUSDCInS: number;
   timeLeftUSDTInS: number;
