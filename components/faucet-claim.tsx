@@ -57,7 +57,7 @@ export const FaucetClaim = ({
     client,
   });
 
-  const minEthRequired = 0;
+  const minEthRequired = ENV.NODE_ENV === "development" ? 0.005 : 0.05;
   const isEligibleToClaim =
     faucetStats &&
     ((denomination === "eth" && faucetStats.canClaimETH) ||
