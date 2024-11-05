@@ -9,7 +9,11 @@ import { useBlockNumber, useWalletBalance } from "thirdweb/react";
 import { toast } from "sonner";
 
 import { KAKAROT_SEPOLIA, client } from "@/lib/thirdweb-client";
-import { CONFETTI_COLORS, KKRT_EXPLORER, RATE_LIMIT_KEY } from "@/lib/constants";
+import {
+  CONFETTI_COLORS,
+  KKRT_EXPLORER,
+  RATE_LIMIT_KEY,
+} from "@/lib/constants";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useFaucet } from "@/hooks/useFaucet";
 import { useFaucetJob } from "@/queries/useFaucetJob";
@@ -25,7 +29,14 @@ import { Denomination } from "@/lib/types";
 const LOCAL_STORAGE_KEY = "faucetJobStatusId";
 
 export default function Faucet() {
-  const { wallet, faucetStats, faucetBalance, refetchFaucet, isFaucetLoading, activeWallets } = useFaucet();
+  const {
+    wallet,
+    faucetStats,
+    faucetBalance,
+    refetchFaucet,
+    isFaucetLoading,
+    activeWallets,
+  } = useFaucet();
   const { width: windowWidth } = useWindowSize();
 
   const blockNumber = useBlockNumber({ client, chain: KAKAROT_SEPOLIA });
@@ -39,20 +50,31 @@ export default function Faucet() {
   const [isProcessing, setIsProcessing] = useState(isPending);
   const [isClaimed, setIsClaimed] = useState(false);
   const [jobId, setJobId] = useState<string | null>(null);
-  const [lastUsedDenomination, setLastUsedDenomination] = useState<Denomination>("eth");
+  const [lastUsedDenomination, setLastUsedDenomination] =
+    useState<Denomination>("eth");
   const { data: faucetJob, isError } = useFaucetJob(jobId ?? "");
   const processedJobRef = useRef<string | null>(null);
 
   const isCooldown =
     !!faucetStats &&
-    ((lastUsedDenomination === "eth" && (faucetStats.timeLeftETHInS !== 0 || !faucetStats.canClaimETH)) ||
-      (lastUsedDenomination === "usdc" && (faucetStats.timeLeftUSDCInS !== 0 || !faucetStats.canClaimUSDC)) ||
-      (lastUsedDenomination === "usdt" && (faucetStats.timeLeftUSDTInS !== 0 || !faucetStats.canClaimUSDT)));
+    ((lastUsedDenomination === "eth" &&
+      (faucetStats.timeLeftETHInS !== 0 || !faucetStats.canClaimETH)) ||
+      (lastUsedDenomination === "usdc" &&
+        (faucetStats.timeLeftUSDCInS !== 0 || !faucetStats.canClaimUSDC)) ||
+      (lastUsedDenomination === "usdt" &&
+        (faucetStats.timeLeftUSDTInS !== 0 || !faucetStats.canClaimUSDT)));
 
-  const handleClaim = (captchaCode: string, denomination: "eth" | "usdt" | "usdc") => {
+  const handleClaim = (
+    captchaCode: string,
+    denomination: "eth" | "usdt" | "usdc",
+  ) => {
     setIsProcessing(true);
     setLastUsedDenomination(denomination);
-    claimFunds({ walletAddress: wallet?.address as string, captchaCode, denomination });
+    claimFunds({
+      walletAddress: wallet?.address as string,
+      captchaCode,
+      denomination,
+    });
   };
 
   const runSuccessToast = useCallback(
@@ -63,8 +85,10 @@ export default function Faucet() {
             <span className="text-black">Transaction Successful</span>
             <span className="w-full text-[#666D80]">
               You have successfully claimed{" "}
-              {denomination === "eth" ? `${faucetStats?.dripAmountInEth} ETH` : `1 ${denomination.toUpperCase()}`} on
-              Kakarot Sepolia.
+              {denomination === "eth"
+                ? `${faucetStats?.dripAmountInEth} ETH`
+                : `1 ${denomination.toUpperCase()}`}{" "}
+              on Kakarot Sepolia.
             </span>
           </div>
           <span className="h-20 w-[2px] bg-slate-100 -my-4"></span>
@@ -75,11 +99,16 @@ export default function Faucet() {
             rel="noopener noreferrer"
           >
             <span className="">View on Explorer</span>
-            <Image src="/assets/link-icon.svg" alt="Docs" width={16} height={16} />
+            <Image
+              src="/assets/link-icon.svg"
+              alt="Docs"
+              width={16}
+              height={16}
+            />
           </a>
-        </div>
+        </div>,
       ),
-    [faucetStats]
+    [faucetStats],
   );
 
   useEffect(() => {
@@ -112,7 +141,11 @@ export default function Faucet() {
   }, [faucetJob]);
 
   useEffect(() => {
-    if (faucetJob && faucetJob[0].status === "completed" && faucetJob[0].job_id !== processedJobRef.current) {
+    if (
+      faucetJob &&
+      faucetJob[0].status === "completed" &&
+      faucetJob[0].job_id !== processedJobRef.current
+    ) {
       processedJobRef.current = faucetJob[0].job_id;
       localStorage.removeItem(LOCAL_STORAGE_KEY);
       runSuccessToast(faucetJob[0].transaction_hash, lastUsedDenomination);
@@ -121,7 +154,13 @@ export default function Faucet() {
       refetchFaucet();
       refetchWallet();
     }
-  }, [faucetJob, refetchFaucet, refetchWallet, runSuccessToast, lastUsedDenomination]);
+  }, [
+    faucetJob,
+    refetchFaucet,
+    refetchWallet,
+    runSuccessToast,
+    lastUsedDenomination,
+  ]);
 
   useEffect(() => {
     if (isError || faucetJob?.[0].status === "error") {
@@ -130,7 +169,7 @@ export default function Faucet() {
     }
   }, [faucetJob, isError]);
 
-  if (isFaucetLoading) return <SkeletonLoader />; // TODO: revert to this when downtime is fixed
+  // if (isFaucetLoading) return <SkeletonLoader />; // TODO: revert to this when downtime is fixed
   if (!wallet || !activeWallets) redirect("/");
 
   return (
@@ -151,11 +190,15 @@ export default function Faucet() {
               lastUsedDenomination === "eth"
                 ? `${faucetBalance?.faucetBalanceInEth.substring(0, 6) ?? 0} ETH`
                 : lastUsedDenomination === "usdc"
-                ? `${faucetBalance?.usdcBalance.substring(0, 6) ?? 0} USDC`
-                : `${faucetBalance?.usdtBalance.substring(0, 6) ?? 0} USDT`
+                  ? `${faucetBalance?.usdcBalance.substring(0, 6) ?? 0} USDC`
+                  : `${faucetBalance?.usdtBalance.substring(0, 6) ?? 0} USDT`
             }
           />
-          <DetailAndText title="Block Number" text={blockNumber?.toString() ?? "0x"} isBlock />
+          <DetailAndText
+            title="Block Number"
+            text={blockNumber?.toString() ?? "0x"}
+            isBlock
+          />
         </div>
         {isClaimed ? (
           <FaucetSuccess
@@ -166,7 +209,8 @@ export default function Faucet() {
         ) : (
           <FaucetClaim
             isOutOfFunds={
-              parseFloat(faucetBalance?.faucetBalanceInEth ?? "0") < parseFloat(faucetStats?.dripAmountInEth ?? "0")
+              parseFloat(faucetBalance?.faucetBalanceInEth ?? "0") <
+              parseFloat(faucetStats?.dripAmountInEth ?? "0")
             }
             isCooldown={isCooldown}
             isProcessing={isProcessing}
@@ -182,19 +226,49 @@ export default function Faucet() {
         heading="Need more testnet ETH?"
         description="Contact us on Discord in the support channel if you need large amount of testnet ETH."
       />
-      <Link href="https://discord.gg/kakarotzkevm" rel="noopener noreferrer" target="_blank" className="pb-10">
-        <Button className="space-x-2 max-w-[120px] mt-6" variant="outline" size="withIcon">
+      <Link
+        href="https://discord.gg/kakarotzkevm"
+        rel="noopener noreferrer"
+        target="_blank"
+        className="pb-10"
+      >
+        <Button
+          className="space-x-2 max-w-[120px] mt-6"
+          variant="outline"
+          size="withIcon"
+        >
           <span>Reach Out</span>
-          <Image src="/assets/link-icon.svg" alt="Docs" width={16} height={16} />
+          <Image
+            src="/assets/link-icon.svg"
+            alt="Docs"
+            width={16}
+            height={16}
+          />
         </Button>
       </Link>
     </main>
   );
 }
 
-const DetailAndText = ({ title, text, isBlock = false }: { title: string; text: string; isBlock?: boolean }) => (
+const DetailAndText = ({
+  title,
+  text,
+  isBlock = false,
+}: {
+  title: string;
+  text: string;
+  isBlock?: boolean;
+}) => (
   <h4 className="text-[#878794] faucetDetails px-3 py-2 rounded-sm">
-    {title}: <span className={cn(isBlock ? "text-[#0A846C]" : "text-kkrtOrange", "font-medium")}>{text}</span>
+    {title}:{" "}
+    <span
+      className={cn(
+        isBlock ? "text-[#0A846C]" : "text-kkrtOrange",
+        "font-medium",
+      )}
+    >
+      {text}
+    </span>
   </h4>
 );
 

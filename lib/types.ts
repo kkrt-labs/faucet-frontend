@@ -32,7 +32,7 @@ export interface IsWhitelistedResponse {
 }
 
 export interface FaucetStatsResponse {
-  message: string;
+  message?: string;
   timeLeftETHInS: number;
   timeLeftUSDCInS: number;
   timeLeftUSDTInS: number;
@@ -42,7 +42,7 @@ export interface FaucetStatsResponse {
   dripAmountInEth: string;
   dripAmountUSDC: string;
   dripAmountUSDT: string;
-  discordDripAmountInEth: string;
+  discordDripAmountInEth?: string;
 }
 
 export interface FaucetBalanceResponse {
