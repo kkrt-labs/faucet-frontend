@@ -6,7 +6,7 @@ import mintingIcon from "@/public/assets/mining.gif";
 import xIcon from "@/public/assets/x-icon-inverted.svg";
 import linkIcon from "@/public/assets/link-icon.svg";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CONFETTI_COLORS, ENV, KAKAROT_CONTRACT_ADDRESS } from "@/lib/constants";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { useSpiritKarrot } from "@/queries/useSpiritKarrot";
@@ -24,21 +24,23 @@ import { useClaimFunds } from "@/mutations/useClaimFunds";
 import { useFaucetJob } from "@/queries/useFaucetJob";
 import { ConnectWallet } from "@/components/connect-wallet";
 import { Skeleton } from "@/components/ui/skeleton";
+import addresses from "@/lib/addresses.json";
+import { useIsSpiritKarrotOwner } from "@/queries/useisSpiritKarrotOwner";
+import { useGetSpiritKarrotDetails } from "@/queries/useGetSpiritKarrotDetails";
+import { generateMerkleProof } from "@/lib/generateMerkleProof";
 
 type MintState = "completed" | "pending" | "generating" | "not-started" | "not-eligible" | "loading";
 
 const SpiritKarrot = () => {
   const { wallet } = useFaucet();
-  const {
-    data: spiritKarrot,
-    isLoading: isSpiritKarrotLoading,
-    isPending: isSpiritKarrotPending,
-  } = useSpiritKarrot(wallet?.address ?? "");
+
   const { data: walletBalance } = useWalletBalance({
     chain: KAKAROT_SEPOLIA,
     address: wallet?.address as string,
     client,
   });
+
+  const { data: isSpiritKarrotOwner } = useIsSpiritKarrotOwner(wallet?.address ?? "");
   const { mutate: claimFunds, data: claimJobID } = useClaimFunds();
   const [jobId, setJobId] = useState<string | null>(null);
   const { data: faucetJob, isError } = useFaucetJob(jobId ?? "");
@@ -52,6 +54,15 @@ const SpiritKarrot = () => {
   const [showTurnstile, setShowTurnstile] = useState<boolean>(true);
   const { mutate: toggleEligibility } = useToggleEligibility();
 
+  const {
+    data: spiritKarrot,
+    isLoading: isSpiritKarrotLoading,
+    isPending: isSpiritKarrotPending,
+  } = useGetSpiritKarrotDetails(
+    wallet?.address ?? "",
+    mintingProgress === "completed" || mintingProgress === "not-started"
+  );
+
   const onTurnstileSuccess = (captchaCode: string) => {
     setCaptchaCode(captchaCode);
     setTimeout(() => setShowTurnstile(false), 1000);
@@ -61,6 +72,24 @@ const SpiritKarrot = () => {
     `🧑‍🌾 I'm a @KakarotZKEVM OG, and this is ${spiritKarrot?.name}, the Spirit Karrot that tells the story of my journey on Kakarot Testnet, now in its final mile before mainnet.
 
 💧 Get the drip and join me on Kakarot Starknet Sepolia\n`;
+
+  const generateProof = useCallback(async () => {
+    const proof = await generateMerkleProof(wallet?.address ?? "");
+    return proof;
+  }, [wallet?.address]);
+
+  useEffect(() => {
+    if (wallet?.address && addresses.includes(wallet.address)) {
+      setMintingProgress("pending");
+      if (isSpiritKarrotOwner?.balance && isSpiritKarrotOwner.balance > 0) {
+        setMintingProgress("completed");
+      } else {
+        setMintingProgress("not-started");
+      }
+    } else {
+      setMintingProgress("not-eligible");
+    }
+  }, [wallet?.address, isSpiritKarrotOwner?.balance]);
 
   useEffect(() => {
     // Set the base URL only after the component has mounted
@@ -72,8 +101,10 @@ const SpiritKarrot = () => {
       `${baseUrl}/spirit-karrot/${spiritKarrot?.name?.toLowerCase()}`
     )}`;
 
-  const handleMintTransaction = async () => {
+  const handleMintTransaction = useCallback(async () => {
     if (!wallet || !spiritKarrot) return;
+    const proof = await generateProof();
+    if (!proof) return;
     toast.info("Minting in progress...");
     try {
       const uris = await upload({
@@ -98,7 +129,7 @@ const SpiritKarrot = () => {
       const transaction = prepareContractCall({
         contract,
         method: "function mint(bytes32[] calldata _merkleProof, string memory _tokenUri)",
-        params: [spiritKarrot.proof, uris] as any,
+        params: [proof, uris] as any,
         maxFeePerBlobGas: BigInt(10000000000000),
         gas: BigInt(1000000),
       });
@@ -127,7 +158,7 @@ const SpiritKarrot = () => {
       toast.error("An error occurred while minting. Please try again.");
       setMintingProgress("not-started");
     }
-  };
+  }, [wallet, spiritKarrot, generateProof, toggleEligibility]);
 
   const handleClaim = () => {
     if (!wallet?.address || !captchaCode) return;
@@ -168,19 +199,13 @@ const SpiritKarrot = () => {
   };
 
   useEffect(() => {
-    if (spiritKarrot?.error) setMintingProgress("not-eligible");
-    else if (spiritKarrot?.isEligible) setMintingProgress("not-started");
-    else if (!spiritKarrot?.error && !spiritKarrot?.isEligible) setMintingProgress("completed");
-  }, [spiritKarrot, isSpiritKarrotLoading]);
-
-  useEffect(() => {
     if (faucetJob?.[0]?.status === "completed") {
       toast.success("Claimed ETH, minting now ...");
       setTimeout(() => {
         handleMintTransaction();
       }, 15 * 1000);
     }
-  }, [faucetJob]);
+  }, [faucetJob, handleMintTransaction]);
 
   useEffect(() => {
     if (isError || faucetJob?.[0]?.status === "error") {
@@ -214,7 +239,7 @@ const SpiritKarrot = () => {
       </div>
     );
 
-  if (isSpiritKarrotPending)
+  if (mintingProgress === "loading")
     return (
       <div className="flex flex-col justify-center items-center w-full py-16 px-3 rounded-md">
         {wallet ? (
