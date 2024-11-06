@@ -86,3 +86,10 @@ export interface SpiritKarrotResponse {
   proof: string[];
   error?: string;
 }
+
+export interface SpiritKarrotDetailsResponse {
+  name: string;
+  fullName: string;
+  description: string;
+  imageUrl: string;
+}

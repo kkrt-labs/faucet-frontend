@@ -14,6 +14,7 @@ import {
   IsWhitelistedResponse,
   RedeemInviteJobResponse,
   RedeemInviteResponse,
+  SpiritKarrotDetailsResponse,
   SpiritKarrotResponse,
   ToggleEligibilityResponse,
 } from "./types";
@@ -54,6 +55,8 @@ export const API = {
       requests.get(`/generateImage?address=${address}`),
     spiritKarrot: (walletAddress: string): Promise<SpiritKarrotResponse> =>
       requests.get(`/spiritKarrot?walletAddress=${walletAddress}`),
+    spiritKarrotDetails: (walletAddress: string): Promise<SpiritKarrotDetailsResponse> =>
+      requests.get(`/spiritKarrotDetails?walletAddress=${walletAddress}`),
   },
   invite: {
     isEligible: (walletAddress: string): Promise<IsEligibleResponse> =>
