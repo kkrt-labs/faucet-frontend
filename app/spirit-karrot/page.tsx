@@ -58,7 +58,10 @@ const SpiritKarrot = () => {
     data: spiritKarrot,
     isLoading: isSpiritKarrotLoading,
     isPending: isSpiritKarrotPending,
-  } = useGetSpiritKarrotDetails(wallet?.address ?? "", mintingProgress === "completed" || mintingProgress === "not-started");
+  } = useGetSpiritKarrotDetails(
+    wallet?.address ?? "",
+    mintingProgress === "completed" || mintingProgress === "not-started"
+  );
 
   const onTurnstileSuccess = (captchaCode: string) => {
     setCaptchaCode(captchaCode);
@@ -76,21 +79,14 @@ const SpiritKarrot = () => {
   }, [wallet?.address]);
 
   useEffect(() => {
-    // check if wallet address is in addresses.json file
     if (wallet?.address && addresses.includes(wallet.address)) {
-      console.log("wallet address is in addresses.json file");
       setMintingProgress("pending");
-
-      // check if user has already minted a karrot
       if (isSpiritKarrotOwner?.balance && isSpiritKarrotOwner.balance > 0) {
-        console.log("user has already minted a karrot");
         setMintingProgress("completed");
       } else {
-        console.log("user has not minted a karrot yet");
         setMintingProgress("not-started");
       }
     } else {
-      console.log("user is not eligible");
       setMintingProgress("not-eligible");
     }
   }, [wallet?.address, isSpiritKarrotOwner?.balance]);
@@ -105,7 +101,7 @@ const SpiritKarrot = () => {
       `${baseUrl}/spirit-karrot/${spiritKarrot?.name?.toLowerCase()}`
     )}`;
 
-  const handleMintTransaction = async () => {
+  const handleMintTransaction = useCallback(async () => {
     if (!wallet || !spiritKarrot) return;
     const proof = await generateProof();
     if (!proof) return;
@@ -162,7 +158,7 @@ const SpiritKarrot = () => {
       toast.error("An error occurred while minting. Please try again.");
       setMintingProgress("not-started");
     }
-  };
+  }, [wallet, spiritKarrot, generateProof, toggleEligibility]);
 
   const handleClaim = () => {
     if (!wallet?.address || !captchaCode) return;
@@ -209,7 +205,7 @@ const SpiritKarrot = () => {
         handleMintTransaction();
       }, 15 * 1000);
     }
-  }, [faucetJob]);
+  }, [faucetJob, handleMintTransaction]);
 
   useEffect(() => {
     if (isError || faucetJob?.[0]?.status === "error") {
@@ -243,7 +239,7 @@ const SpiritKarrot = () => {
       </div>
     );
 
-  if (isSpiritKarrotPending)
+  if (mintingProgress === "loading")
     return (
       <div className="flex flex-col justify-center items-center w-full py-16 px-3 rounded-md">
         {wallet ? (
@@ -285,15 +281,15 @@ const SpiritKarrot = () => {
           {mintingProgress === "not-eligible"
             ? "🧑‍🌾 You are not eligible for a Spirit Karrot"
             : mintingProgress === "completed"
-              ? `${spiritKarrot?.fullName} 🥕`
-              : "Meet your Spirit Karrot 🥕"}
+            ? `${spiritKarrot?.fullName} 🥕`
+            : "Meet your Spirit Karrot 🥕"}
         </h1>
         <p className="leading-7 [&:not(:first-child)]:mt-6  text-[#878794]">
           {mintingProgress === "not-eligible"
             ? "Spirit Karrots are only available to OG farmers"
             : mintingProgress === "completed"
-              ? "Meet your Spirit Karrot!"
-              : "This Karrot embodies your activity on the previous version of our testnet"}
+            ? "Meet your Spirit Karrot!"
+            : "This Karrot embodies your activity on the previous version of our testnet"}
         </p>
       </div>
       <div className="grid items-start justify-center mt-12 max-h-[400px] max-w-[320px]">
