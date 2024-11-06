@@ -176,14 +176,14 @@ export const FaucetClaim = ({
         variant={"main"}
         className="mt-6 w-full"
       >
-        {isProcessing || !isEligibleToClaim || !captchaCode ? (
+        {(isProcessing || !faucetStats || !captchaCode) && (
           <>
             <Loader2 className="animate-spin w-4 h-4 mr-2 text-lg" />
-            <span>{!isEligibleToClaim ? "Loading..." : "Claiming.."} </span>
+            <span>{!faucetStats ? "Loading..." : "Claiming.."}</span>
           </>
-        ) : (
-          "Claim"
         )}
+        {faucetStats && !isEligibleToClaim && <span>Insufficient Balance</span>}
+        {!isProcessing && isEligibleToClaim && captchaCode && "Claim"}
       </Button>
       <Link
         href="https://ecosystem.kakarot.org/"
