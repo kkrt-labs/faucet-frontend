@@ -29,7 +29,11 @@ export const Navbar = () => {
       <ul className="flex flex-row justify-between md:justify-around items-center w-full max-w-7xl px-6">
         <Link className=" flex place-items-center gap-2 py-6" href="/">
           <Image
-            src={isMobile ? "/assets/kakarot-logo-mobile.svg" : "/assets/kakarot-logo.svg"}
+            src={
+              isMobile
+                ? "/assets/kakarot-logo-mobile.svg"
+                : "/assets/kakarot-logo.svg"
+            }
             alt="Kakarot Logo"
             className={cn("dark:invert shrink-0", !isMobile && "min-w-24")}
             width={isMobile ? 28 : 137}
@@ -59,7 +63,12 @@ export const Navbar = () => {
           </Link>
         </li>
         <li className="sm:inline-flex flex-row items-center md:space-x-4 space-x-0 hidden">
-          <IconLink src="/assets/x-icon.svg" href="https://x.com/KakarotZkEvm" name="X" className="hidden lg:block" />
+          <IconLink
+            src="/assets/x-icon.svg"
+            href="https://x.com/KakarotZkEvm"
+            name="X"
+            className="hidden lg:block"
+          />
           <IconLink
             src="/assets/discord-icon.svg"
             href="https://discord.gg/kakarotzkevm"
@@ -106,7 +115,9 @@ const DropdownCTA = () => {
         <DropdownMenuItem className="group text-[#003d29] hover:underline hover:text-white">
           <div>
             {wallet && chainId?.id !== KAKAROT_SEPOLIA.id ? (
-              <span onClick={() => wallet?.switchChain(KAKAROT_SEPOLIA)}>Add Network</span>
+              <span onClick={() => wallet?.switchChain(KAKAROT_SEPOLIA)}>
+                Add Network
+              </span>
             ) : (
               <Link
                 href={KKRT_RPC_DETAILS}
@@ -135,7 +146,7 @@ const DropdownCTA = () => {
             />
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem className="text-[#003d29] hover:underline hover:text-kkrtOrange">
+        <DropdownMenuItem className="text-[#003d29] hover:underline hover:text-white">
           <Link href={"/spirit-karrot"}>
             Spirit Karrot
             <ArrowUpRight size={16} className="inline-block ml-1 mb-1" />
