@@ -17,7 +17,7 @@ import { useFaucet } from "@/hooks/useFaucet";
 import { ArrowUpRight, EllipsisIcon } from "lucide-react";
 import { useActiveWallet, useActiveWalletChain } from "thirdweb/react";
 import { client, KAKAROT_SEPOLIA } from "@/lib/thirdweb-client";
-import { FEEDBACK_TYPEFORM, KKRT_RPC_DETAILS } from "@/lib/constants";
+import { BUG_FORM, FEEDBACK_TYPEFORM, KKRT_RPC_DETAILS } from "@/lib/constants";
 import { useEffect } from "react";
 
 export const Navbar = () => {
@@ -134,12 +134,8 @@ const DropdownCTA = () => {
           </div>
         </DropdownMenuItem>
         <DropdownMenuItem className="group text-[#003d29] hover:underline hover:text-white">
-          <Link
-            href={FEEDBACK_TYPEFORM}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Feedback
+          <Link href={BUG_FORM} rel="noopener noreferrer" target="_blank">
+            Report a Bug
             <ArrowUpRight
               size={16}
               className="inline-block mb-1 transition-transform duration-300 ease-in-out group-hover:translate-x-1 group-hover:-translate-y-1"
