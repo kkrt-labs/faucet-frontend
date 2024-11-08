@@ -89,29 +89,50 @@ const DropdownCTA = () => {
       <DropdownMenuTrigger className="border py-2 px-3 rounded-md shadow-sm">
         <EllipsisIcon size={24} />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-[#FFFADB]">
-        <DropdownMenuItem className="text-[#003d29] hover:underline hover:text-kkrtOrange">
-          <Link href="https://discord.gg/kakarotzkevm" rel="noopener noreferrer" target="_blank">
+      <DropdownMenuContent className="bg-[#FFF4E0]">
+        <DropdownMenuItem className="group text-[#003d29] hover:underline hover:text-white">
+          <Link
+            href="https://discord.gg/kakarotzkevm"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
             Discord Faucet
-            <ArrowUpRight size={16} className="inline-block ml-1 mb-1" />
+            <ArrowUpRight
+              size={16}
+              className="inline-block mb-1 transition-transform duration-300 ease-in-out group-hover:translate-x-1 group-hover:-translate-y-1"
+            />
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem className="text-[#003d29] hover:underline hover:text-kkrtOrange">
+        <DropdownMenuItem className="group text-[#003d29] hover:underline hover:text-white">
           <div>
             {wallet && chainId?.id !== KAKAROT_SEPOLIA.id ? (
               <span onClick={() => wallet?.switchChain(KAKAROT_SEPOLIA)}>Add Network</span>
             ) : (
-              <Link href={KKRT_RPC_DETAILS} rel="noopener noreferrer" target="_blank">
-                <span className="">Network Details</span>
-                <ArrowUpRight size={16} className="inline-block ml-1 mb-1" />
+              <Link
+                href={KKRT_RPC_DETAILS}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <span>Network Details</span>
+                <ArrowUpRight
+                  size={16}
+                  className="inline-block mb-1 transition-transform duration-300 ease-in-out group-hover:translate-x-1 group-hover:-translate-y-1"
+                />
               </Link>
             )}
           </div>
         </DropdownMenuItem>
-        <DropdownMenuItem className="text-[#003d29] hover:underline hover:text-kkrtOrange">
-          <Link href={FEEDBACK_TYPEFORM} rel="noopener noreferrer" target="_blank">
+        <DropdownMenuItem className="group text-[#003d29] hover:underline hover:text-white">
+          <Link
+            href={FEEDBACK_TYPEFORM}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
             Feedback
-            <ArrowUpRight size={16} className="inline-block ml-1 mb-1" />
+            <ArrowUpRight
+              size={16}
+              className="inline-block mb-1 transition-transform duration-300 ease-in-out group-hover:translate-x-1 group-hover:-translate-y-1"
+            />
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="text-[#003d29] hover:underline hover:text-kkrtOrange">
