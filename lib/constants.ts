@@ -59,6 +59,8 @@ const KKRT_EXPLORER = "https://sepolia.kakarotscan.org";
 const KKRT_RPC_DETAILS =
   "https://docs.kakarot.org/starknet/overview#as-a-user-how-can-i-interact-with-kakarot-on-starknet";
 const KAKAROT_CONTRACT_ADDRESS = "0xb45E3EfCd7C21120a335F75f1a02985d94285827";
+const BUG_FORM =
+  "https://kkrtlabs.notion.site/1343e373fba080e29f0de6b3f04bd980?pvs=105";
 
 export {
   ENV,
@@ -70,4 +72,5 @@ export {
   RATE_LIMIT_KEY,
   FEEDBACK_TYPEFORM,
   KAKAROT_CONTRACT_ADDRESS,
+  BUG_FORM,
 };
