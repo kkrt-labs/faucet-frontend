@@ -32,7 +32,7 @@ git clone https://github.com/kkrt-labs/faucet-frontend
 cd faucet-frontend && npm i
 npm run dev
 
-# aleternatively, yarn && yarn dev -> installs packages + starts server at port 3000!
+# alternatively, yarn && yarn dev -> installs packages + starts server at port 3000!
 ```
 
 made at kkrt labs 🥕✌️
