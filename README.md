@@ -14,7 +14,7 @@ checkout the current deployment ✨ [faucet](https://sepolia-faucet.kakarot.org
 - `app/page.tsx` -> using next's app router, this is our home page
 - `app/globals.css` -> base for tailwind + shared styles
 - `components/` -> hosts all shared elements  + `/ui/` is base for `@shadcn` components
-- `public/assets` -> all shared assets, `.svg` preffered
+- `public/assets` -> all shared assets, `.svg` preferred
 - `.env.example` -> create your own `.env` file following the structure here
 
 
