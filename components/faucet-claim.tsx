@@ -49,7 +49,7 @@ export const FaucetClaim = ({
   const { data: isDowntimeCheck } = useIsDowntime();
 
   const [captchaCode, setCaptchaCode] = useState<string | null>(null);
-  const [showCloudfare, setShowCloudfare] = useState(true);
+  const [showCloudfare, setShowCloudflare] = useState(true);
 
   const { refetch: refetchWallet, data: balance } = useWalletBalance({
     chain: mainnet,
@@ -84,7 +84,7 @@ export const FaucetClaim = ({
 
   const onTurnstileSuccess = (captchaCode: string) => {
     setCaptchaCode(captchaCode);
-    setTimeout(() => setShowCloudfare(false), 1000);
+    setTimeout(() => setShowCloudflare(false), 1000);
   };
 
   if (isDowntimeCheck?.isDowntime ?? false)
