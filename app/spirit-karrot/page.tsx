@@ -7,7 +7,11 @@ import xIcon from "@/public/assets/x-icon-inverted.svg";
 import linkIcon from "@/public/assets/link-icon.svg";
 
 import { useCallback, useEffect, useState } from "react";
-import { CONFETTI_COLORS, ENV, KAKAROT_CONTRACT_ADDRESS } from "@/lib/constants";
+import {
+  CONFETTI_COLORS,
+  ENV,
+  KAKAROT_CONTRACT_ADDRESS,
+} from "@/lib/constants";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { useSpiritKarrot } from "@/queries/useSpiritKarrot";
 import { useFaucet } from "@/hooks/useFaucet";
@@ -15,7 +19,12 @@ import { MediaRenderer, useWalletBalance } from "thirdweb/react";
 import { client, KAKAROT_SEPOLIA } from "@/lib/thirdweb-client";
 import { Button } from "@/components/ui/button";
 import { upload } from "thirdweb/storage";
-import { getContract, prepareContractCall, sendTransaction, waitForReceipt } from "thirdweb";
+import {
+  getContract,
+  prepareContractCall,
+  sendTransaction,
+  waitForReceipt,
+} from "thirdweb";
 import { abi as AirdropNFTABI } from "@/public/contracts/nftAirdropABI";
 import { toast } from "sonner";
 import { useToggleEligibility } from "@/mutations/useToggleEligibility";
@@ -29,7 +38,13 @@ import { useIsSpiritKarrotOwner } from "@/queries/useisSpiritKarrotOwner";
 import { useGetSpiritKarrotDetails } from "@/queries/useGetSpiritKarrotDetails";
 import { generateMerkleProof } from "@/lib/generateMerkleProof";
 
-type MintState = "completed" | "pending" | "generating" | "not-started" | "not-eligible" | "loading";
+type MintState =
+  | "completed"
+  | "pending"
+  | "generating"
+  | "not-started"
+  | "not-eligible"
+  | "loading";
 
 const SpiritKarrot = () => {
   const { wallet } = useFaucet();
@@ -40,7 +55,9 @@ const SpiritKarrot = () => {
     client,
   });
 
-  const { data: isSpiritKarrotOwner } = useIsSpiritKarrotOwner(wallet?.address ?? "");
+  const { data: isSpiritKarrotOwner } = useIsSpiritKarrotOwner(
+    wallet?.address ?? "",
+  );
   const { mutate: claimFunds, data: claimJobID } = useClaimFunds();
   const [jobId, setJobId] = useState<string | null>(null);
   const { data: faucetJob, isError } = useFaucetJob(jobId ?? "");
@@ -60,7 +77,7 @@ const SpiritKarrot = () => {
     isPending: isSpiritKarrotPending,
   } = useGetSpiritKarrotDetails(
     wallet?.address ?? "",
-    mintingProgress === "completed" || mintingProgress === "not-started"
+    mintingProgress === "completed" || mintingProgress === "not-started",
   );
 
   const onTurnstileSuccess = (captchaCode: string) => {
@@ -79,17 +96,23 @@ const SpiritKarrot = () => {
   }, [wallet?.address]);
 
   useEffect(() => {
-    if (wallet?.address && addresses.includes(wallet.address)) {
-      setMintingProgress("pending");
-      if (isSpiritKarrotOwner?.balance && isSpiritKarrotOwner.balance > 0) {
-        setMintingProgress("completed");
-      } else {
-        setMintingProgress("not-started");
-      }
-    } else {
-      setMintingProgress("not-eligible");
+    // If no wallet is connected
+    if (!wallet?.address) {
+      setMintingProgress("loading");
+      return;
     }
-  }, [wallet?.address, isSpiritKarrotOwner?.balance]);
+
+    // If wallet is in eligible addresses list
+    const isEligible = addresses.includes(wallet.address);
+    if (!isEligible) {
+      setMintingProgress("not-eligible");
+      return;
+    }
+
+    // If user already owns a Spirit Karrot
+    const hasKarrot = isSpiritKarrotOwner && isSpiritKarrotOwner?.balance > 0;
+    setMintingProgress(hasKarrot ? "completed" : "not-started");
+  }, [wallet?.address, isSpiritKarrotOwner?.balance, isSpiritKarrotOwner]);
 
   useEffect(() => {
     // Set the base URL only after the component has mounted
@@ -98,7 +121,7 @@ const SpiritKarrot = () => {
 
   const generateIntent = () =>
     `https://x.com/intent/post?text=${encodeURIComponent(generateTweet())}&url=${encodeURIComponent(
-      `${baseUrl}/spirit-karrot/${spiritKarrot?.name?.toLowerCase()}`
+      `${baseUrl}/spirit-karrot/${spiritKarrot?.name?.toLowerCase()}`,
     )}`;
 
   const handleMintTransaction = useCallback(async () => {
@@ -128,7 +151,8 @@ const SpiritKarrot = () => {
 
       const transaction = prepareContractCall({
         contract,
-        method: "function mint(bytes32[] calldata _merkleProof, string memory _tokenUri)",
+        method:
+          "function mint(bytes32[] calldata _merkleProof, string memory _tokenUri)",
         params: [proof, uris] as any,
         maxFeePerBlobGas: BigInt(10000000000000),
         gas: BigInt(1000000),
@@ -164,17 +188,24 @@ const SpiritKarrot = () => {
     if (!wallet?.address || !captchaCode) return;
 
     claimFunds(
-      { walletAddress: wallet.address, captchaCode, denomination: "eth", isSpiritClaim: true },
+      {
+        walletAddress: wallet.address,
+        captchaCode,
+        denomination: "eth",
+        isSpiritClaim: true,
+      },
       {
         onSuccess: (data) => {
           toast.info("Claiming some ETH to cover gas fees...");
           setJobId(data.jobID);
         },
         onError: () => {
-          toast.error("Faucet is under a lot of load right now. Wait a bit and try again!");
+          toast.error(
+            "Faucet is under a lot of load right now. Wait a bit and try again!",
+          );
           setMintingProgress("not-started");
         },
-      }
+      },
     );
   };
 
@@ -193,7 +224,9 @@ const SpiritKarrot = () => {
       handleMintTransaction();
     } catch (error) {
       console.error("Error minting Karrot:", error);
-      toast.error("An error occurred during the minting process. Please try again.");
+      toast.error(
+        "An error occurred during the minting process. Please try again.",
+      );
       setMintingProgress("not-started");
     }
   };
@@ -209,7 +242,9 @@ const SpiritKarrot = () => {
 
   useEffect(() => {
     if (isError || faucetJob?.[0]?.status === "error") {
-      toast.error("An error occurred while claiming funds. Check if you have enough mainnet ETH. Then try again!");
+      toast.error(
+        "An error occurred while claiming funds. Check if you have enough mainnet ETH. Then try again!",
+      );
       setMintingProgress("not-started");
     }
   }, [isError, faucetJob]);
@@ -222,7 +257,9 @@ const SpiritKarrot = () => {
           Uh oh, we are under maintenance!
         </h1>
 
-        <p className="leading-7 [&:not(:first-child)]:mt-6  text-[#878794]">Please check back in a bit!</p>
+        <p className="leading-7 [&:not(:first-child)]:mt-6  text-[#878794]">
+          Please check back in a bit!
+        </p>
 
         <div className="grid items-start justify-center mt-12 max-h-[400px] max-w-[320px] mb-10">
           <div className="relative group">
@@ -274,29 +311,39 @@ const SpiritKarrot = () => {
 
   return (
     <div className="flex flex-col justify-center items-center w-full py-16 px-3 rounded-md">
-      <Confetti colors={CONFETTI_COLORS} run={runConfetti} numberOfPieces={800} recycle={false} width={windowWidth} />
+      <Confetti
+        colors={CONFETTI_COLORS}
+        run={runConfetti}
+        numberOfPieces={800}
+        recycle={false}
+        width={windowWidth}
+      />
 
       <div className="flex flex-col justify-center items-center text-center max-w-xl">
         <h1 className="scroll-m-20 text-3xl md:text-4xl font-medium tracking-tight md:leading-[3rem] lg:text-[52px] text-nowrap">
           {mintingProgress === "not-eligible"
             ? "🧑‍🌾 You are not eligible for a Spirit Karrot"
             : mintingProgress === "completed"
-            ? `${spiritKarrot?.fullName} 🥕`
-            : "Meet your Spirit Karrot 🥕"}
+              ? `${spiritKarrot?.fullName} 🥕`
+              : "Meet your Spirit Karrot 🥕"}
         </h1>
         <p className="leading-7 [&:not(:first-child)]:mt-6  text-[#878794]">
           {mintingProgress === "not-eligible"
             ? "Spirit Karrots are only available to OG farmers"
             : mintingProgress === "completed"
-            ? "Meet your Spirit Karrot!"
-            : "This Karrot embodies your activity on the previous version of our testnet"}
+              ? "Meet your Spirit Karrot!"
+              : "This Karrot embodies your activity on the previous version of our testnet"}
         </p>
       </div>
       <div className="grid items-start justify-center mt-12 max-h-[400px] max-w-[320px]">
         <div className="relative group">
           <div className="absolute inset-0 bg-gradient-to-r from-kkrtOrange  to-[#0DAB0D] rounded-md blur opacity-85 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt" />
           <MediaRenderer
-            src={mintingProgress === "completed" ? spiritKarrot?.imageUrl : "/assets/og-border.png"}
+            src={
+              mintingProgress === "completed"
+                ? spiritKarrot?.imageUrl
+                : "/assets/og-border.png"
+            }
             client={client}
             width="400px"
             height="400px"
@@ -314,7 +361,12 @@ const SpiritKarrot = () => {
       <Turnstile
         siteKey={ENV.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
         onSuccess={onTurnstileSuccess}
-        options={{ size: showTurnstile && mintingProgress === "not-started" ? "normal" : "invisible" }}
+        options={{
+          size:
+            showTurnstile && mintingProgress === "not-started"
+              ? "normal"
+              : "invisible",
+        }}
       />
 
       {mintingProgress === "not-eligible" && wallet && (
@@ -337,24 +389,51 @@ const SpiritKarrot = () => {
       )}
 
       {mintingProgress === "generating" && (
-        <Button variant="outline" className="mt-4 w-full max-w-[400px] text-[#878794] pointer-events-none">
-          <Image src={mintingIcon} alt="minting" width={24} height={24} priority className="w-[30px] h-6 mr-3" />
+        <Button
+          variant="outline"
+          className="mt-4 w-full max-w-[400px] text-[#878794] pointer-events-none"
+        >
+          <Image
+            src={mintingIcon}
+            alt="minting"
+            width={24}
+            height={24}
+            priority
+            className="w-[30px] h-6 mr-3"
+          />
           <span>Minting in progress</span>
         </Button>
       )}
 
       {mintingProgress === "completed" && (
         <div className="flex w-full space-x-3 max-w-[400px]">
-          <Link rel="noopener noreferrer" target="_blank" href={generateIntent()} className="w-full">
-            <Button variant="outline" className="mt-4 w-full gap-1 !bg-black !text-white">
+          <Link
+            rel="noopener noreferrer"
+            target="_blank"
+            href={generateIntent()}
+            className="w-full"
+          >
+            <Button
+              variant="outline"
+              className="mt-4 w-full gap-1 !bg-black !text-white"
+            >
               <span>Share on</span>
               <Image src={xIcon} alt="X icon" width={20} height={20} priority />
             </Button>
           </Link>
           <Link href="/faucet" className="w-full">
-            <Button variant="outline" className="mt-4 w-full text-[#878794] gap-1">
+            <Button
+              variant="outline"
+              className="mt-4 w-full text-[#878794] gap-1"
+            >
               <span>Go To Faucet</span>
-              <Image src={linkIcon} alt="link icon" width={20} height={20} priority />
+              <Image
+                src={linkIcon}
+                alt="link icon"
+                width={20}
+                height={20}
+                priority
+              />
             </Button>
           </Link>
         </div>
