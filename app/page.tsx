@@ -12,7 +12,7 @@ const Home = () => (
       Over the past few months, your support has been invaluable. You&apos;ve
       tested our Starknet Sepolia Testnet, explored dApps, and provided crucial
       feedback. Thanks to your efforts, we&apos;ve achieved remarkable
-      milestones: over 2m transactions, XX active users, and 20+ innovative
+      milestones: over 2m transactions, 200k active users, and 20+ innovative
       dApps deployed. With audits from C4 and{" "}
       <a
         href="https://github.com/kkrt-labs/kakarot/blob/main/audits/cairo_zero/Kakarot%20EVM%20-%20Zellic%20Audit%20Report.pdf"
