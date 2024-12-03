@@ -19,13 +19,19 @@ const LinkBanner = () => {
     <div
       className={cn(
         "sticky w-screen flex bg-[#2A2927] justify-center items-center py-3 px-2 text-center",
-        !showBanner && "hidden"
+        !showBanner && "hidden",
       )}
     >
       <p className="text-white mt-6 lg:mt-0">
-        We are officially on Kakarot Starknet Sepolia! If you&apos;re an OG farmer, claim your
-        <Link rel="noopener noreferrer" target="_blank" href="/spirit-karrot" className="text-kkrtOrange ml-1">
-          Spirit Karrot!
+        We will land the most efficient and high-performance EVM proving engine
+        in Q1 2025.
+        <Link
+          rel="noopener noreferrer"
+          target="_blank"
+          href="/spirit-karrot"
+          className="text-kkrtOrange ml-1"
+        >
+          Find out more
         </Link>
       </p>
       <button

@@ -8,11 +8,11 @@ import { Footer } from "@/components/mobile-footer";
 import { LinkBanner } from "@/components/notify-banner";
 import { ThirdwebProvider } from "@/lib/thirdweb-provider";
 import { Provider } from "@/lib/query-provider";
-import SpiritKarrotModal from "@/components/spirit-karrot-modal";
 
 export const metadata: Metadata = {
   title: "Kakarot Faucet",
-  description: "The fast, native faucet to kickstart your journey in the Kakarot ecosystem.",
+  description:
+    "The fast, native faucet to kickstart your journey in the Kakarot ecosystem.",
   icons: [
     {
       url: "/favicon.svg",
@@ -23,7 +23,8 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     title: "Kakarot Faucet",
-    description: "The fast, native faucet to kickstart your journey in the Kakarot ecosystem.",
+    description:
+      "The fast, native faucet to kickstart your journey in the Kakarot ecosystem.",
     images: [
       {
         url: "/og-image.png",
@@ -49,13 +50,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ThirdwebProvider>
-        <body className={`${inter.className} flex flex-col faucetBackground min-h-svh`}>
+        <body
+          className={`${inter.className} flex flex-col faucetBackground min-h-svh`}
+        >
           <Toaster />
           <Provider>
             <LinkBanner />
             <Navbar />
-            <SpiritKarrotModal />
-            <div className="px-4 sm:px-20 my-auto overflow-x-hidden">{children}</div>
+            <div className="px-4 sm:px-20 my-auto overflow-x-hidden">
+              {children}
+            </div>
             <Footer />
           </Provider>
           <Analytics />

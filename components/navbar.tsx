@@ -26,7 +26,7 @@ export const Navbar = () => {
   const isMobile = width < 900 && wallet;
   return (
     <nav className="flex w-full justify-center pt-5">
-      <ul className="flex flex-row justify-between md:justify-around items-center w-full max-w-7xl px-6">
+      <ul className="flex flex-row justify-between items-center w-full px-6 md:px-0 sm:max-w-[680px]">
         <Link className=" flex place-items-center gap-2 py-6" href="/">
           <Image
             src={
@@ -42,16 +42,7 @@ export const Navbar = () => {
           />
         </Link>
 
-        <li className="hidden sm:flex flex-row items-center space-x-3">
-          <Link
-            className="font-medium text-[#003e2a] lg:text-lg flex-nowrap"
-            href="https://ecosystem.kakarot.org/"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Ecosystem
-            <ArrowUpRight size={16} className="inline-block ml-1 mb-1" />
-          </Link>
+        <li className="flex flex-row items-center space-x-3">
           <Link
             className="font-medium text-[#003e2a] lg:text-lg"
             href="https://docs.kakarot.org/"
@@ -62,25 +53,18 @@ export const Navbar = () => {
             <ArrowUpRight size={16} className="inline-block ml-1 mb-1" />
           </Link>
         </li>
-        <li className="sm:inline-flex flex-row items-center md:space-x-4 space-x-0 hidden">
+        <li className="hidden md:inline-flex flex-row items-center md:space-x-4 space-x-0">
           <IconLink
             src="/assets/x-icon.svg"
             href="https://x.com/KakarotZkEvm"
             name="X"
-            className="hidden lg:block"
           />
           <IconLink
             src="/assets/discord-icon.svg"
             href="https://discord.gg/kakarotzkevm"
             name="Discord"
-            className="hidden lg:block"
           />
           <WalletDetails />
-          <DropdownCTA />
-        </li>
-        <li className="sm:hidden flex flex-row items-center space-x-4">
-          <WalletDetails />
-          <DropdownCTA />
         </li>
       </ul>
     </nav>
