@@ -5,7 +5,7 @@ import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
-const LOCAL_STORAGE_KEY = "kkrtSepolia";
+const LOCAL_STORAGE_KEY = "keth";
 
 const LinkBanner = () => {
   const [showBanner, setShowBanner] = useState(false);
@@ -28,7 +28,7 @@ const LinkBanner = () => {
         <Link
           rel="noopener noreferrer"
           target="_blank"
-          href="/spirit-karrot"
+          href="https://x.com/KakarotZkEvm/status/1863610420851863876"
           className="text-kkrtOrange ml-1"
         >
           Find out more
