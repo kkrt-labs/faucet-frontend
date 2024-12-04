@@ -24,8 +24,9 @@ const Home = () => (
     </p>
 
     <p className="mt-4 text-foreground text-left max-w-[680px]">
-      This closure is not an end—it&apos;s a sharpening of our focus. Over the
-      past year, we&apos;ve been dedicated to building the{" "}
+      We are currently halting deployment to Starknet Mainnet, but this is not
+      an end&mdash;it&apos;s a sharpening of our focus. Over the past year,
+      we&apos;ve been dedicated to building the{" "}
       <b>best-performing proving engine</b>, that will bring unmatched
       efficiency and provability to EVM-compatible networks and appchains on
       Starknet and beyond.
