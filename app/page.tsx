@@ -8,24 +8,27 @@ const Home = () => (
     </p>
 
     <p className="mt-4 text-foreground text-left max-w-[680px]">
-      The Sepolia Testnet is officially closed as of December 16, 2024, marking
-      the completion of an incredible phase in Kakarot&apos;s journey. With 1.6
-      million transactions and tens of thousands of unique users, the testnet
-      has proven the{" "}
+      The <b>Sepolia Testnet is officially closed</b> as of{" "}
+      <b> December 16, 2024</b>, marking the completion of an incredible phase
+      in Kakarot&apos;s journey. With <b>1.6 million transactions</b> and tens
+      of thousands of unique users, the testnet has proven the scalability and
+      efficiency of our EVM implementation (its code being fully{" "}
       <a
         href="https://github.com/kkrt-labs/kakarot/blob/main/audits/cairo_zero/Kakarot%20EVM%20-%20Zellic%20Audit%20Report.pdf"
         target="_blank"
         className="underline"
       >
-        scalability and efficiency of our EVM implementation
+        audited by Zellic
       </a>{" "}
+      and Code 4rena).
     </p>
 
     <p className="mt-4 text-foreground text-left max-w-[680px]">
       This closure is not an end—it&apos;s a sharpening of our focus. Over the
-      past year, we&apos;ve been dedicated to building the best-performing
-      proving engine, that will bring unmatched efficiency and provability to
-      EVM-compatible networks and appchains on Starknet and beyond.
+      past year, we&apos;ve been dedicated to building the{" "}
+      <b>best-performing proving engine</b>, that will bring unmatched
+      efficiency and provability to EVM-compatible networks and appchains on
+      Starknet and beyond.
     </p>
 
     <p className="mt-4 text-foreground text-left max-w-[680px]">
@@ -41,7 +44,7 @@ const Home = () => (
     </p>
 
     <p className="mt-4 text-foreground text-left max-w-[680px]">
-      🥕 — The Kakarot Team
+      🥕 — <b>The Kakarot Team</b>
     </p>
   </main>
 );
