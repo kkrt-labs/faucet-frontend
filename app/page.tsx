@@ -1,7 +1,7 @@
 const Home = () => (
   <main className="flex flex-col items-center text-center my-20 h-full">
     <h1 className="scroll-m-20 text-4xl font-medium tracking-tight text-left md:text-center lg:text-[52px] max-w-[800px]">
-      Testnet Closed, Engines On
+      Testnet Closed, Engine’s On
     </h1>
     <p className="leading-7 mt-6 text-foreground text-left w-full max-w-[680px]">
       Builders and Farmers,
@@ -24,9 +24,11 @@ const Home = () => (
     </p>
 
     <p className="mt-4 text-foreground text-left max-w-[680px]">
-      We are currently halting deployment to Starknet Mainnet, but this is not
-      an end&mdash;it&apos;s a sharpening of our focus. Over the past year,
-      we&apos;ve been dedicated to building the{" "}
+      We are currently halting deployment to Starknet Mainnet (detailed
+      explanations in <a href="https://x.com/KakarotZkEvm/status/1863610420851863876" target="_blank"
+        className="underline">this article</a>), but this is not an end&mdash;it&apos;s a
+      sharpening of our focus. Over the past year, we&apos;ve been dedicated to
+      building the{" "}
       <b>best-performing proving engine</b>, that will bring unmatched
       efficiency and provability to EVM-compatible networks and appchains on
       Starknet and beyond.
