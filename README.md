@@ -2,7 +2,7 @@
 
 > The fast, native Sepolia Testnet faucet to kickstart your journey in the Kakarot ecosystem.
 
-checkout the current deployment ✨ [faucet](https://sepolia-faucet.kakarot.org/) ✨
+Check out the current deployment ✨ [faucet](https://sepolia-faucet.kakarot.org/) ✨
 
 `faucet` gets you test tokens to build apps on the Kakarot Testnet!
 <div align="center">
@@ -23,7 +23,7 @@ checkout the current deployment ✨ [faucet](https://sepolia-faucet.kakarot.org
 1. [`TailwindCSS`](https://tailwindcss.com)
 2. [`TypeScript`](https://www.typescriptlang.org/)
 3. [`NextJS`](https://nextjs.org/)
-3. [`ReactQuery`](https://tanstack.com/query/latest)
+4. [`ReactQuery`](https://tanstack.com/query/latest)
 
 ## 🛠 want to install `faucet`, locally?
 
